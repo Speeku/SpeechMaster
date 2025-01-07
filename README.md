@@ -1,4 +1,21 @@
 # SpeechMaster
+Guidelines For Developers:
+* Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
+* Don't ever Commit a Buggy Code.
+* The Development branch arising from production is the main branch; you have to create your respective feature branches fromm Development branch only.
+* Before merging your respective branch to development
+
+  
+Branch Naming Conventions:
+featureName [Description]
+subfeatureName [Description]
+
+Commit Naming Convention:
+Commit messages should be descriptive such as:
+if you added a feature then write "Added so and so feature[Description]"
+if you fixed a bug then write " Fixed this bug [Description]"
+
+App Description:
 SpeechMaster is a powerful application that polishes your public communication skills by analysing your speeches on various parameters like filler words usage, pronunciation, pace, pitch, etc., 
 The mirror doesn't judge you and neither does our app; but indeed it is a powerful tool using which you can analyse your public communication and presentation delivery skills
 The app provides the user to do practice like in front of the mirror but the mirror neither modifies your script, nor does it analyse your speech, and nor does it asks questions to you based on your speech;
