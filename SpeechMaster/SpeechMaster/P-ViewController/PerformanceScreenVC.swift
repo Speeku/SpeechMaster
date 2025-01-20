@@ -12,7 +12,7 @@ class PerformanceScreenVC: UIViewController {
     @IBOutlet var coachButton :        UIButton!
     @IBOutlet var scriptButton :       UIButton!
     @IBOutlet var settingPerformance : UIButton!
-
+    
     // Varables for enabling camera and capturing video
     var captureSession =       AVCaptureSession()
     var videoOutput =          AVCaptureMovieFileOutput()
@@ -24,13 +24,13 @@ class PerformanceScreenVC: UIViewController {
     @IBOutlet var showingKeynote: UIView!
     private var previewController: QLPreviewController?
     var selectedKeynoteURL: URL? {
-           didSet {
-               // Display keynote when URL is set
-               if isViewLoaded {
-                   displayKeynote()
-               }
-           }
-       }
+        didSet {
+            // Display keynote when URL is set
+            if isViewLoaded {
+                displayKeynote()
+            }
+        }
+    }
     
     
     
@@ -39,21 +39,21 @@ class PerformanceScreenVC: UIViewController {
     private var scrollTimer :     Timer?
     private let scrollSpeed :     TimeInterval = 0.1  // Adjust speed as needed
     private let pixelsPerScroll : CGFloat = 1     // Adjust scroll amount as needed
-
+    
     
     //variable for timer of video
     private var recordingTimer : Timer?
     private var elapsedSeconds : Int = 0
-
-
+    
+    
     @IBOutlet var cameraView :           UIView!
     @IBOutlet var textView :             UITextView!
     @IBOutlet var startRecordingButton : UIButton!
     
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        
         
         // calling camera and capture video session functions
         checkPermissions()
@@ -71,9 +71,9 @@ class PerformanceScreenVC: UIViewController {
         videoTimer.text = "00:00"
         
         if selectedKeynoteURL != nil {
-                   displayKeynote()
-               }
-   
+            displayKeynote()
+        }
+        
     }
     
     func checkPermissions() {
@@ -100,10 +100,11 @@ class PerformanceScreenVC: UIViewController {
             // Stop recording
             videoOutput.stopRecording()
             isRecording = false
-            stopAutoScroll()                 // for auto scrolling off of the textView
-            stopRecordingTimer()             // for stoping the timer as soon as video is ended
-            sender.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)  // changing the button image
-            print("Recording stopped")    // for console awareness
+            stopAutoScroll()
+            stopRecordingTimer()
+            
+            sender.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
+            print("Recording stopped")
         } else {
             // Create unique file path in Documents directory
             let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -128,12 +129,12 @@ class PerformanceScreenVC: UIViewController {
     @IBAction func coachButton(_ sender: Any) {
         coachLabel.isHidden = !coachLabel.isHidden
         if coachLabel.isHidden {
-                // Label is hidden - use unfilled person symbol
-                coachButton.setImage(UIImage(systemName: "person"), for: .normal)
-            } else {
-                // Label is visible - use filled person symbol
-                coachButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
-            }
+            // Label is hidden - use unfilled person symbol
+            coachButton.setImage(UIImage(systemName: "person"), for: .normal)
+        } else {
+            // Label is visible - use filled person symbol
+            coachButton.setImage(UIImage(systemName: "person.fill"), for: .normal)
+        }
     }
     
     @IBAction func scriptButton(_ sender: Any) {
@@ -142,11 +143,11 @@ class PerformanceScreenVC: UIViewController {
             //textView is hidden - use unfilled document Button
             scriptButton.setImage(UIImage(systemName: "document"), for: .normal)
         }
-            else{
-                
-                scriptButton.setImage(UIImage(systemName: "document.fill"), for: .normal)
-            }
+        else{
+            
+            scriptButton.setImage(UIImage(systemName: "document.fill"), for: .normal)
         }
+    }
     
     private func startAutoScroll() {
         // Stop any existing timer
@@ -169,7 +170,7 @@ class PerformanceScreenVC: UIViewController {
             }
         }
     }
-
+    
     
     private func stopAutoScroll() {
         scrollTimer?.invalidate()
@@ -192,36 +193,45 @@ class PerformanceScreenVC: UIViewController {
             self.videoTimer.text = self.formatTime(self.elapsedSeconds)
         }
     }
-
+    
     // Add this function to stop the timer
     private func stopRecordingTimer() {
         recordingTimer?.invalidate()
         recordingTimer = nil
+        
+        // Save the final time to summary array
+        let finalTime = formatTime(elapsedSeconds)
+        summary[0].timeSpent = finalTime
+        
+        // Reset timer
         elapsedSeconds = 0
         videoTimer.text = "00:00"
     }
     
     private func displayKeynote() {
-         // Remove existing preview controller if any
-         previewController?.willMove(toParent: nil)
-         previewController?.view.removeFromSuperview()
-         previewController?.removeFromParent()
-         
-         guard let keynoteURL = selectedKeynoteURL else { return }
-         
-         // Create new preview controller
-         let previewVC = QLPreviewController()
-         previewVC.dataSource = self
-         previewVC.view.frame = showingKeynote.bounds
-         addChild(previewVC)
-         showingKeynote.addSubview(previewVC.view)
-         previewVC.didMove(toParent: self)
-         
-         previewController = previewVC
-     }
-    
+        // Remove existing preview controller if any
+        previewController?.willMove(toParent: nil)
+        previewController?.view.removeFromSuperview()
+        previewController?.removeFromParent()
+        
+        guard let keynoteURL = selectedKeynoteURL else { return }
+        
+        // Create new preview controller
+        let previewVC = QLPreviewController()
+        previewVC.dataSource = self
+        previewVC.view.frame = showingKeynote.bounds
+        addChild(previewVC)
+        showingKeynote.addSubview(previewVC.view)
+        previewVC.didMove(toParent: self)
+        
+        previewController = previewVC
     }
-
+    
+   
+  
+    
+    
+}
     
        
 
@@ -312,8 +322,8 @@ extension PerformanceScreenVC: AVCaptureFileOutputRecordingDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showVideo",
-           let showVideoVC = segue.destination as? VideoCVCell {
-            showVideoVC.videoURL = self.videoURL
+            let showVideoVC = segue.destination as? VideoCVCell {
+                     showVideoVC.videoURL = self.videoURL
         }
     }
 }
@@ -328,3 +338,5 @@ extension PerformanceScreenVC : QLPreviewControllerDataSource {
         return selectedKeynoteURL! as NSURL // Your keynoteURL needs to be converted to NSURL
     }
 }
+
+

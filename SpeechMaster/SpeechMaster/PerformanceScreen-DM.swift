@@ -41,7 +41,7 @@ struct Video {
 }
 
 struct Summary {
-    var timeSpent : String
+    var timeSpent: String
 }
 
 struct Fillers {
