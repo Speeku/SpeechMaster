@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		18071B0D2D3E9D9F007A2EEF /* SelectingKeynoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18071B0C2D3E9D9F007A2EEF /* SelectingKeynoteVC.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		05511DF52D118E7400E26F10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		05511DDE2D118E7300E26F10 /* SpeechMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeechMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DF42D118E7400E26F10 /* SpeechMasterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18071B0C2D3E9D9F007A2EEF /* SelectingKeynoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectingKeynoteVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,6 +93,7 @@
 		05511DD52D118E7300E26F10 = {
 			isa = PBXGroup;
 			children = (
+				18071B0C2D3E9D9F007A2EEF /* SelectingKeynoteVC.swift */,
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
 				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
 				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
@@ -252,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18071B0D2D3E9D9F007A2EEF /* SelectingKeynoteVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

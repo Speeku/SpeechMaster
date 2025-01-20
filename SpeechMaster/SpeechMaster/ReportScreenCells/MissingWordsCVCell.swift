@@ -11,10 +11,11 @@ class MissingWordsCVCell: UICollectionViewCell {
     
     @IBOutlet var noOfMissingWords: UILabel!
     
+    @IBOutlet var controlChevron: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         self.layer.cornerRadius = 13
-        
+        controlChevron.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
     }
     
     func updateMissingWords(with missingWords : MissingWords){

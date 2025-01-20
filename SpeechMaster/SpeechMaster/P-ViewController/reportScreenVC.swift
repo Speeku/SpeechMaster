@@ -28,6 +28,8 @@ class reportScreenVC: UIViewController {
             }
         }
     
+
+    
 }
 
 
@@ -35,7 +37,7 @@ class reportScreenVC: UIViewController {
 
 
 
-extension reportScreenVC : UICollectionViewDataSource {
+extension reportScreenVC : UICollectionViewDataSource, UICollectionViewDelegate {
     
     func createVideoCellSection() -> NSCollectionLayoutSection {
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -67,7 +69,7 @@ extension reportScreenVC : UICollectionViewDataSource {
             bottom: 3,
             trailing: 8)
            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .absolute(120)) // Adjust height for labels
+                                                  heightDimension: .absolute(85)) // Adjust height for labels
        
            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         group.contentInsets = NSDirectionalEdgeInsets(
@@ -214,8 +216,10 @@ extension reportScreenVC : UICollectionViewDataSource {
         switch indexPath.section{
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCell", for: indexPath) as! VideoCVCell
-            let userVideo = video[indexPath.item]
-            cell.updateVideo(with: userVideo)
+            if !video.isEmpty {
+                let userVideo = video[indexPath.item]
+                cell.updateVideo(with: userVideo)
+            }
             return cell
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SummaryCell", for: indexPath) as! SummaryCVCell
@@ -236,6 +240,7 @@ extension reportScreenVC : UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaceCell", for: indexPath) as! PaceCVCell
             let userPace = pace[indexPath.item]
             cell.updatePace(with: userPace)
+            //performSegue(withIdentifier: "fillersDetail", sender: indexPath)
             return cell
         case 5:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PronunciationCell", for: indexPath) as! PronunciationCVCell
@@ -255,5 +260,16 @@ extension reportScreenVC : UICollectionViewDataSource {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            switch indexPath.item {
+            case 2: // Filler Words cell
+                performSegue(withIdentifier: "fillersDetail", sender: nil)
+            case 3: // Missing Words cell
+                performSegue(withIdentifier: "missingWordDetails", sender: nil)
+            default:
+                break
+            }
+        }
+    }
     
-}
+

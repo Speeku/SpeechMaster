@@ -37,6 +37,7 @@ import UIKit
 
 struct Video {
     var showImage : UIImage
+    var videoURL: URL?
 }
 
 struct Summary {

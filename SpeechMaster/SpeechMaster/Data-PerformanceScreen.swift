@@ -8,9 +8,7 @@
 import Foundation
 import UIKit
 
-var video : [Video] = [
-    Video(showImage: UIImage(named: "sj")!)
-]
+var video: [Video] = []
 
 var summary : [Summary] = [
     Summary(timeSpent: "3:19")
