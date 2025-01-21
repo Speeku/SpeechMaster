@@ -31,9 +31,23 @@ class PerformanceScreenVC: UIViewController {
             }
         }
     }
+ 
+    // for rotation
+  // private var currentOrientation: UIDeviceOrientation = .unknown
     
-    
-    
+//    var currentState: ViewControllerState?
+//    
+//    struct ViewControllerState {
+//          var isRecording: Bool
+//          var videoURL: URL?
+//          var selectedKeynoteURL: URL?
+//          var script: String
+//          var elapsedSeconds: Int
+//          var isCoachLabelHidden: Bool
+//          var isTextViewHidden: Bool
+//          var scrollPosition: CGPoint
+//          // Add any other state you need to preserve
+//      }
     
     // variables for scrolling the content of textView
     private var scrollTimer :     Timer?
@@ -53,8 +67,33 @@ class PerformanceScreenVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+//        if let state = currentState {
+//            // If we have a state, restore it
+//            restoreState()
+//        } else {
+//            // Initial setup if no state exists
+//            checkPermissions()
+//            setUpCaptureSession()
+//            setUpDevice()
+//            setUpInputOutput()
+//            setUpPreviewLayer()
+//            startRunningCaptureSession()
+//            
+//            textView.isScrollEnabled = true
+//            textView.isUserInteractionEnabled = true
+//            textView.layoutManager.allowsNonContiguousLayout = false
+//            textView.text = script
+//            
+//            videoTimer.text = "00:00"
+//            
+//            if selectedKeynoteURL != nil {
+//                displayKeynote()
+//            }
+//        }
+//        
+//        // Set initial orientation
+//        currentOrientation = UIDevice.current.orientation
+//        
         // calling camera and capture video session functions
         checkPermissions()
         setUpCaptureSession()
@@ -74,6 +113,7 @@ class PerformanceScreenVC: UIViewController {
             displayKeynote()
         }
         
+//        ///currentOrientation = UIDevice.current.orientation
     }
     
     func checkPermissions() {
@@ -225,12 +265,63 @@ class PerformanceScreenVC: UIViewController {
         previewVC.didMove(toParent: self)
         
         previewController = previewVC
+        
+       
     }
     
+//    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+//    {
+//        super.viewWillTransition(to: size, with: coordinator)
+//        
+//        let newOrientation = UIDevice.current.orientation
+//        
+//        // Only proceed if orientation actually changed
+//        guard newOrientation != currentOrientation,
+//              newOrientation != .unknown,
+//              newOrientation != .faceUp,
+//              newOrientation != .faceDown else {
+//            return
+//        }
+//        
+//        let storyboard = UIStoryboard(name: "PerformanceScreen", bundle: nil)
+//        let identifier = newOrientation.isPortrait ? "PortraitVC" : "LandscapeVC"
+//        
+//        guard let newVC = storyboard.instantiateViewController(withIdentifier: identifier) as? PerformanceScreenVC else {
+//            return
+//        }
+//        
+//        // Update orientation tracking
+//        currentOrientation = newOrientation
+//        
+//        // Configure transition
+//        newVC.modalPresentationStyle = .fullScreen
+//        newVC.modalTransitionStyle = .crossDissolve
+//        
+//        coordinator.animate { [weak self] _ in
+//            self?.present(newVC, animated: false) {
+//                // Update the checkView reference after transition
+//                newVC.videoTimer.backgroundColor = self?.videoTimer.backgroundColor
+//                newVC.videoTimer.frame = newVC.videoTimer.frame
+//                newVC.coachLabel.backgroundColor = self?.coachLabel.backgroundColor
+//                newVC.coachLabel.frame = newVC.coachLabel.frame
+//                newVC.coachButton.backgroundColor = self?.coachButton.backgroundColor
+//                newVC.coachButton.frame = newVC.coachButton.frame
+//                newVC.scriptButton.backgroundColor = self?.scriptButton.backgroundColor
+//                newVC.scriptButton.frame = newVC.scriptButton.frame
+//                newVC.cameraView.backgroundColor = self?.cameraView.backgroundColor
+//                newVC.cameraView.frame = newVC.cameraView.frame
+//                newVC.textView.backgroundColor = self?.textView.backgroundColor
+//                newVC.textView.frame = newVC.textView.frame
+//                newVC.showingKeynote.backgroundColor = self?.showingKeynote.backgroundColor
+//                newVC.showingKeynote.frame = newVC.showingKeynote.frame
+//            }
+//        }
+//        
+ //   }
    
-  
     
     
+     
 }
     
        
@@ -281,6 +372,7 @@ extension PerformanceScreenVC: AVCaptureFileOutputRecordingDelegate {
             previewLayer.frame = cameraView.bounds
             cameraView.layer.addSublayer(previewLayer)
         }
+       
     }
     
     func startRunningCaptureSession() {

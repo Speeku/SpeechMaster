@@ -14,8 +14,13 @@ import ObjectiveC
 class SelectingKeynoteVC: UIViewController,UIDocumentPickerDelegate {
     var currentDocument: URL?
         
-        override func viewDidLoad() {
+    @IBOutlet var uploadKeynote: UIButton!
+    
+    @IBOutlet var withoutKeynote: UIButton!
+    override func viewDidLoad() {
             super.viewDidLoad()
+        uploadKeynote.layer.cornerRadius = 20
+        withoutKeynote.layer.cornerRadius = 20
         }
         
         @IBAction func selectKeynote(_ sender: Any) {
