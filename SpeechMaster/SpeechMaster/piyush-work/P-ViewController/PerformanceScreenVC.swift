@@ -5,7 +5,7 @@ import Speech
 
 class PerformanceScreenVC: UIViewController {
     
-    //var scriptText = "A string is a series of characters, such as that forms a collection. Strings in Swift are Unicode correct and locale insensitive, and are designed to be efficient. The String type bridges with the Objective-C class NSString and offers interoperability with C functions that works with strings."
+    var scriptText = "A string is a series of characters, such as that forms a collection. Strings in Swift are Unicode correct and locale insensitive, and are designed to be efficient. The String type bridges with the Objective-C class NSString and offers interoperability with C functions that works with strings."
     
     @IBOutlet var videoTimer :         UILabel!
     @IBOutlet var coachLabel :         UILabel!
@@ -105,7 +105,7 @@ class PerformanceScreenVC: UIViewController {
         textView.isScrollEnabled = true
         textView.isUserInteractionEnabled = true  // Set to false if you don't want user scrolling
         textView.layoutManager.allowsNonContiguousLayout = false
-        textView.text = HomeViewModel().uploadedScriptText
+        textView.text = scriptText
         
         videoTimer.text = "00:00"
         
