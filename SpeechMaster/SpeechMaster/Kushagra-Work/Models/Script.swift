@@ -1,6 +1,12 @@
 import Foundation
-struct Script: Identifiable {
+
+struct Script: Identifiable, Equatable {
     let id = UUID()
-    let title: String
-    let date: Date
+    var title: String
+    var date: Date
+    var isPinned: Bool
+    
+    static func == (lhs: Script, rhs: Script) -> Bool {
+        lhs.id == rhs.id
+    }
 }
