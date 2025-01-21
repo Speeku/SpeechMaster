@@ -3,10 +3,10 @@ import SwiftUI
 struct StoryboardView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         // Get reference to your storyboard
-        let storyboard = UIStoryboard(name: "Arnav", bundle: nil)
+        let storyboard = UIStoryboard(name: "ProgressSession", bundle: nil)
         
         // Instantiate the desired view controller
-        let viewController = storyboard.instantiateViewController(withIdentifier: "Arnav")
+        let viewController = storyboard.instantiateViewController(withIdentifier: "ScriptDetailedSection")
         return viewController
     }
     

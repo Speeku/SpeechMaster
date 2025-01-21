@@ -12,7 +12,7 @@
         <!--CyberSecurity-->
         <scene sceneID="4QZ-DK-dsW">
             <objects>
-                <viewController id="PdR-uD-nB0" customClass="DemoViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ScriptDetailedSection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PdR-uD-nB0" customClass="DemoViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aM8-lO-YdH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
