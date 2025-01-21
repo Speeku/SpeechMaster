@@ -9,8 +9,13 @@ import Foundation
 struct Session{
     var name :String
 }
+struct Sessions{
+    var name : String
+    var date : String
+}
 struct QnA{
     var name  : String
+    var date : String
 }
 struct Progress{
     var name : String

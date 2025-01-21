@@ -10,9 +10,9 @@ import UIKit
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
     
     var progressOfSession : [Progress] = [
-        Progress(name: "Session 1", fillerWords: 100, missingWords: 10, pace: 10, pronunciation: 1),
-        Progress(name: "Session 2", fillerWords: 100, missingWords: 10, pace: 10, pronunciation: 5),
-        Progress(name: "Session 3", fillerWords: 100, missingWords: 10, pace: 10, pronunciation: 4),
+        Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 10, pronunciation: 1),
+        Progress(name: "Session 2", fillerWords: 40, missingWords: 10, pace: 10, pronunciation: 5),
+        Progress(name: "Session 3", fillerWords: 50, missingWords: 10, pace: 10, pronunciation: 4),
         Progress(name: "Session 4", fillerWords: 100, missingWords: 12, pace: 10, pronunciation: 6),
         
     ]
@@ -21,9 +21,9 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
-    let afterClicking = UIImage(systemName: "arrowshape.right.fill")
-    let beforeClicking = UIImage(systemName: "arrowshape.down.fill")
-    var stateOfButton : Bool = false
+    let afterClicking = UIImage(systemName: "chevron.down")
+    let beforeClicking = UIImage(systemName: "chevron.right")
+    var stateOfButtonPrevious : Bool = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         sessions.count
     }
@@ -34,19 +34,37 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Deselect the row with animation
+        tableView.deselectRow(at: indexPath, animated: true)
         
+        // Hide the table view and reset button image
+        // and animate the button
+        UIView.animate(withDuration: 0.3) {
+            tableView.isHidden = true
+            
+            // Reset appropriate button image based on which table view was selected
+            // case if something is selected from the table view and table
+            // view hides so to return the button back to its normal >
+            if tableView == self.TableView1 {
+                self.leftButton.setImage(self.beforeClicking, for: .normal)
+            } else {
+                self.rightButton.setImage(self.beforeClicking, for: .normal)
+            }
+        }
+        let selectedText = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
         if tableView.tag == 1{
-            stateOfButton = false
+            stateOfButtonPrevious = false
             left = progressOfSession[indexPath.row]
-            previous.text = progressOfSession[indexPath.row].name
-            previousTableView.isHidden = true
+            previous.text = selectedText
+            TableView1.isHidden = true
             print("left used")
         }
         
         if tableView.tag == 2{
+            stateOfButtonCurrent = false
             right = progressOfSession[indexPath.row]
-            currentTableView.isHidden = true
-            current.text = progressOfSession[indexPath.row].name
+            TableView2.isHidden = true
+            current.text = selectedText
             print("right used")
         }
         if let leftProgress = left, let rightProgress = right {
@@ -57,114 +75,151 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     func setData(leftProgress : Progress,rightProgress : Progress){
 
             // Table view 1
-        UIView.animate(withDuration: 0.5){
-            self.fillerP1.progress = min(max(Float(leftProgress.fillerWords) / 100, 0.0), 1.0)
-            self.missingP1.progress = min(max(Float(leftProgress.missingWords) / 100, 0.0), 1.0)
-            self.paceP1.progress = min(max(Float(leftProgress.pace) / 100, 0.0), 1.0)
-            self.pronunciationP1.progress = min(max(Float(leftProgress.pronunciation) / 100, 0.0), 1.0)
-            self.overallP1.progress = min(max(Float(leftProgress.overall) / 100, 0.0), 1.0)
+        // when data change so it animates
+        UIView.animate(withDuration: 2){
+            self.fillerP1.progress = CGFloat(min(max(Float(leftProgress.fillerWords) / 100, 0.0), 1.0))
+            self.missingP1.progress = CGFloat(min(max(Float(leftProgress.missingWords) / 100, 0.0), 1.0))
+            self.paceP1.progress = CGFloat(min(max(Float(leftProgress.pace) / 100, 0.0), 1.0))
+            self.pronunciationP1.progress = CGFloat(min(max(Float(leftProgress.pronunciation) / 100, 0.0), 1.0))
+            self.overallP1.progress = CGFloat(min(max(Float(leftProgress.overall) / 100, 0.0), 1.0))
             
             // Table view 2
-            self.fillerP2.progress = min(max(Float(rightProgress.fillerWords) / 100, 0.0), 1.0)
-            self.missingP2.progress = min(max(Float(rightProgress.missingWords) / 100, 0.0), 1.0)
-            self.paceP2.progress = min(max(Float(rightProgress.pace) / 100, 0.0), 1.0)
-            self.prounciationP2.progress = min(max(Float(rightProgress.pronunciation) / 100, 0.0), 1.0)
-            self.overrallP2.progress = min(max(Float(rightProgress.overall) / 100, 0.0), 1.0)
+            self.fillerP2.progress = CGFloat(min(max(Float(rightProgress.fillerWords) / 100, 0.0), 1.0))
+            self.missingP2.progress = CGFloat(min(max(Float(rightProgress.missingWords) / 100, 0.0), 1.0))
+            self.paceP2.progress = CGFloat(min(max(Float(rightProgress.pace) / 100, 0.0), 1.0))
+            self.prounciationP2.progress = CGFloat(min(max(Float(rightProgress.pronunciation) / 100, 0.0), 1.0))
+            self.overrallP2.progress = CGFloat(min(max(Float(rightProgress.overall) / 100, 0.0), 1.0))
             
         }
-            //height of progress view
-       
+        updateColor(leftProgress: fillerP1, rightProgress: fillerP2)
+        updateColor(leftProgress: missingP1, rightProgress: missingP2)
+        updateColor(leftProgress: pronunciationP1, rightProgress: prounciationP2)
+        updateColor(leftProgress: paceP1, rightProgress: paceP2)
+        updateColor(leftProgress: overallP1, rightProgress: overrallP2)
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-               // color
-            updateProgressBarColors(leftValue: leftProgress.fillerWords, rightValue: rightProgress.fillerWords, leftProgressBar: fillerP1, rightProgressBar: fillerP2)
-            updateProgressBarColors(leftValue: leftProgress.missingWords, rightValue: rightProgress.missingWords, leftProgressBar: missingP1, rightProgressBar: missingP2)
-        updateProgressBarColors(leftValue: Int(leftProgress.pace), rightValue: Int(rightProgress.pace), leftProgressBar: paceP1, rightProgressBar: paceP2)
-        updateProgressBarColors(leftValue: Int(leftProgress.pronunciation), rightValue: Int(rightProgress.pronunciation), leftProgressBar: pronunciationP1, rightProgressBar: prounciationP2)
-        updateProgressBarColors(leftValue: Int(leftProgress.overall), rightValue: Int(rightProgress.overall), leftProgressBar: overallP1, rightProgressBar: overrallP2)
-        
+           
 
         
     }
-    func updateProgressBarColors(leftValue: Int, rightValue: Int, leftProgressBar: UIProgressView, rightProgressBar: UIProgressView) {
-        if leftValue > rightValue {
-            leftProgressBar.tintColor = .red
-            rightProgressBar.tintColor = .green
-        } else if leftValue < rightValue {
-            leftProgressBar.tintColor = .green
-            rightProgressBar.tintColor = .red
-        } else {
-            leftProgressBar.tintColor = .gray
-            rightProgressBar.tintColor = .gray
+    func updateColor(leftProgress : RoundedEndProgress, rightProgress : RoundedEndProgress){
+        if(leftProgress.progress > rightProgress.progress){
+            leftProgress.progressColor = .systemBlue
+            rightProgress.progressColor = .systemRed
+        }else if(leftProgress.progress<rightProgress.progress){
+            leftProgress.progressColor = .systemRed
+            rightProgress.progressColor = .systemBlue
+        }else{
+            leftProgress.progressColor = .systemBlue
+            rightProgress.progressColor  = .systemBlue
         }
+        leftProgress.setNeedsDisplay()
+        rightProgress.setNeedsDisplay()
     }
-
-    func round(){
+    func roundProgressView(){
         fillerP1.layer.cornerRadius = 10
         fillerP2.layer.cornerRadius = 10
         
     }
+    func flipProgressView(){
+        fillerP1.transform = CGAffineTransform(scaleX: -1, y: 1)
+        missingP1.transform = CGAffineTransform(scaleX: -1, y: 1)
+        paceP1.transform = CGAffineTransform(scaleX: -1, y: 1)
+        pronunciationP1.transform = CGAffineTransform(scaleX: -1, y: 1)
+        overallP1.transform = CGAffineTransform(scaleX: -1, y: 1)
+    }
+    func tableViewConstriants() {
+        
     
+        [TableView1, TableView2].forEach { tableView in
+            if tableView?.superview == nil {
+                contentView.addSubview(tableView!)
+            }
+            tableView?.translatesAutoresizingMaskIntoConstraints = false
+            tableView?.layer.cornerRadius = 8
+            tableView?.layer.borderWidth = 0.5
+            tableView?.layer.borderColor = UIColor.systemGray4.cgColor
+            tableView?.backgroundColor = .systemBackground
+        }
+        
+        
+        guard previous.superview != nil, current.superview != nil else {
+            print("Labels must be properly connected in Interface Builder")
+            return
+        }
+        
+        NSLayoutConstraint.activate([
+            // TableView1 constraints
+            TableView1.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 8),
+            TableView1.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            TableView1.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4),
+            TableView1.heightAnchor.constraint(equalToConstant: 150),
+            
+            // TableView2 constraints
+            TableView2.topAnchor.constraint(equalTo: current.bottomAnchor, constant: 8),
+            TableView2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            TableView2.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4),
+            TableView2.heightAnchor.constraint(equalToConstant: 150)
+        ])
+    }
     
-    
+            
     
     @IBOutlet weak var previous: UILabel!
     
     @IBOutlet weak var current: UILabel!
+
     
     @IBAction func previousB(_ sender: UIButton) {
-        stateOfButton.toggle()
-        if stateOfButton{
-            previousTableView.isHidden = false
+        stateOfButtonPrevious.toggle()
+        if stateOfButtonPrevious{
+            TableView1.isHidden = false
             leftButton.setImage(afterClicking, for: .normal)
             print("Image set")
         }else{
-            previousTableView.isHidden = true
+            TableView1.isHidden = true
             leftButton.setImage(beforeClicking, for: .normal)
             print("Image previous")
         }
         
-        //previousTableView.isHidden = !previousTableView.isHidden
     }
-    
+    var stateOfButtonCurrent :Bool = false
     @IBAction func currentB(_ sender: UIButton) {
-        
-        currentTableView.isHidden = !currentTableView.isHidden
+        stateOfButtonCurrent.toggle()
+        if stateOfButtonCurrent{
+            TableView2.isHidden = false
+            rightButton.setImage(afterClicking, for: .normal)
+            print("Image set")
+        }else{
+            TableView2.isHidden = true
+            rightButton.setImage(beforeClicking, for: .normal)
+            print("Image previous")
+        }
     }
     
-    @IBOutlet weak var previousTableView: UITableView!
+    @IBOutlet weak var TableView1: UITableView!
   
-    @IBOutlet weak var currentTableView: UITableView!
+    @IBOutlet weak var TableView2: UITableView!
     
     //progress1
     
     @IBOutlet weak var fillerP1
-    : UIProgressView!
+    : RoundedEndProgress!
     
-    @IBOutlet weak var missingP1: UIProgressView!
+    @IBOutlet weak var missingP1: RoundedEndProgress!
     
-    @IBOutlet weak var paceP1: UIProgressView!
+    @IBOutlet weak var paceP1: RoundedEndProgress!
     
-    @IBOutlet weak var pronunciationP1: UIProgressView!
+    @IBOutlet weak var pronunciationP1: RoundedEndProgress!
     
-    @IBOutlet weak var overallP1: UIProgressView!
+    @IBOutlet weak var overallP1: RoundedEndProgress!
     
     // progress 2
     
-    @IBOutlet weak var fillerP2: UIProgressView!
-    @IBOutlet weak var missingP2: UIProgressView!
-    @IBOutlet weak var paceP2: UIProgressView!
-    @IBOutlet weak var prounciationP2: UIProgressView!
-    @IBOutlet weak var overrallP2: UIProgressView!
+    @IBOutlet weak var fillerP2: RoundedEndProgress!
+    @IBOutlet weak var missingP2: RoundedEndProgress!
+    @IBOutlet weak var paceP2: RoundedEndProgress!
+    @IBOutlet weak var prounciationP2: RoundedEndProgress!
+    @IBOutlet weak var overrallP2: RoundedEndProgress!
     
     
     
@@ -182,26 +237,53 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     
     
     
-    
-    
-    
-    
-    
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        previousTableView.delegate = self
-        previousTableView.dataSource = self
-        currentTableView.delegate = self
-        currentTableView.dataSource = self
-        previousTableView.isHidden = true
-        currentTableView.isHidden = true
-        
-        //tag
-        previousTableView.tag = 1
-        currentTableView.tag = 2
+        setupTableViews()
+        setupButtons()
+        tableViewConstriants()
+        setupInitialState()
+        flipProgressView()
+    
     }
-    
-    
+  
+    private func setupTableViews() {
+        var table = [TableView1, TableView2]
+        table.forEach {
+            tableView in
+            tableView?.delegate = self
+            tableView?.dataSource = self
+            tableView?.isHidden = true
+            tableView?.clipsToBounds = true
+        }
+        TableView1.tag = 1
+        TableView2.tag = 2
+    }
+
+    func setupButtons() {
+        var button = [leftButton, rightButton]
+            button.forEach { button in
+            button?.setImage(beforeClicking, for: .normal)
+            button?.tintColor = .label
+        }
+    }
+
+    func setupInitialState() {
+        // button when not clicked
+        var button = [leftButton, rightButton]
+        button.forEach { button in
+            button?.tintColor = .label
+            button?.setImage(beforeClicking, for: .normal)
+        }
+        
+        // label ui
+        var ui = [previous, current]
+            ui.forEach { label in
+            label?.font = .systemFont(ofSize: 16, weight: .medium)
+        }
+        
+        // table view intially hidden
+        TableView1.isHidden = true
+        TableView2.isHidden = true
+    }
 }

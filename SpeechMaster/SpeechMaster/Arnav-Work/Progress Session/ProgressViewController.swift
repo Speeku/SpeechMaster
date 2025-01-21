@@ -10,22 +10,23 @@ import UIKit
 class DemoViewController: UIViewController,UICollectionViewDelegate,
                           UICollectionViewDataSource,
                           UITableViewDelegate,
-                          UITableViewDataSource {
-     let gifImage = UIImage.gifImageWithName("goblin")
+                          UITableViewDataSource,UICollectionViewDelegateFlowLayout {
+     let gifImage = UIImage.gifImageWithName("man")
     
-
-    var sessions : [Session] = [
-        Session(name: "Session 1"),
-        Session(name: "Session 2"),
-        Session(name: "Session 3"),
-        Session(name: "Session 4")
+    
+    var sessions : [Sessions] = [
+        Sessions(name: "Session 1", date: "10.01.2025"),
+        Sessions(name: "Session 2", date: "12.01.2025"),
+        Sessions(name: "Session 3", date: "14.01.2025"),
+        Sessions(name: "Session 4", date: "15.01.2025")
+    
     ]
     
     var qna : [QnA] = [
-        QnA(name: "Q/A 1"),
-        QnA(name: "Q/A 2"),
-        QnA(name: "Q/A 3"),
-        QnA(name: "Q/A 4")
+        QnA(name: "Q/A 1", date: "10.01.2025"),
+        QnA(name: "Q/A 2", date: "12.01.2025"),
+        QnA(name: "Q/A 3", date: "13.01.2025"),
+        QnA(name: "Q/A 4", date: "15.01.2025")
     ]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,18 +41,26 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
             
-                let cell  = UITableViewCell()
-                cell.textLabel?.text = sessions[indexPath.row].name
-            reheraseB.titleLabel?.text = "Reherase Again"
+            if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
+                cell.topicName = sessions[indexPath.row].name
+                cell.dateName = sessions[indexPath.row].date
+                cell.setup()
+                reheraseB.titleLabel?.text = "Reherase Again"
                 return cell
-            }else{
-                let cell = UITableViewCell()
-                cell.textLabel?.text = qna[indexPath.row].name
+            }
+        }
+        else{
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)  as? cellTableViewCell{
+                cell.topicName = qna[indexPath.row].name
+                cell.dateName = qna[indexPath.row].date
+                cell.setup()
                 reheraseB.titleLabel?.text = "Practice Q/A"
                 return cell
             }
+        }
+        print("Default Called")
+        return UITableViewCell()
     }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 2
     }
@@ -74,6 +83,9 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
                 cell.title2percent.text = "40%"
                 cell.updateCircle2(percentage: 0.4, progresscolor: .green)
                 cell.image.image = gifImage
+                
+                
+                pageControll.currentPage = indexPath.row
                 return cell
             }
         }
@@ -90,7 +102,16 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         return UICollectionViewCell()
     }
     
-
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // Ensure that the scrollView is your collection view
+        if scrollView == collectionView {
+            let pageWidth = collectionView.bounds.width // Width of the collection view
+            let currentPage = Int((collectionView.contentOffset.x + (0.5 * pageWidth)) / pageWidth)
+            
+            // Set the page control's current page to match the collection view's current page
+            pageControll.currentPage = currentPage
+        }
+    }
    
     
     @IBOutlet weak var textView: UITextView!
@@ -98,6 +119,8 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var reheraseB: UIButton!
+    
+    @IBOutlet weak var pageControll: UIPageControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,34 +157,20 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         tableView.delegate = self
     }
     
-    @IBAction func longPress(_ sender: UILongPressGestureRecognizer) {
-        if sender.state == .began{
-            
-            
-            performSegue(withIdentifier: "PopOverViewController", sender: self)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        print("Used")
+        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0) //
         }
-    }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "PopOverViewController" {
-            if let pop = segue.destination as? PopOverViewController {
-                if let textView = sender as? UITextView {
-                    
-                    pop.popoverPresentationController?.sourceView = textView
-                    pop.popoverPresentationController?.sourceRect = textView.bounds
-                    pop.popoverPresentationController?.permittedArrowDirections = .down
-                    pop.preferredContentSize = CGSize(width: 300, height: 300)
-                
-                }
-            }
-        }
-    }
+
+  
 
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
         }
     }
 
-    
+
+
     
     
     

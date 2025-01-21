@@ -39,7 +39,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     func updateCircle1(percentage: Double, progresscolor: UIColor) {
         guard let circularProgressBar = percent1 else { return }
         circularProgressBar.progress = percentage
-        circularProgressBar.lineWidth = 12
+        circularProgressBar.lineWidth = 7
         circularProgressBar.progressColor = progresscolor
         circularProgressBar.trackColor = .white
         
@@ -48,7 +48,7 @@ class ProgressCollectionViewCell: UICollectionViewCell {
     func updateCircle2(percentage: Double, progresscolor: UIColor) {
         guard let circularProgressBar = percent2 else { return }
         circularProgressBar.progress = percentage
-        circularProgressBar.lineWidth = 12
+        circularProgressBar.lineWidth = 7
         circularProgressBar.progressColor = progresscolor
         circularProgressBar.trackColor = .white
     }
