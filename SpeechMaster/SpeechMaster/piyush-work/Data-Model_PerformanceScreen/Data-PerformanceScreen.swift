@@ -31,7 +31,7 @@ var pace : [Pace] = [
 //]
 
 var pitch : [Pitch] = [
-    Pitch(graphPlaceHolder: UIImage(named: "PitchGraph")!)
+    Pitch(graphPlaceHolder: UIImage(named: "pitchGraph")!)
 ]
 
 var originality : [Originality] = [

@@ -133,12 +133,4 @@ class HomeViewModel: ObservableObject {
             imageName: "winston_churchill"
         )
     ]
-    @Published var showScriptPicker = false
-    @Published var showKeynotePrompt = false
-    @Published var showingError = false
-    @Published var errorMessage = ""
-    @Published var selectedScriptURL: URL?
-    @Published var showingScriptPicker = false
-    @Published var showingPresentationPicker = false
-    @Published var showError = false
 }

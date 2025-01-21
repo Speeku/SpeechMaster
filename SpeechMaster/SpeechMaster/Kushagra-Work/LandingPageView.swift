@@ -5,6 +5,20 @@
 //  Created by Kushagra Kulshrestha on 17/01/25.
 //
 import SwiftUI
+struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        // Get reference to your storyboard
+        let storyboard = UIStoryboard(name: "PerformanceScreen", bundle: nil)
+        
+        // Instantiate the desired view controller
+        let viewController = storyboard.instantiateViewController(withIdentifier: "KeynoteOptionsVC")
+        return viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // Update the view controller if needed
+    }
+}
 struct LandingPageView: View {
     @StateObject private var viewModel = HomeViewModel()
     @StateObject private var videoViewModel = VideoPlayerViewModel()
@@ -136,8 +150,10 @@ struct LandingPageView: View {
                     }
                 }
             }
+            
             .navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                PiyushScreen(scriptText: viewModel.uploadedScriptText)
+                KeyNoteOptionsStoryboardView()
+//                PiyushScreen(scriptText: viewModel.uploadedScriptText)
             }
             .toolbar(.hidden)
         }

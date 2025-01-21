@@ -48,16 +48,6 @@
 			path = SpeechMaster;
 			sourceTree = "<group>";
 		};
-		05511DF72D118E7400E26F10 /* SpeechMasterTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SpeechMasterTests;
-			sourceTree = "<group>";
-		};
-		05511E012D118E7400E26F10 /* SpeechMasterUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SpeechMasterUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,8 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
-				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
-				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 				05511DDF2D118E7300E26F10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -143,9 +131,6 @@
 			dependencies = (
 				05511DF62D118E7400E26F10 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
-			);
 			name = SpeechMasterTests;
 			packageProductDependencies = (
 			);
@@ -165,9 +150,6 @@
 			);
 			dependencies = (
 				05511E002D118E7400E26F10 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 			);
 			name = SpeechMasterUITests;
 			packageProductDependencies = (
@@ -292,7 +274,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8X32N6H25H;
+				DEVELOPMENT_TEAM = Y3Q96V56UM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -302,6 +284,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -310,7 +293,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMasteri;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -325,7 +308,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8X32N6H25H;
+				DEVELOPMENT_TEAM = Y3Q96V56UM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
@@ -335,6 +318,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -343,7 +327,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMasteri;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
