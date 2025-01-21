@@ -1,0 +1,42 @@
+//
+//  cellTableViewCell.swift
+//  SpeechMaster
+//
+//  Created by Arnav Chauhan on 21/01/25.
+//
+
+import UIKit
+
+class cellTableViewCell: UITableViewCell {
+
+    // cell outlets
+    
+    @IBOutlet weak var titleName: UILabel!
+    
+    @IBOutlet weak var date: UILabel!
+    
+    var topicName : String?
+    var dateName : String?
+    func setup(){
+        titleName.text = topicName ??  "No Name"
+        date.text = dateName ?? "29.02.2025"
+    }
+    
+    
+    
+    
+    
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+        
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}
