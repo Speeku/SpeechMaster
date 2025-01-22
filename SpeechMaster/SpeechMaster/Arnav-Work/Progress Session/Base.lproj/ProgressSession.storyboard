@@ -17,14 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6oz-si-RRF">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6oz-si-RRF">
                                 <rect key="frame" x="0.0" y="784" width="393" height="68"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yqu-w1-lVN">
-                                        <rect key="frame" x="8" y="8" width="377" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yqu-w1-lVN">
+                                        <rect key="frame" x="8" y="20" width="377" height="35"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="CCj-oy-ZE1"/>
+                                        </constraints>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Rehearse Again">
                                             <backgroundConfiguration key="background" cornerRadius="15">
@@ -36,6 +37,11 @@
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="yqu-w1-lVN" firstAttribute="top" secondItem="6oz-si-RRF" secondAttribute="top" constant="20" id="Lhe-Az-lUU"/>
+                                    <constraint firstAttribute="trailing" secondItem="yqu-w1-lVN" secondAttribute="trailing" constant="8" id="f3N-cx-NaC"/>
+                                    <constraint firstItem="yqu-w1-lVN" firstAttribute="leading" secondItem="6oz-si-RRF" secondAttribute="leading" constant="8" id="rlu-hq-EA2"/>
+                                </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Noo-kr-UO7">
                                 <rect key="frame" x="20" y="123" width="353" height="650.66666666666663"/>
@@ -53,6 +59,13 @@
                                                 <attributes>
                                                     <color key="NSColor" systemColor="labelColor"/>
                                                     <font key="NSFont" metaFont="system" size="14"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                            <fragment content="take a look at how hackers operate and what hackers operate and what hackers operate ...">
+                                                <attributes>
+                                                    <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <font key="NSFont" size="14" name="HelveticaNeue"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -182,9 +195,13 @@
                         <viewLayoutGuide key="safeArea" id="0fG-K1-ykz"/>
                         <color key="backgroundColor" red="0.94901967050000002" green="0.94901967050000002" blue="0.97254902119999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="6oz-si-RRF" firstAttribute="top" secondItem="Noo-kr-UO7" secondAttribute="bottom" constant="10.33" id="1cN-bI-CZb"/>
+                            <constraint firstItem="6oz-si-RRF" firstAttribute="trailing" secondItem="0fG-K1-ykz" secondAttribute="trailing" id="8ZS-IZ-2ha"/>
                             <constraint firstItem="Noo-kr-UO7" firstAttribute="leading" secondItem="0fG-K1-ykz" secondAttribute="leading" constant="20" id="9z8-FL-T1i"/>
                             <constraint firstItem="Noo-kr-UO7" firstAttribute="centerX" secondItem="aM8-lO-YdH" secondAttribute="centerX" id="Gq7-ji-NKF"/>
+                            <constraint firstItem="6oz-si-RRF" firstAttribute="leading" secondItem="0fG-K1-ykz" secondAttribute="leading" id="gJs-NC-lh0"/>
                             <constraint firstItem="Noo-kr-UO7" firstAttribute="top" secondItem="0fG-K1-ykz" secondAttribute="top" constant="20" id="hmW-rF-1Y2"/>
+                            <constraint firstAttribute="bottom" secondItem="6oz-si-RRF" secondAttribute="bottom" id="jKp-Xe-FV5"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="CyberSecurity" id="ZIl-XO-T47"/>
@@ -195,24 +212,25 @@
                         <outlet property="segemtedControlOutlet" destination="9V6-on-Mzd" id="Eog-8s-CsY"/>
                         <outlet property="tableView" destination="1xk-el-9k0" id="cbg-OK-wtx"/>
                         <outlet property="textView" destination="EwL-RS-dlI" id="sMi-ss-VWm"/>
+                        <segue destination="Dzg-vE-jKV" kind="show" identifier="TextViewController" id="DSG-ks-sTM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WPt-pe-04d" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2096.9465648854962" y="10.563380281690142"/>
+            <point key="canvasLocation" x="2150" y="4"/>
         </scene>
-        <!--Text View View Controller-->
+        <!--TextViewController-->
         <scene sceneID="VEp-dm-uRs">
             <objects>
-                <viewController id="Dzg-vE-jKV" customClass="TextViewViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="TextViewController" id="Dzg-vE-jKV" customClass="TextViewViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="diy-gl-XKV">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gf0-44-c0Y">
-                                <rect key="frame" x="20" y="79" width="353" height="719"/>
+                                <rect key="frame" x="20" y="123" width="353" height="675"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <mutableString key="text">Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...take a look at how hackers operate and what hackers operate and what hackers operate ...</mutableString>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -227,28 +245,11 @@
                             <constraint firstItem="Ltq-zP-sM6" firstAttribute="bottom" secondItem="gf0-44-c0Y" secondAttribute="bottom" constant="20" id="imy-zL-9vM"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="Lxh-rb-PyH"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gNX-zc-xe1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3634" y="53"/>
-        </scene>
-        <!--PopOverViewController-->
-        <scene sceneID="QOH-QD-Qx8">
-            <objects>
-                <viewController storyboardIdentifier="PopOverViewController" title="PopOverViewController" id="BU4-sS-GLV" customClass="PopOverViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="gKd-Ho-saF">
-                        <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="wjO-GJ-G9X"/>
-                        <color key="backgroundColor" red="0.26274511220000002" green="0.58823531870000001" blue="0.83137255909999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                    </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="300" height="300"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="300" height="300"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="o8z-mS-a72" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2887" y="-142"/>
+            <point key="canvasLocation" x="3236" y="4"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="tqs-f3-ASx">
@@ -278,7 +279,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
