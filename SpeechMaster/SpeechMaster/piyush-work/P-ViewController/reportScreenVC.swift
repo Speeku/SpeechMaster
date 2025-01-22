@@ -1,6 +1,13 @@
 import UIKit
 
 class reportScreenVC: UIViewController {
+    @objc private func saveAndDismiss() {
+        // Pop to the root of the navigation stack
+        navigationController?.popToRootViewController(animated: false)
+    }
+    @IBAction func SaveButtonTapped(_ sender: Any) {
+        saveAndDismiss()
+    }
     
     @IBOutlet var collectionView: UICollectionView!
     override func viewDidLoad() {

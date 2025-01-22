@@ -757,7 +757,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Rehearsal Report" id="AWx-Mh-Is4">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="YO5-kA-pZg"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="YO5-kA-pZg">
+                            <connections>
+                                <action selector="SaveButtonTapped:" destination="foB-J5-ugn" id="sH7-Xn-yBO"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="ov1-NB-AIM" id="09R-Po-Uyx"/>
