@@ -127,7 +127,8 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         updateCollectionView()
         updateTableView()
         round()
-        // Do any additional setup after loading the view.
+        //createPopUp()
+        
     }
     func updateCollectionView(){
         collectionView.delegate = self
@@ -167,8 +168,46 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
         }
-    }
-
+    
+    @IBAction func longPressGesture(_ sender: Any) {
+        let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
+                print("edit Tappepd")
+        
+            }
+            let regernate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
+                print("regenerate Tappepd")
+            }
+            let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { _ in
+                print("share Tappepd")
+            }
+    
+        
+            let menu = UIMenu(title: "", options: .displayInline, children: [edit, regernate, share])
+        
+        
+       
+        
+                }
+        }
+    
+    
+    
+//func createPopUp(){
+//    let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
+//        print("edit Tappepd")
+//        
+//    }
+//    let regernate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
+//        print("regenerate Tappepd")
+//    }
+//    let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { _ in
+//        print("share Tappepd")
+//    }
+//    
+//    
+//    let menu = UIMenu(title: "", options: .displayInline, children: [edit, regernate, share])
+//    textView.menu
+//}
 
 
     
