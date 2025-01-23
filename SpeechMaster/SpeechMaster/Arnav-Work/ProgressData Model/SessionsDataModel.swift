@@ -26,4 +26,6 @@ struct Progress{
     var overall : Double{
         return (Double(fillerWords + missingWords) + pace + pronunciation)/4.0
     }
+
+
 }

@@ -7,11 +7,14 @@
 
 import UIKit
 
+
 class DemoViewController: UIViewController,UICollectionViewDelegate,
                           UICollectionViewDataSource,
                           UITableViewDelegate,
-                          UITableViewDataSource,UICollectionViewDelegateFlowLayout {
-     let gifImage = UIImage.gifImageWithName("man")
+                          UITableViewDataSource,UICollectionViewDelegateFlowLayout, UIContextMenuInteractionDelegate {
+    
+    
+    let gifImage = UIImage.gifImageWithName("man")
     
     
     var sessions : [Sessions] = [
@@ -19,7 +22,7 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         Sessions(name: "Session 2", date: "12.01.2025"),
         Sessions(name: "Session 3", date: "14.01.2025"),
         Sessions(name: "Session 4", date: "15.01.2025")
-    
+        
     ]
     
     var qna : [QnA] = [
@@ -89,16 +92,16 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
                 return cell
             }
         }
-            if indexPath.row == 1{
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell{
-                    print("Yeah")
-                    return cell
-                }
+        if indexPath.row == 1{
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell{
+                print("Yeah")
+                return cell
             }
-            else{
-                print("Failed")
-                return UICollectionViewCell()
-            }
+        }
+        else{
+            print("Failed")
+            return UICollectionViewCell()
+        }
         return UICollectionViewCell()
     }
     
@@ -112,7 +115,26 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
             pageControll.currentPage = currentPage
         }
     }
-   
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        // actions defined
+            let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
+                print("Edit Tapped")
+                self.performSegue(withIdentifier: "TextViewController", sender :self)
+            }
+            
+            let regenerate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
+                print("Regenerate Tapped")
+            }
+            
+            let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { _ in
+                print("Share Tapped")
+            }
+            
+            // Return the menu
+            return UIMenu(title: "", children: [edit, regenerate, share])
+        }
+    }
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var segemtedControlOutlet: UISegmentedControl!
@@ -127,7 +149,14 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         updateCollectionView()
         updateTableView()
         round()
-        // Do any additional setup after loading the view.
+        updateLongPress()
+       
+      
+        
+    }
+    func updateLongPress(){
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+        textView.addInteraction(contextMenuInteraction)
     }
     func updateCollectionView(){
         collectionView.delegate = self
@@ -160,23 +189,15 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         print("Used")
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0) //
-        }
-
-  
-
+    }
+    
+    
+    
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
-        }
     }
 
+    }
 
-
-    
-    
-    
-    
-    
-    
-    
 
 

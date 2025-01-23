@@ -10,10 +10,10 @@ import UIKit
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
     
     var progressOfSession : [Progress] = [
-        Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 10, pronunciation: 1),
-        Progress(name: "Session 2", fillerWords: 40, missingWords: 10, pace: 10, pronunciation: 5),
-        Progress(name: "Session 3", fillerWords: 50, missingWords: 10, pace: 10, pronunciation: 4),
-        Progress(name: "Session 4", fillerWords: 100, missingWords: 12, pace: 10, pronunciation: 6),
+        Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 123, pronunciation: 1),
+        Progress(name: "Session 2", fillerWords: 40, missingWords: 10, pace: 100, pronunciation: 5),
+        Progress(name: "Session 3", fillerWords: 50, missingWords: 10, pace: 170, pronunciation: 4),
+        Progress(name: "Session 4", fillerWords: 100, missingWords: 12, pace: 140, pronunciation: 6),
         
     ]
     var left : Progress?
@@ -77,35 +77,37 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
             // Table view 1
         // when data change so it animates
         UIView.animate(withDuration: 2){
-            self.fillerP1.progress = CGFloat(min(max(Float(leftProgress.fillerWords) / 100, 0.0), 1.0))
-            self.missingP1.progress = CGFloat(min(max(Float(leftProgress.missingWords) / 100, 0.0), 1.0))
-            self.paceP1.progress = CGFloat(min(max(Float(leftProgress.pace) / 100, 0.0), 1.0))
-            self.pronunciationP1.progress = CGFloat(min(max(Float(leftProgress.pronunciation) / 100, 0.0), 1.0))
-            self.overallP1.progress = CGFloat(min(max(Float(leftProgress.overall) / 100, 0.0), 1.0))
+            self.fillerP1.progress = CGFloat(leftProgress.fillerWords) / 100
+            self.missingP1.progress = CGFloat(leftProgress.missingWords) / 100
+            self.paceP1.progress = CGFloat(leftProgress.pace) / 200
+            self.pronunciationP1.progress = CGFloat(leftProgress.pronunciation) / 100
+            self.overallP1.progress = CGFloat(leftProgress.overall) / 100
             
             // Table view 2
-            self.fillerP2.progress = CGFloat(min(max(Float(rightProgress.fillerWords) / 100, 0.0), 1.0))
-            self.missingP2.progress = CGFloat(min(max(Float(rightProgress.missingWords) / 100, 0.0), 1.0))
-            self.paceP2.progress = CGFloat(min(max(Float(rightProgress.pace) / 100, 0.0), 1.0))
-            self.prounciationP2.progress = CGFloat(min(max(Float(rightProgress.pronunciation) / 100, 0.0), 1.0))
-            self.overrallP2.progress = CGFloat(min(max(Float(rightProgress.overall) / 100, 0.0), 1.0))
+            self.fillerP2.progress = CGFloat(rightProgress.fillerWords) / 100
+            self.missingP2.progress = CGFloat(rightProgress.missingWords) / 100
+            self.paceP2.progress = CGFloat(rightProgress.pace) / 200
+            self.prounciationP2.progress = CGFloat(rightProgress.pronunciation) / 100
+            self.overrallP2.progress = CGFloat(rightProgress.overall) / 100
             
         }
         updateColor(leftProgress: fillerP1, rightProgress: fillerP2)
         updateColor(leftProgress: missingP1, rightProgress: missingP2)
         updateColor(leftProgress: pronunciationP1, rightProgress: prounciationP2)
-        updateColor(leftProgress: paceP1, rightProgress: paceP2)
-        updateColor(leftProgress: overallP1, rightProgress: overrallP2)
+        self.paceP1.progressColor = (leftProgress.pace < 80 || rightProgress.pace > 150) ? .systemRed : .systemBlue
+        self.paceP2.progressColor = (rightProgress.pace < 80 || leftProgress.pace > 150) ? .systemRed : .systemBlue
+        self.overallP1.progressColor = (leftProgress.overall<rightProgress.overall) ? .systemRed : .systemBlue
+        self.overrallP2.progressColor = (rightProgress.overall<leftProgress.overall) ? .systemRed : .systemBlue
         
            
 
         
     }
     func updateColor(leftProgress : RoundedEndProgress, rightProgress : RoundedEndProgress){
-        if(leftProgress.progress > rightProgress.progress){
+        if(leftProgress.progress < rightProgress.progress){
             leftProgress.progressColor = .systemBlue
             rightProgress.progressColor = .systemRed
-        }else if(leftProgress.progress<rightProgress.progress){
+        }else if(leftProgress.progress>rightProgress.progress){
             leftProgress.progressColor = .systemRed
             rightProgress.progressColor = .systemBlue
         }else{
