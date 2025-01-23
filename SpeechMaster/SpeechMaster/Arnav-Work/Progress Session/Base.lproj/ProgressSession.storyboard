@@ -34,6 +34,9 @@
                                             <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
                                             <color key="baseForegroundColor" red="0.26274511220000002" green="0.58823531870000001" blue="0.83529412749999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="rehearseButtonTap:" destination="PdR-uD-nB0" eventType="touchUpInside" id="Qz5-9S-5SI"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -213,11 +216,33 @@
                         <outlet property="tableView" destination="1xk-el-9k0" id="cbg-OK-wtx"/>
                         <outlet property="textView" destination="EwL-RS-dlI" id="sMi-ss-VWm"/>
                         <segue destination="Dzg-vE-jKV" kind="show" identifier="TextViewController" id="DSG-ks-sTM"/>
+                        <segue destination="RXG-4J-yCQ" kind="show" identifier="toQ&amp;A" id="xto-kD-JIR"/>
+                        <segue destination="jKw-l0-zCB" kind="show" identifier="toPerformance" id="hd5-wZ-O6G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WPt-pe-04d" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2150" y="4"/>
+        </scene>
+        <!--PortraitVC-->
+        <scene sceneID="dQf-mA-bVx">
+            <objects>
+                <viewControllerPlaceholder storyboardName="PerformanceScreen" referencedIdentifier="PortraitVC" id="jKw-l0-zCB" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="GHH-e1-cjd"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A9y-Ix-tfO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1737" y="469"/>
+        </scene>
+        <!--QuestionAnswer-->
+        <scene sceneID="vOZ-Rm-D13">
+            <objects>
+                <viewControllerPlaceholder storyboardName="QuestionAndAnswers" referencedIdentifier="QuestionAnswer" id="RXG-4J-yCQ" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="SnA-lS-NvL"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5Lq-oo-NQc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2128" y="474"/>
         </scene>
         <!--TextViewController-->
         <scene sceneID="VEp-dm-uRs">
@@ -230,7 +255,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gf0-44-c0Y">
                                 <rect key="frame" x="20" y="123" width="353" height="675"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <mutableString key="text">Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...take a look at how hackers operate and what hackers operate and what hackers operate ...</mutableString>
+                                <string key="text">Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...take a look at how hackers operate and what hackers operate and what hackers operate ...</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

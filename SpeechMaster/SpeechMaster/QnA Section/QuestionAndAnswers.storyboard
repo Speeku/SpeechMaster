@@ -12,7 +12,7 @@
         <!--Question And AnsVC-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController id="Y6W-OH-hqX" customClass="questionAndAnsVC" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuestionAnswer" id="Y6W-OH-hqX" customClass="questionAndAnsVC" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -87,7 +87,11 @@
                         <color key="backgroundColor" red="0.94919770960000005" green="0.94874733690000002" blue="0.96863013509999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="tCq-cK-kMy">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="mO1-aG-qUC"/>
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="mO1-aG-qUC">
+                            <connections>
+                                <segue destination="cdV-Wt-m6h" kind="unwind" unwindAction="unwindCancelWithSegue:" id="czF-ub-AlT"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="End Session" id="GrA-tW-V1J">
                             <color key="tintColor" systemColor="systemRedColor"/>
                             <connections>
@@ -106,6 +110,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="cdV-Wt-m6h" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1014.5038167938931" y="-28.169014084507044"/>
         </scene>
@@ -185,13 +190,18 @@
                         <color key="backgroundColor" red="0.94919770960000005" green="0.94874733690000002" blue="0.96863013509999996" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" title="Q/A Report" id="4Rf-vK-Git">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="3qc-iC-Mj4"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="3qc-iC-Mj4">
+                            <connections>
+                                <segue destination="qCA-eM-q62" kind="unwind" unwindAction="unwindCancelWithSegue:" id="hb3-4O-0cY"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Fl3-kf-x22" id="24u-dO-MAQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KpN-mA-4rK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="qCA-eM-q62" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1812.9770992366412" y="-28.169014084507044"/>
         </scene>
@@ -228,7 +238,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

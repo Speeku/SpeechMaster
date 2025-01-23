@@ -48,7 +48,8 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
                 cell.topicName = sessions[indexPath.row].name
                 cell.dateName = sessions[indexPath.row].date
                 cell.setup()
-                reheraseB.titleLabel?.text = "Reherase Again"
+               // reheraseB.titleLabel?.text = "Reherase Again"
+                updateButtonName()
                 return cell
             }
         }
@@ -57,7 +58,8 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
                 cell.topicName = qna[indexPath.row].name
                 cell.dateName = qna[indexPath.row].date
                 cell.setup()
-                reheraseB.titleLabel?.text = "Practice Q/A"
+              //  reheraseB.titleLabel?.text = "Practice Q/A"
+                updateButtonName()
                 return cell
             }
         }
@@ -191,10 +193,30 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0) //
     }
     
-    
+    func updateButtonName(){
+        if segemtedControlOutlet.selectedSegmentIndex == 0{
+            reheraseB.setTitle("Rehearse Again", for: .normal)
+            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        }else{
+            reheraseB.setTitle("Practice Q&A", for: .normal)
+            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+        }
+    }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
+    }
+    
+    @IBAction func unwindCancel(segue: UIStoryboardSegue){
+        
+    }
+    
+    @IBAction func rehearseButtonTap(_ sender: Any) {
+        if segemtedControlOutlet.selectedSegmentIndex == 0{
+            performSegue(withIdentifier: "toPerformance", sender: nil)
+        }else{
+            performSegue(withIdentifier: "toQ&A", sender: nil)
+        }
     }
 
     }
