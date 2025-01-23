@@ -101,9 +101,10 @@ class PerformanceScreenVC: UIViewController {
         setUpInputOutput()
         setUpPreviewLayer()
         startRunningCaptureSession()
-        
+        coachLabel.isHidden = true
         textView.isScrollEnabled = true
         textView.isUserInteractionEnabled = true  // Set to false if you don't want user scrolling
+        textView.isEditable = false
         textView.layoutManager.allowsNonContiguousLayout = false
         textView.text = scriptText
         
