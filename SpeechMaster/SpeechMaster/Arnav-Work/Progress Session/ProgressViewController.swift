@@ -86,7 +86,7 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
                 cell.title2.text = "Overall\nImprovement"
                 cell.topicName2.text = "CyberSecurity"
                 cell.title2percent.text = "40%"
-                cell.updateCircle2(percentage: 0.4, progresscolor: .green)
+                cell.updateCircle2(percentage: 0.4, progresscolor: .systemGreen)
                 cell.image.image = gifImage
                 
                 
