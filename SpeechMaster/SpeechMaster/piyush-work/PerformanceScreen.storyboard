@@ -722,7 +722,7 @@
                                 <rect key="frame" x="0.0" y="770" width="393" height="82"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="09z-7g-CEi">
-                                        <rect key="frame" x="107.66666666666667" y="16" width="177.66666666666663" height="41"/>
+                                        <rect key="frame" x="107.66666666666669" y="16" width="177.66666666666663" height="41"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="41" id="LSK-x6-vdg"/>
                                         </constraints>
@@ -992,21 +992,22 @@ If you found yourself filler words in the transitional moment, write down some t
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Speech Practice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzA-Ww-zVr">
-                                <rect key="frame" x="16.000000000000014" y="110" width="243.33333333333337" height="39.666666666666686"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speech Practice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzA-Ww-zVr">
+                                <rect key="frame" x="20" y="110.00000000000001" width="353" height="39.666666666666671"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="33"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="waveform.and.person.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-N5-jfh">
-                                <rect key="frame" x="71" y="197.66666666666669" width="253.99999999999997" height="160.99999999999994"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.and.person.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-N5-jfh">
+                                <rect key="frame" x="71" y="197.66666666666663" width="254" height="161.00000000000006"/>
                                 <color key="tintColor" red="0.7883364558" green="0.65269988779999999" blue="0.80001550909999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="251.33000000000001" id="3po-Je-84A"/>
+                                    <constraint firstAttribute="height" constant="160" id="op4-IP-fHE"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6c-uu-9as">
-                                <rect key="frame" x="42" y="376" width="308.33333333333331" height="61"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6c-uu-9as">
+                                <rect key="frame" x="40" y="376" width="313" height="61"/>
                                 <string key="text">We can start rehersal now you just have
 to upload keynote or we can proceed
 without keynote also</string>
@@ -1014,9 +1015,12 @@ without keynote also</string>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hky-2O-AMR">
-                                <rect key="frame" x="42" y="461" width="308" height="57"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hky-2O-AMR">
+                                <rect key="frame" x="42.666666666666657" y="461" width="308" height="57"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="308" id="GAC-ND-T9T"/>
+                                    <constraint firstAttribute="height" constant="57" id="hXq-Ox-DaD"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Upload Keynote">
                                     <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
@@ -1030,9 +1034,12 @@ without keynote also</string>
                                     <action selector="selectKeynote:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="giC-Q3-KGO"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKb-zl-3ho">
-                                <rect key="frame" x="42" y="538" width="307" height="57"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKb-zl-3ho">
+                                <rect key="frame" x="43" y="538" width="307" height="57"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="307" id="naz-zo-t1b"/>
+                                    <constraint firstAttribute="height" constant="57" id="pdx-w1-GjM"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Without Keynote">
                                     <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
@@ -1050,6 +1057,21 @@ without keynote also</string>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xgb-fr-Kqd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n2u-N5-jfh" firstAttribute="top" secondItem="mzA-Ww-zVr" secondAttribute="bottom" constant="47.329999999999998" id="HA5-cz-zXU"/>
+                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="20" id="SBC-Sl-d36"/>
+                            <constraint firstItem="n2u-N5-jfh" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="WJA-S2-e31"/>
+                            <constraint firstItem="h6c-uu-9as" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="40" id="YSf-p0-6Sl"/>
+                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="trailing" secondItem="h6c-uu-9as" secondAttribute="trailing" constant="40" id="cNq-Wo-DeH"/>
+                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="d9S-6h-Tqz"/>
+                            <constraint firstItem="h6c-uu-9as" firstAttribute="top" secondItem="n2u-N5-jfh" secondAttribute="bottom" constant="19" id="gc1-le-fCz"/>
+                            <constraint firstItem="hky-2O-AMR" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="gjJ-XC-lZC"/>
+                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="top" secondItem="Xgb-fr-Kqd" secondAttribute="top" constant="7" id="ibb-He-u49"/>
+                            <constraint firstItem="KKb-zl-3ho" firstAttribute="top" secondItem="hky-2O-AMR" secondAttribute="bottom" constant="20" id="k5E-BH-o0t"/>
+                            <constraint firstItem="hky-2O-AMR" firstAttribute="top" secondItem="h6c-uu-9as" secondAttribute="bottom" constant="24" id="nrZ-Ag-QD7"/>
+                            <constraint firstItem="h6c-uu-9as" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="oaZ-QA-xGY"/>
+                            <constraint firstItem="KKb-zl-3ho" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="yk4-eP-abG"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nv6-2T-2zE"/>
                     <connections>
@@ -1082,7 +1104,7 @@ without keynote also</string>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="2QW-n9-LOx"/>
+        <segue reference="lhZ-7e-TG1"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="circle.inset.filled" catalog="system" width="128" height="123"/>
@@ -1100,16 +1122,16 @@ without keynote also</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
