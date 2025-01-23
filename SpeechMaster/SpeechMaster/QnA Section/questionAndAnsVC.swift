@@ -66,10 +66,12 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate {
         if audioEngine.isRunning {
             stopRecording()
             isRecording = false
+            answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
             answerButton.setTitle("Start Speaking", for: .normal)
         } else {
             startRecording()
             isRecording = true
+            answerButton.setImage(UIImage(systemName: "waveform.circle.fill"), for: .normal)
             answerButton.setTitle("Stop Recording", for: .normal)
         }
     }

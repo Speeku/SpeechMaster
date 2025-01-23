@@ -130,7 +130,7 @@ struct CustomAlertView: View {
 struct ScriptCreationView: View {
     @ObservedObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var scriptText = ""
+    @State var scriptText = ""
     @State private var showingSaveAlert = false
     @State private var sessionName = ""
     @State private var showingDiscardAlert = false
