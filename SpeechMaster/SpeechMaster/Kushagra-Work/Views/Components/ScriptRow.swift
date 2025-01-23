@@ -93,10 +93,6 @@ struct ScriptRow: View {
             .tint(.blue)
         }
         
-        if script.id != viewModel.scripts.last?.id {
-            Divider()
-                .padding(.horizontal)
-        }
     }
 }
 

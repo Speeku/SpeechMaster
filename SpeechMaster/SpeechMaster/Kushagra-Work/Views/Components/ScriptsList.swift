@@ -10,6 +10,10 @@ struct ScriptsList: View {
                 NavigationLink(destination: StoryboardView()) {
                     ScriptRow(script: script, viewModel: viewModel)
                 }
+                if script.id != viewModel.scripts.last?.id {
+                    Divider()
+                        .padding(.horizontal)
+                }
             }
         }
         .background(Color.white)
