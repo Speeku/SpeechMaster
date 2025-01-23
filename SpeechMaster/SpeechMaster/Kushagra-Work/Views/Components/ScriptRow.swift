@@ -69,6 +69,34 @@ struct ScriptRow: View {
         .sheet(isPresented: $showingInfoSheet) {
             ScriptInfoView(script: script)
         }
+        .buttonStyle(.plain) // This ensures swipe actions work properly
+        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+            Button(role: .destructive) {
+                withAnimation {
+                    viewModel.deleteScript(script)
+                }
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+            
+            Button {
+                withAnimation {
+                    viewModel.togglePin(for: script)
+                }
+            } label: {
+                if script.isPinned {
+                    Label("Unpin", systemImage: "pin.slash")
+                } else {
+                    Label("Pin", systemImage: "pin")
+                }
+            }
+            .tint(.blue)
+        }
+        
+        if script.id != viewModel.scripts.last?.id {
+            Divider()
+                .padding(.horizontal)
+        }
     }
 }
 

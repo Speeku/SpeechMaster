@@ -8,11 +8,11 @@ class HomeViewModel: ObservableObject {
         Script(title: "Scene 1", date: Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date(), isPinned: false),
         Script(title: "Scene 2", date: Calendar.current.date(byAdding: .day, value: -2, to: Date()) ?? Date(), isPinned: false),
         Script(title: "Conclusion", date: Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date(), isPinned: false)
-    ]
+  ]
     
     @Published var searchText: String = ""
-    @Published var audienceEngagement: Double = 0
-    @Published var overallImprovement: Double = 0
+    @Published var audienceEngagement: Double = 80
+    @Published var overallImprovement: Double = 50
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     

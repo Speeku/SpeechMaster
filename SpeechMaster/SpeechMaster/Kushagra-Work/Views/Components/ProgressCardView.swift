@@ -1,70 +1,63 @@
 import SwiftUI
 struct ProgressCardView: View {
-    
     let title: String
     let progress: Double
     let fgColor: Color
     let bgColor: Color
     let circleColor: Color
     let lastCreatedScriptName: String?
-    /*init(title: String, progress: Double, color: Color) {
-        self.title = title
-        self.progress = progress
-        self.color = color
-        self.lastCreatedScriptName = nil
-    }
-    init (title: String, progress: Double, color: Color, lastCreatedScriptName: String?) {
-        self.title = title
-        self.progress = progress
-        self.color = color
-        self.lastCreatedScriptName*/
+
     var body: some View {
-        VStack(alignment: .leading,spacing:2){
+        VStack(alignment: .leading, spacing: 5) {
+            // Title
             Text(title)
                 .foregroundStyle(fgColor)
                 .font(.headline)
                 .lineLimit(2)
-            HStack{
-                VStack(alignment: .leading){
-                    if let lastScriptName = lastCreatedScriptName{ Text(lastScriptName)
+
+            // Content HStack
+            HStack(alignment: .center) {
+                VStack(alignment: .leading, spacing: 5) {
+                    // Last Created Script Name
+                    if let lastScriptName = lastCreatedScriptName {
+                        Text(lastScriptName)
                             .font(.subheadline)
+                            .multilineTextAlignment(.leading)
                             .foregroundStyle(fgColor)
-                            .frame(maxWidth:.infinity)
                             .lineLimit(1)
-                            .padding(.trailing,3)
                     }
-                    else{
-                        Spacer()
-                        //Text("").frame(maxWidth:.infinity)
-                    }
+
+                    // Progress Percentage
                     Text("\(Int(progress))%")
                         .font(.subheadline)
-                    .foregroundStyle(fgColor)}
+                        .multilineTextAlignment(.leading)
+                        .foregroundStyle(fgColor)
+                }
+
+                // Circular Progress Indicator
+                Spacer() // Ensures the circle is pushed to the right
                 ZStack {
                     Circle()
                         .stroke(lineWidth: 7)
-                        .foregroundColor(.white)
-                    
+                        .foregroundColor(circleColor.opacity(0.2))
+
                     Circle()
-                        .trim(from: 0, to: progress/100)
-                        .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .butt))
+                        .trim(from: 0, to: progress / 100)
+                        .stroke(style: StrokeStyle(lineWidth: 8, lineCap: .round))
                         .foregroundColor(circleColor)
                         .rotationEffect(.degrees(-90))
-                        //.bold()
                 }
                 .frame(width: 50, height: 50)
-            }}
+            }
+        }
         .padding()
         .background(bgColor)
         .cornerRadius(15)
         .frame(maxHeight: .infinity)
     }
-} 
-#Preview {
-    @Previewable @StateObject var viewModel = HomeViewModel()
-    HStack(spacing:16){ProgressCardView(title: "Audience Engagement", progress: 50, fgColor: .white ,bgColor: .progressCardColorAudienceEngagement, circleColor: .orange, lastCreatedScriptName: viewModel.scripts.first?.title ?? nil)
-        ProgressCardView(title: "Overall Improvement", progress: 34, fgColor: .black ,bgColor: .progressCardColorOverallImprovement, circleColor: .green,lastCreatedScriptName:"Computer Science Network")
-    }.padding()
-    
 }
-//(String(format: "%.2f", progress)
+#Preview {
+    HStack {
+        ProgressCardView(title: "Audience Ebgagement", progress: 10, fgColor: .white, bgColor: .progressCardColorAudienceEngagement, circleColor: .orange, lastCreatedScriptName: "Avc")
+        ProgressCardView(title: "Audience Ebgagement", progress: 10, fgColor: .white, bgColor: .progressCardColorAudienceEngagement, circleColor: .orange, lastCreatedScriptName: "Avc")}
+}
