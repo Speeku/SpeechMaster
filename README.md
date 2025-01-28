@@ -1,4 +1,4 @@
-![GitHub Metrics](https://github.com/Speeku/SpeechMaster/blob/production/.github/workflows/metrics.yml)
+![GitHub Metrics](https://github.com/Speeku/SpeechMaster/blob/production/metrics.svg)
 # SpeechMaster
 Guidelines For Developers:
 * Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
