@@ -1,3 +1,4 @@
+![GitHub Metrics](https://github.com/YOUR_ORG/YOUR_REPO/blob/main/metrics.svg)
 # SpeechMaster
 Guidelines For Developers:
 * Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
