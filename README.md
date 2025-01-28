@@ -1,113 +1,66 @@
+# SpeechMaster
+Guidelines For Developers:
+* Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
+* Don't ever Commit a Buggy Code.
+* The Development branch arising from production is the main branch; you have to create your respective feature branches fromm Development branch only.
+* Before merging your respective branch to development
+
+  
+Branch Naming Conventions:
+featureName [Description]
+subfeatureName [Description]
+
+Commit Naming Convention:
+Commit messages should be descriptive such as:
+if you added a feature then write "Added so and so feature[Description]"
+if you fixed a bug then write " Fixed this bug [Description]"
+
+App Description:
+SpeechMaster is a powerful application that polishes your public communication skills by analysing your speeches on various parameters like filler words usage, pronunciation, pace, pitch, etc., 
+The mirror doesn't judge you and neither does our app; but indeed it is a powerful tool using which you can analyse your public communication and presentation delivery skills
+The app provides the user to do practice like in front of the mirror but the mirror neither modifies your script, nor does it analyse your speech, and nor does it asks questions to you based on your speech;
+With the following advantages we are set to beat the traditional mirror method with all its advantages alongwith some cutting edge technologies like Apple Intelligence leveraging complex Machine Learning algorithms.
+The app is pretty easy to use; there is only one single tab that has complete flow of the application; One single button for practicing sessions having a completely straight forward flow makes the app user friendly.
+The Practice feature includes Script Generation feature that uses Apple Intellingence to generate scripts for presentations and public speaking.
+The QnA feature included in the Script Section makes the user familiar with real world QnA sessions after presentations 
+There is column on landing page where the user can watch great speakers delivering their presentations and get adaptation tips from that.
+
+## 📊 Repository Analytics
+
 <div align="center">
 
-# 🎙️ SpeechMaster
-
-[![Development Status](https://img.shields.io/badge/Status-Active-success)](https://github.com/Speeku/SpeechMaster)
-[![Platform](https://img.shields.io/badge/Platform-iOS-blue)](https://github.com/Speeku/SpeechMaster)
-[![Swift](https://img.shields.io/badge/Swift-100%25-orange)](https://github.com/Speeku/SpeechMaster)
-[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/Speeku/SpeechMaster)
-
-<img src="https://raw.githubusercontent.com/Speeku/SpeechMaster/main/Assets/logo.png" alt="SpeechMaster Logo" width="200"/>
-
-### Master the Art of Public Speaking with AI-Powered Analysis
-
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Contributing](#contributing)
+[![Repo Stats](https://github-readme-stats.vercel.app/api/pin/?username=Speeku&repo=SpeechMaster&theme=swift)](https://github.com/Speeku/SpeechMaster)
 
 </div>
-
-## 🎯 About
-
-SpeechMaster is a powerful iOS application designed to enhance your public speaking skills through advanced speech analysis. Using cutting-edge AI technology, the app provides real-time feedback on:
-
-- 🗣️ Filler Word Usage
-- 🎯 Pronunciation Accuracy
-- ⏱️ Speech Pace
-- 🎵 Pitch Variation
-- 📊 Overall Delivery
-
-## ✨ Key Features
-
-### 1. Speech Analysis
-- Real-time feedback during practice sessions
-- Detailed analysis reports
-- Progress tracking over time
-
-### 2. AI-Powered Features
-- Smart filler word detection
-- Pronunciation guidance
-- Pace optimization suggestions
-- Voice modulation tips
-
-### 3. Performance Metrics
-- Comprehensive analytics dashboard
-- Historical data tracking
-- Custom goal setting
-- Progress visualization
-
-## 🚀 Installation
-
-### Prerequisites
-```bash
-- iOS 15.0+
-- Xcode 14.0+
-- Swift 5.5+
-- CocoaPods
-### 💬 Commit Message Convention
-Commit messages should be descriptive such as:
-- If you added a feature: "Added so and so feature[Description]"
-- If you fixed a bug: "Fixed this bug [Description]"
-
-## 🛠️ Technical Details
-
-- **Platform**: iOS
-- **Language**: Swift (100%)
-- **AI Integration**: Apple Intelligence
-- **Architecture**: Native iOS
-
-## 🎯 Features
-
-1. **Script Generation**
-   - Powered by Apple Intelligence
-   - Professional templates
-   - Customizable content
-
-2. **QnA Practice**
-   - Interactive sessions
-   - Real-world scenarios
-   - Performance feedback
-
-3. **Expert Learning**
-   - Watch professional speakers
-   - Get adaptation tips
-   - Track progress
 
 ## 👥 Contributors
 
-### Current Active Contributors
-- [@Ricky30feb](https://github.com/Ricky30feb)
-  - Contributions: 29
-  - Pull Requests: 3
+<div align="center">
 
-## 🤝 Contributing
+[![Contributors](https://contrib.rocks/image?repo=Speeku/SpeechMaster)](https://github.com/Speeku/SpeechMaster/graphs/contributors)
 
-1. Fork the repository
-2. Create feature branch from development
-3. Follow naming conventions
-4. Make your changes
-5. Create Pull Request
+</div>
 
-## 📞 Support
+## 📈 Recent Activity
 
-Need help? Have questions?
-- Open an [Issue](https://github.com/Speeku/SpeechMaster/issues)
-- Start a [Discussion](https://github.com/Speeku/SpeechMaster/discussions)
+<!-- Activity graph -->
+[![Ricky's github activity graph](https://github-readme-activity-graph.vercel.app/graph?username=Ricky30feb&theme=github-light)](https://github.com/Speeku/SpeechMaster)
 
----
+### 📊 Stats
 
 <div align="center">
 
-Made with ❤️ by [Speeku](https://github.com/Speeku)
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=Ricky30feb&show_icons=true&theme=swift)
 
-Last Updated: 2025-01-28 14:05:53 UTC
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Ricky30feb&theme=swift)](https://github.com/Speeku/SpeechMaster)
 
 </div>
+
+## Repository Details
+
+![Languages](https://img.shields.io/github/languages/count/Speeku/SpeechMaster)
+![Top Language](https://img.shields.io/github/languages/top/Speeku/SpeechMaster)
+![Contributors](https://img.shields.io/github/contributors/Speeku/SpeechMaster)
+![Stars](https://img.shields.io/github/stars/Speeku/SpeechMaster)
+![Forks](https://img.shields.io/github/forks/Speeku/SpeechMaster)
+![Issues](https://img.shields.io/github/issues/Speeku/SpeechMaster)
