@@ -1,117 +1,54 @@
-Your README looks great! Here are a few corrections and improvements for clarity and formatting:
-
-```markdown
-# SpeechMaster 🎙️
-
 <div align="center">
 
-![Development Status](https://img.shields.io/badge/Status-Active-success)
-![Platform](https://img.shields.io/badge/Platform-iOS-blue)
-![Development](https://img.shields.io/badge/Development-In_Progress-grey)
+# 🎙️ SpeechMaster
 
-A powerful application that polishes your public communication skills by analyzing your speeches on various parameters like filler words usage, pronunciation, pace, pitch, and more.
+[![Development Status](https://img.shields.io/badge/Status-Active-success)](https://github.com/Speeku/SpeechMaster)
+[![Platform](https://img.shields.io/badge/Platform-iOS-blue)](https://github.com/Speeku/SpeechMaster)
+[![Swift](https://img.shields.io/badge/Swift-100%25-orange)](https://github.com/Speeku/SpeechMaster)
+[![License](https://img.shields.io/badge/License-MIT-green)](https://github.com/Speeku/SpeechMaster)
 
-[![Repo Stats](https://github-readme-stats.vercel.app/api/pin/?username=Speeku&repo=SpeechMaster&theme=swift)](https://github.com/Speeku/SpeechMaster)
+<img src="https://raw.githubusercontent.com/Speeku/SpeechMaster/main/Assets/logo.png" alt="SpeechMaster Logo" width="200"/>
+
+### Master the Art of Public Speaking with AI-Powered Analysis
+
+[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Contributing](#contributing)
 
 </div>
 
-## 📊 Recent Activity Dashboard
-<div align="center">
-  <img src="https://github-activity-graphs-demo.herokuapp.com/graph" alt="Activity Graph" />
-</div>
+## 🎯 About
 
-### Repository Metrics (Last 7 Days)
-- 🔵 **130 commits** (+28 this week, 246 total)
-- 🔴 **25 issues** handled
-- ⚪ **41 pull requests** (+9 this week, 75 total)
+SpeechMaster is a powerful iOS application designed to enhance your public speaking skills through advanced speech analysis. Using cutting-edge AI technology, the app provides real-time feedback on:
 
-### 👥 Top Contributors
+- 🗣️ Filler Word Usage
+- 🎯 Pronunciation Accuracy
+- ⏱️ Speech Pace
+- 🎵 Pitch Variation
+- 📊 Overall Delivery
 
-| Rank | Contributor | Commits | Issue Activity | Latest Activity |
-|------|-------------|---------|----------------|-----------------|
-| 1 | Ricky30feb | 39 | 153 | JAN 24, 2025 |
-| 2 | Other Contributors | 31 | 11 | JAN 23, 2025 |
-| 3 | Development Team | 8 | 12 | JAN 23, 2025 |
-| 4 | QA Team | 5 | 26 | JAN 21, 2025 |
+## ✨ Key Features
 
-## 🎯 Key Features
-- 🎯 Speech Analysis & Feedback
-- 📝 AI-Powered Script Generation
-- ❓ Interactive QnA Sessions
-- 🎥 Learning from Expert Speakers
-- 🔍 Real-time Performance Metrics
+### 1. Speech Analysis
+- Real-time feedback during practice sessions
+- Detailed analysis reports
+- Progress tracking over time
 
-## 📊 Repository Analytics
-<div align="center">
+### 2. AI-Powered Features
+- Smart filler word detection
+- Pronunciation guidance
+- Pace optimization suggestions
+- Voice modulation tips
 
-![Languages](https://img.shields.io/github/languages/count/Speeku/SpeechMaster)
-![Top Language](https://img.shields.io/github/languages/top/Speeku/SpeechMaster)
-![Contributors](https://img.shields.io/github/contributors/Speeku/SpeechMaster)
-![Stars](https://img.shields.io/github/stars/Speeku/SpeechMaster)
-![Forks](https://img.shields.io/github/forks/Speeku/SpeechMaster)
-![Issues](https://img.shields.io/github/issues/Speeku/SpeechMaster)
+### 3. Performance Metrics
+- Comprehensive analytics dashboard
+- Historical data tracking
+- Custom goal setting
+- Progress visualization
 
-</div>
+## 🚀 Installation
 
-## 👥 Contributor Stats
-<div align="center">
-
-[![Contributors](https://contrib.rocks/image?repo=Speeku/SpeechMaster)](https://github.com/Speeku/SpeechMaster/graphs/contributors)
-
-### Lead Developer Stats
-[![Ricky's GitHub stats](https://github-readme-stats.vercel.app/api?username=Ricky30feb&show_icons=true&theme=swift)](https://github.com/Speeku/SpeechMaster)
-
-</div>
-
-## 📈 Development Progress
-[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Ricky30feb&theme=github-light)](https://github.com/Speeku/SpeechMaster)
-
-### Contribution Streak
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com/?user=Ricky30feb&theme=swift)](https://github.com/Speeku/SpeechMaster)
-
-## 📝 Development Guidelines
-
-### Branch Structure
-- `production` (default): Protected main branch
-- `development`: Main development branch
-- Feature branches: Created from development
-
-### Branch Naming Convention
-- Feature branch: `featureName [Description]`
-- Sub-feature branch: `subfeatureName [Description]`
-
-### Commit Guidelines
-Commit messages should be descriptive:
-- New features: "Added [feature name] [Description]"
-- Bug fixes: "Fixed [bug description] [Details]"
-
-### Important Rules
-1. ⛔ Never commit directly to the production branch
-2. ✅ Create feature branches from the development branch only
-3. 🐛 No buggy code commits
-4. 🔍 Review before merging to development
-
-## 📱 App Features
-
-### 1. Practice Sessions
-- One-click practice mode
-- Intuitive user interface
-- Real-time feedback
-
-### 2. Script Generation
-- AI-powered script creation
-- Apple Intelligence integration
-- Context-aware content
-
-### 3. QnA Preparation
-- Interactive Q&A sessions
-- Real-world scenario simulation
-- Comprehensive feedback
-
-### 4. Learning Resources
-- Expert speaker examples
-- Adaptation tips
-- Best practices
-```
-
-This version corrects minor typos and improves clarity and readability.
+### Prerequisites
+```bash
+- iOS 15.0+
+- Xcode 14.0+
+- Swift 5.5+
+- CocoaPods
