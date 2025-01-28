@@ -5,7 +5,7 @@ from github import Github
 
 def update_readme():
     # Initialize GitHub client
-    g = Github(os.getenv('GITHUB_TOKEN'))
+    g = Github(os.getenv('METRICS_TOKEN'))
     repo = g.get_repo("Speeku/SpeechMaster")
 
     # Get repository statistics
