@@ -1,3 +1,6 @@
+Your README looks great! Here are a few corrections and improvements for clarity and formatting:
+
+```markdown
 # SpeechMaster 🎙️
 
 <div align="center">
@@ -6,7 +9,7 @@
 ![Platform](https://img.shields.io/badge/Platform-iOS-blue)
 ![Development](https://img.shields.io/badge/Development-In_Progress-grey)
 
-A powerful application that polishes your public communication skills by analysing your speeches on various parameters like filler words usage, pronunciation, pace, pitch, and more.
+A powerful application that polishes your public communication skills by analyzing your speeches on various parameters like filler words usage, pronunciation, pace, pitch, and more.
 
 [![Repo Stats](https://github-readme-stats.vercel.app/api/pin/?username=Speeku&repo=SpeechMaster&theme=swift)](https://github.com/Speeku/SpeechMaster)
 
@@ -25,7 +28,7 @@ A powerful application that polishes your public communication skills by analysi
 ### 👥 Top Contributors
 
 | Rank | Contributor | Commits | Issue Activity | Latest Activity |
-|------|------------|---------|----------------|-----------------|
+|------|-------------|---------|----------------|-----------------|
 | 1 | Ricky30feb | 39 | 153 | JAN 24, 2025 |
 | 2 | Other Contributors | 31 | 11 | JAN 23, 2025 |
 | 3 | Development Team | 8 | 12 | JAN 23, 2025 |
@@ -84,7 +87,7 @@ Commit messages should be descriptive:
 
 ### Important Rules
 1. ⛔ Never commit directly to the production branch
-2. ✅ Create feature branches from development branch only
+2. ✅ Create feature branches from the development branch only
 3. 🐛 No buggy code commits
 4. 🔍 Review before merging to development
 
@@ -109,3 +112,6 @@ Commit messages should be descriptive:
 - Expert speaker examples
 - Adaptation tips
 - Best practices
+```
+
+This version corrects minor typos and improves clarity and readability.
