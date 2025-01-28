@@ -1,3 +1,27 @@
+<div align="center">
+
+# 🎙️ SpeechMaster
+
+<!-- These badges update automatically -->
+![GitHub contributors](https://img.shields.io/github/contributors/Speeku/SpeechMaster)
+![GitHub last commit](https://img.shields.io/github/last-commit/Speeku/SpeechMaster)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/Speeku/SpeechMaster)
+![GitHub issues](https://img.shields.io/github/issues/Speeku/SpeechMaster)
+
+</div>
+
+[Rest of your existing README content...]
+
+## 📊 Repository Statistics
+<!-- START_SECTION:stats -->
+<!-- This section will be automatically updated by GitHub Actions -->
+<!-- END_SECTION:stats -->
+
+## 👥 Contributors
+<!-- START_SECTION:contributors -->
+<!-- This section will be automatically updated by GitHub Actions -->
+<!-- END_SECTION:contributors -->
+
 # SpeechMaster
 Guidelines For Developers:
 * Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
