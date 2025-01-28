@@ -10,7 +10,6 @@
 
 </div>
 
-[Rest of your existing README content...]
 
 ## 📊 Repository Statistics
 <!-- START_SECTION:stats -->
