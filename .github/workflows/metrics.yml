@@ -14,6 +14,6 @@ jobs:
         with:
           filename: metrics.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          user: Speeku  # Change this to your GitHub organization name
+          user: Ricky30feb  # Change this to your GitHub organization name
           template: classic
           base: header, activity, community, repositories
