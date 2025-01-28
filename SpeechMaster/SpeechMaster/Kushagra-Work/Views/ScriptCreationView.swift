@@ -172,6 +172,7 @@ struct ScriptCreationView: View {
                 }
             }
             
+        
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Save") {
                     showingSaveAlert = true

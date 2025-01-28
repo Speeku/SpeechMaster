@@ -37,11 +37,25 @@ struct LandingPageView: View {
                     // Search Bar
                     SearchBarView(searchText: $viewModel.searchText)
 
-                    ScrollView {
+                    ScrollView(showsIndicators: false){
                         VStack(alignment: .leading, spacing: 20) {
+                            //Highlights
+                            VStack(alignment: .leading) {
+                                Text("Highlights")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 17)
+                                NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
+                                Image("Highlights").resizable()
+                                        .frame(width: 358, height:120).padding(.init(top: 0, leading:22, bottom: 0, trailing:5))
+                                    .clipShape(.rect(cornerRadius: 10))
+
+                                }
+                                
+                            }
                             // Top Speeches Section
                             VStack(alignment: .leading) {
-                                Text("Speeches")
+                                Text("Top Speakers")
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .padding(.horizontal, 17)
@@ -123,7 +137,7 @@ struct LandingPageView: View {
                     }
                 }
             }
-            NavigationLink(destination: ScriptCreationView(viewModel: .init()), isActive: $showingScriptCreation) {
+            NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {
             }
 //            .sheet(isPresented: $showingScriptCreation) {
 //                ScriptCreationView(viewModel: viewModel)

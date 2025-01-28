@@ -16,9 +16,10 @@ struct SearchBarView: View {
             Image(systemName: "mic.fill")
                 .foregroundColor(.gray)
         }
+        .frame(width: .infinity,height : 10)
         .padding()
         .background(Color(.white))
-        .cornerRadius(10)
+        .cornerRadius(25)
         .padding(.horizontal)
     }
 } 
