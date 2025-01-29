@@ -9,7 +9,10 @@
 ## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Top contributors
 [![Top contributors](https://images.repography.com/60218403/Speeku/SpeechMaster/top-contributors/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_table.svg)](https://github.com/Speeku/SpeechMaster/graphs/contributors)
 
-# 🎙️ SpeechMaster
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
+[![Structure](https://images.repography.com/60218403/Speeku/SpeechMaster/structure/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/mkTnnphTZEvL15dLykWjMFG7pxqxNNtSe0Q6b9xzsyA_table.svg)](https://github.com/Speeku/SpeechMaster)
+
+### 🎙️ SpeechMaster
 
 <!-- These badges update auto
 # SpeechMaster
@@ -38,5 +41,3 @@ The app is pretty easy to use; there is only one single tab that has complete fl
 The Practice feature includes Script Generation feature that uses Apple Intellingence to generate scripts for presentations and public speaking.
 The QnA feature included in the Script Section makes the user familiar with real world QnA sessions after presentations 
 There is column on landing page where the user can watch great speakers delivering their presentations and get adaptation tips from that.
-## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
-[![Structure](https://images.repography.com/60218403/Speeku/SpeechMaster/structure/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/mkTnnphTZEvL15dLykWjMFG7pxqxNNtSe0Q6b9xzsyA_table.svg)](https://github.com/Speeku/SpeechMaster)
