@@ -1,3 +1,20 @@
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Recent activity [![Time period](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_badge.svg)](https://repography.com)
+[![Timeline graph](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_timeline.svg)](https://github.com/Speeku/SpeechMaster/commits)
+[![Issue status graph](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_issues.svg)](https://github.com/Speeku/SpeechMaster/issues)
+[![Pull request status graph](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_prs.svg)](https://github.com/Speeku/SpeechMaster/pulls)
+[![Trending topics](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_words.svg)](https://github.com/Speeku/SpeechMaster/commits)
+[![Top contributors](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_users.svg)](https://github.com/Speeku/SpeechMaster/graphs/contributors)
+[![Activity map](https://images.repography.com/60218403/Speeku/SpeechMaster/recent-activity/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_map.svg)](https://github.com/Speeku/SpeechMaster/commits)
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Top contributors
+[![Top contributors](https://images.repography.com/60218403/Speeku/SpeechMaster/top-contributors/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/8xxp6qcjuFfMvPdjsUNJlVCdieLhiXuAii2LqGO9Qos_table.svg)](https://github.com/Speeku/SpeechMaster/graphs/contributors)
+
+## [![Repography logo](https://images.repography.com/logo.svg)](https://repography.com) / Structure
+[![Structure](https://images.repography.com/60218403/Speeku/SpeechMaster/structure/j8yT9YkiX2m_ONWL4HQ1CpSQa6CgMeLKnvYU6Hm_iFw/mkTnnphTZEvL15dLykWjMFG7pxqxNNtSe0Q6b9xzsyA_table.svg)](https://github.com/Speeku/SpeechMaster)
+
+### 🎙️ SpeechMaster
+
+<!-- These badges update auto
 # SpeechMaster
 Guidelines For Developers:
 * Don't ever try to change anything in production branch. It is the default branch; once changed, very difficult to revert back.
