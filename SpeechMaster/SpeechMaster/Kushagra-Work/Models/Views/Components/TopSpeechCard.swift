@@ -7,7 +7,7 @@ struct TopSpeechCard: View {
             Image(speech.imageName)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 175, height: 220)
+                .frame(width: 170, height: 200)
                 .cornerRadius(10)
             VStack(alignment: .leading){
                 Text(speech.title)
@@ -19,11 +19,11 @@ struct TopSpeechCard: View {
                     .foregroundStyle(.white)
                     .lineLimit(1)
             }.padding(.bottom,10)
-            .frame(width:175)
+            .frame(width:170)
             .background(Color.black.opacity(0.5))
         }
         .clipShape(.rect(cornerRadius: 10))
-        .frame(width: 175)
+        .frame(width: 170)
     }
 }
 #Preview {

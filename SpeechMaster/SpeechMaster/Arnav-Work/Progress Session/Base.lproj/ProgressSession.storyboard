@@ -12,7 +12,7 @@
         <!--CyberSecurity-->
         <scene sceneID="4QZ-DK-dsW">
             <objects>
-                <viewController storyboardIdentifier="ScriptDetailedSection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PdR-uD-nB0" customClass="DemoViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ScriptDetailedSection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PdR-uD-nB0" customClass="ProgressViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aM8-lO-YdH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -120,6 +120,9 @@
                                     <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="BbQ-b1-DWF">
                                         <rect key="frame" x="0.0" y="419.33333333333337" width="353" height="25.666666666666686"/>
                                         <color key="currentPageIndicatorTintColor" systemColor="labelColor"/>
+                                        <connections>
+                                            <action selector="pageControlTapped:" destination="PdR-uD-nB0" eventType="valueChanged" id="yii-nK-sjC"/>
+                                        </connections>
                                     </pageControl>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="9V6-on-Mzd">
                                         <rect key="frame" x="0.0" y="465" width="353" height="37"/>
@@ -210,7 +213,7 @@
                     <navigationItem key="navigationItem" title="CyberSecurity" id="ZIl-XO-T47"/>
                     <connections>
                         <outlet property="collectionView" destination="R1g-QU-sms" id="IeR-wv-YQd"/>
-                        <outlet property="pageControll" destination="BbQ-b1-DWF" id="K2L-Ap-B2a"/>
+                        <outlet property="pageControll" destination="BbQ-b1-DWF" id="DXl-nV-q2j"/>
                         <outlet property="reheraseB" destination="yqu-w1-lVN" id="HVf-gR-gQz"/>
                         <outlet property="segemtedControlOutlet" destination="9V6-on-Mzd" id="Eog-8s-CsY"/>
                         <outlet property="tableView" destination="1xk-el-9k0" id="cbg-OK-wtx"/>

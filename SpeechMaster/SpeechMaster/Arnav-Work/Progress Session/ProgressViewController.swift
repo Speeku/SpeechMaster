@@ -8,10 +8,12 @@
 import UIKit
 
 
-class DemoViewController: UIViewController,UICollectionViewDelegate,
+class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UICollectionViewDataSource,
                           UITableViewDelegate,
-                          UITableViewDataSource,UICollectionViewDelegateFlowLayout, UIContextMenuInteractionDelegate {
+                          UITableViewDataSource,
+                          UICollectionViewDelegateFlowLayout
+                         ,UIContextMenuInteractionDelegate {
     
     
     let gifImage = UIImage.gifImageWithName("man")
@@ -110,7 +112,7 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         // Ensure that the scrollView is your collection view
         if scrollView == collectionView {
-            let pageWidth = collectionView.bounds.width // Width of the collection view
+            let pageWidth = self.collectionView.bounds.width // Width of the collection view
             let currentPage = Int((collectionView.contentOffset.x + (0.5 * pageWidth)) / pageWidth)
             
             // Set the page control's current page to match the collection view's current page
@@ -149,10 +151,20 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         updateCollectionView()
-        updateTableView()
         round()
+        
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.isPagingEnabled = true
         updateLongPress()
-       
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.scrollDirection = .horizontal
+        }
+
       
         
     }
@@ -161,8 +173,8 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         textView.addInteraction(contextMenuInteraction)
     }
     func updateCollectionView(){
-        collectionView.delegate = self
-        collectionView.dataSource = self
+       
+        
         
         let progressNib = UINib(nibName: "ProgressCollectionViewCell", bundle: nil)
         let compareNib = UINib(nibName: "CompareCollectionViewCell", bundle: nil)
@@ -183,14 +195,13 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
         collectionView.layer.cornerRadius = 10
         collectionView.clipsToBounds = true
     }
-    func updateTableView(){
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
+    
+      
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         print("Used")
-        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0) //
+        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
     }
     
     func updateButtonName(){
@@ -218,7 +229,33 @@ class DemoViewController: UIViewController,UICollectionViewDelegate,
             performSegue(withIdentifier: "toQ&A", sender: nil)
         }
     }
+    @IBAction func pageControlTapped(_ sender: UIPageControl) {
+        
+       /* tell the exact position of the page
+       1) like sender.currentPage tell the position of the dot
+       2) collection.frame.width tell the width of the cell
+        
+   ***    So,  if we are on page 0
+          sender.currentPage = 0
+          and width let say is 300
+        so newXposition = 0*300 = 0 -> we are on page 0
+        
+   ***    if we are on page 1 and want to move 0
+        so newXposition = 0*300 = 0
+        
+        .setContentOffset -> shift the collectionView to that position
+        and since we are doing horizontal scrolling we wouldn't
+        be changing y axis that's why y = 0
+        
+        */
+        let newXposition = CGFloat(sender.currentPage) * collectionView.frame.width
+        collectionView.setContentOffset(CGPoint(x: newXposition, y: 0), animated: true)
+        
+    }
+    
 
+    
+    
     }
 
 
