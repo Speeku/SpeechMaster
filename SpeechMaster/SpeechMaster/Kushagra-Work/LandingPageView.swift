@@ -138,6 +138,7 @@ struct LandingPageView: View {
                 }
             }
             NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {
+
             }
 //            .sheet(isPresented: $showingScriptCreation) {
 //                ScriptCreationView(viewModel: viewModel)

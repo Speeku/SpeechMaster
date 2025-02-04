@@ -153,13 +153,9 @@ struct ScriptCreationView: View {
                     .padding()
                     .background(Color(.systemBackground))
                     .frame(maxHeight: .infinity)
-                
-                NavigationLink(
-                    destination: KeyNoteOptionsStoryboardView(),
-                    isActive: $viewModel.navigateToPiyushScreen
-                ) {
-                    EmptyView()
-                }
+//                    .navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
+//                        KeyNoteOptionsStoryboardView()
+//                    }
             }
         }.toolbar{
             ToolbarItem(placement: .navigationBarLeading) {
