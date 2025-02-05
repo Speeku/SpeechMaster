@@ -17,8 +17,8 @@ class CustomQuestionCell: UICollectionViewCell {
         super.awakeFromNib()
         self.layer.cornerRadius = 10
     }
-    func updateCell(with question : Questions){
-        questonLabel.text = question.questions
+    func updateCell(with question : Question){
+        questonLabel.text = question.questionText
         timeTaken.text = question.timeTaken
     }
 }

@@ -55,7 +55,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate {
     var currentQuestionIndex = 0
     
     func updateUI() {
-        questions.text = questionsList[currentQuestionIndex].questions
+        questions.text = questionsList[currentQuestionIndex].questionText
         let progress = Float(currentQuestionIndex + 1) / Float(questionsList.count)
         questionProgressBar.progress = progress
         self.navigationItem.title = "Question \(currentQuestionIndex + 1)"
@@ -172,7 +172,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate {
             answerButton.setTitle("Start Speaking", for: .normal)
             isRecording = false
         }
-        
+        questionsList[currentQuestionIndex].answerText = userAnswer.text
         // Clear the text view
         userAnswer.text = ""
         
