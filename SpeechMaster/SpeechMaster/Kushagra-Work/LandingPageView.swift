@@ -16,27 +16,31 @@ struct LandingPageView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Header
-                    HStack {
-                        Text("Hi \(viewModel.userName)")
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                        Spacer()
-                        NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .frame(width: 38, height: 38)
-                                .clipShape(Circle())
-                                .foregroundColor(.gray)
+                VStack(alignment: .leading,spacing: 0) {
+                    VStack(alignment: .leading,spacing:20) {
+                        
+                        // Header
+                        HStack {
+                            Text("Hi \(viewModel.userName)")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                            Spacer()
+                            NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 38, height: 38)
+                                    .clipShape(Circle())
+                                    .foregroundColor(.gray)
+                            }
                         }
-                    }
-                    .padding(.horizontal, 17)
-                    .padding(.top, 8)
-
-                    // Search Bar
-                    SearchBarView(searchText: $viewModel.searchText)
-
+                        .padding(.horizontal, 17)
+                        
+                        // Search Bar
+                        SearchBarView(searchText: $viewModel.searchText)
+                    }.padding(.bottom,20)
+                        .padding(.top, 22)
+                        //.background(Color.white)
+                    
                     ScrollView(showsIndicators: false){
                         VStack(alignment: .leading, spacing: 20) {
                             //Highlights
@@ -47,12 +51,12 @@ struct LandingPageView: View {
                                     .padding(.horizontal, 17)
                                 NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
                                 Image("Highlights").resizable()
-                                        .frame(width: 358, height:120).padding(.init(top: 0, leading:22, bottom: 0, trailing:5))
+                                        .frame(width: .infinity, height:120).padding(.init(top: 0, leading:22, bottom: 0, trailing:22))
                                     .clipShape(.rect(cornerRadius: 10))
 
                                 }
                                 
-                            }
+                            }.padding(.top,15)
                             // Top Speeches Section
                             VStack(alignment: .leading) {
                                 Text("Top Speakers")
@@ -89,7 +93,7 @@ struct LandingPageView: View {
                             // My Scripts Section
                             VStack(alignment: .leading) {
                                 HStack {
-                                    Text("My Scripts")
+                                    Text("Recent Scripts")
                                         .font(.title2)
                                         .fontWeight(.bold)
                                     Spacer()

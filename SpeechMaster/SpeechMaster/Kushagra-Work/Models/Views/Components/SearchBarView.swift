@@ -10,7 +10,7 @@ struct SearchBarView: View {
             if !searchText.isEmpty {
                 Button(action: { searchText = "" }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
                 }
             }
             Image(systemName: "mic.fill")
@@ -20,6 +20,7 @@ struct SearchBarView: View {
         .padding()
         .background(Color(.white))
         .cornerRadius(25)
+        .shadow(color: Color(.gray.opacity(0.5)), radius: 2, x: 0 , y:0)
         .padding(.horizontal)
     }
 } 
