@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F07F69922D533283009AA047 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07F69912D533283009AA047 /* DataController.swift */; };
+		F0EB898E2D5225B5008DC500 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0EB898D2D5225B5008DC500 /* DataModel.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		05511DF52D118E7400E26F10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +32,8 @@
 		05511DDE2D118E7300E26F10 /* SpeechMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeechMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DF42D118E7400E26F10 /* SpeechMasterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F07F69912D533283009AA047 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		F0EB898D2D5225B5008DC500 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -78,6 +85,8 @@
 		05511DD52D118E7300E26F10 = {
 			isa = PBXGroup;
 			children = (
+				F0EB898D2D5225B5008DC500 /* DataModel.swift */,
+				F07F69912D533283009AA047 /* DataController.swift */,
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
 				05511DDF2D118E7300E26F10 /* Products */,
 			);
@@ -234,6 +243,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0EB898E2D5225B5008DC500 /* DataModel.swift in Sources */,
+				F07F69922D533283009AA047 /* DataController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

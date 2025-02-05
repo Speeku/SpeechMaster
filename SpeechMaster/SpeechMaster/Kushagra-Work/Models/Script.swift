@@ -10,3 +10,4 @@ struct Script: Identifiable, Equatable {
         lhs.id == rhs.id
     }
 }
+//
