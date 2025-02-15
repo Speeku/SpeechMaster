@@ -2,7 +2,7 @@ import UIKit
 
 class reportScreenVC: UIViewController {
     let ds = DataController.shared
-    var scriptId: UUID?  // Add this property to store the script ID
+    var scriptId: UUID = HomeViewModel.shared.currentScriptID // Add this property to store the script ID
     
     @objc private func saveAndDismiss() {
         let alert = UIAlertController(title: "Save Session", message: "Enter a name for this session", preferredStyle: .alert)
@@ -31,7 +31,7 @@ class reportScreenVC: UIViewController {
                                  pronunciationScore: 10)
             
             let newSession = PracticeSession(id: UUID(), 
-                                           scriptId: self.scriptId!, //MARK: - Possible Error Issue
+                                           scriptId: self.scriptId, //MARK: - Possible Error Issue
                                            recordingURL: "",
                                            createdAt: Date(), 
                                            title: sessionName, 

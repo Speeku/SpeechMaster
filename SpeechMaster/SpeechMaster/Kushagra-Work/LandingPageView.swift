@@ -205,7 +205,7 @@ struct LandingPageView: View {
                 }
             }
             .navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText)
+                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText,scID: viewModel.currentScriptID)
             }
             .toolbar(.hidden)
         }

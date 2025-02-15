@@ -14,7 +14,7 @@ import ObjectiveC
 class SelectingKeynoteVC: UIViewController,UIDocumentPickerDelegate {
     var currentDocument: URL?
     var texty: String = ""
-    var scriptId: UUID?
+    var scriptId: UUID = UUID()
     
     @IBOutlet var uploadKeynote: UIButton!
     @IBOutlet var withoutKeynote: UIButton!

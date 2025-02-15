@@ -9,6 +9,7 @@ import SwiftUI
 }*/
 struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
     let successText : String
+    let scID : UUID
     func makeUIViewController(context: Context) -> UIViewController {
         // Get reference to your storyboard
         
@@ -19,6 +20,7 @@ struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
             fatalError("Could not instantiate ViewController")
         }
         viewController.texty = successText
+        viewController.scriptId = scID
         return viewController
     }
     
@@ -26,6 +28,8 @@ struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
         // Update the view controller if needed
         if let VC = uiViewController as?  SelectingKeynoteVC{
             VC.texty = successText
+            VC.scriptId = scID
+            
         }
     }
 }
@@ -118,6 +122,7 @@ struct CustomAlertView: View {
                         let newScript = Script(id: UUID(), title: scriptName, scriptText: scriptText, createdAt: Date(), isKeynoteAssociated: false, isPinned: false)
                         viewModel.addScript(newScript)
                         viewModel.uploadedScriptText = scriptText
+                        viewModel.currentScriptID = newScript.id
                         isPresented = false
                        // dismiss()
                         viewModel.navigateToPiyushScreen = true

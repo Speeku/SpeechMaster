@@ -13,6 +13,7 @@ class HomeViewModel: ObservableObject {
     @Published var overallImprovement: Double = 0
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
+    @Published var currentScriptID: UUID = UUID()
     // MARK: - Script Management
     
     private init() {

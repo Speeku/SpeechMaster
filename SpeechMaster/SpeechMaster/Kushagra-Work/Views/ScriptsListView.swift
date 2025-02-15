@@ -193,7 +193,7 @@ struct ScriptsListView: View {
                     viewModel.uploadedScriptText = fileUploadViewModel.uploadedScriptText
                 }
             }.navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText)
+                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText,scID: viewModel.currentScriptID)
                   }
         }
         NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {

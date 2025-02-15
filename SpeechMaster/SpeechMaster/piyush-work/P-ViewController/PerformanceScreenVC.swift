@@ -6,7 +6,7 @@ import Speech
 class PerformanceScreenVC: UIViewController {
     
     var scriptText = ""
-    var scriptId: UUID?
+    var scriptId: UUID = UUID()
     
     @IBOutlet var videoTimer :         UILabel!
     @IBOutlet var coachLabel :         UILabel!
