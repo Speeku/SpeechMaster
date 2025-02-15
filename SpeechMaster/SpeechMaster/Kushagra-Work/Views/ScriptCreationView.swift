@@ -115,7 +115,7 @@ struct CustomAlertView: View {
                         }
                         
                         // Save script to array
-                        let newScript = Script(id: UUID(), userId: UUID(), title: scriptName, scriptText: scriptText, createdAt: Date(), isKeynoteAssociated: false, isPinned: false)
+                        let newScript = Script(id: UUID(), title: scriptName, scriptText: scriptText, createdAt: Date(), isKeynoteAssociated: false, isPinned: false)
                         viewModel.addScript(newScript)
                         viewModel.uploadedScriptText = scriptText
                         isPresented = false

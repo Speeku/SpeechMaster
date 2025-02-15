@@ -31,8 +31,8 @@ class reportScreenVC: UIViewController {
                                  pronunciationScore: 10)
             
             let newSession = PracticeSession(id: UUID(), 
-                                           scriptId: self.scriptId ?? UUID(), // Use the passed scriptId or create new one
-                                           recordingURL: "", 
+                                           scriptId: self.scriptId!, //MARK: - Possible Error Issue
+                                           recordingURL: "",
                                            createdAt: Date(), 
                                            title: sessionName, 
                                            hasKeynote: true, 

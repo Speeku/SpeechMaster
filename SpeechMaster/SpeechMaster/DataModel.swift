@@ -32,7 +32,7 @@ enum AuthError: Error {
 
 struct Script: Identifiable,Codable,Equatable {
     let id: UUID
-    let userId: UUID
+    //let userId: UUID
     let title: String
     let scriptText: String
     //var progress: Double = 0

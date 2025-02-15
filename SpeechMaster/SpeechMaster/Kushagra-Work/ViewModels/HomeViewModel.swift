@@ -10,7 +10,7 @@ class HomeViewModel: ObservableObject {
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
     //@Published var audienceEngagement: Double = 80
-    @Published var overallImprovement: Double = 50
+    @Published var overallImprovement: Double = 0
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     // MARK: - Script Management
