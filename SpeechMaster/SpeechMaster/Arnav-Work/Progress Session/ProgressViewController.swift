@@ -49,7 +49,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                     cell.topicName = sessions[indexPath.row].title
                     cell.dateName = sessions[indexPath.row].createdAt.description
                     cell.setup()
-                    updateButtonName()
+                    
                 }
                 return cell
             }
@@ -59,7 +59,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                 cell.topicName = dataSource.qnaArray[indexPath.row].title
                 cell.dateName = dataSource.qnaArray[indexPath.row].createdAt.description
                 cell.setup()
-                updateButtonName()
+               
                 return cell
             }
         }
@@ -158,8 +158,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         super.viewDidLoad()
         updateCollectionView()
         round()
-        
-        
+        updateButtonName()
         tableView.dataSource = self
         tableView.delegate = self
         collectionView.delegate = self
@@ -221,6 +220,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
+        updateButtonName()
     }
     
     @IBAction func unwindCancel(segue: UIStoryboardSegue){
