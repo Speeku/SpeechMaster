@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 struct LandingPageView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @StateObject private var viewModel = HomeViewModel.shared
     @StateObject private var videoViewModel = VideoPlayerViewModel()
     @StateObject private var fileUploadViewModel = FileUploadViewModel()
     @State private var showingActionSheet = false
@@ -11,8 +11,21 @@ struct LandingPageView: View {
 
     private func deleteScript(at offsets: IndexSet) {
         viewModel.scripts.remove(atOffsets: offsets)
+   }
+    private var emptyScriptsView: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "doc.text.fill")
+                .font(.system(size: 48))
+                .foregroundColor(.gray.opacity(0.3))
+            
+            Text("Click on + button to start your first practice")
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+                .font(.subheadline)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 48)
     }
-
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
@@ -51,8 +64,8 @@ struct LandingPageView: View {
                                     .padding(.horizontal, 17)
                                 NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
                                 Image("Highlights").resizable()
-                                        .frame(width: .infinity, height:120).padding(.init(top: 0, leading:22, bottom: 0, trailing:22))
-                                    .clipShape(.rect(cornerRadius: 10))
+                                        .frame(width: .infinity, height:135)
+                                    //.clipShape(.rect(cornerRadius: 10))
 
                                 }
                                 
@@ -77,18 +90,46 @@ struct LandingPageView: View {
                             }
 
                             // Progress Section
-                            VStack(alignment: .leading) {
+                            VStack(alignment: .leading, spacing: 16) {
                                 Text("Progress")
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .padding(.horizontal)
 
-                                HStack(spacing: 10) {
-                                    ProgressCardView(title: "Audience Engagement", progress: viewModel.audienceEngagement, fgColor: .white, bgColor: .progressCardColorAudienceEngagement, circleColor: .orange, lastCreatedScriptName: viewModel.scripts.first?.title ?? "")
-                                    ProgressCardView(title: "Overall Improvement", progress: viewModel.overallImprovement, fgColor: .black, bgColor: .progressCardColorOverallImprovement, circleColor: .green, lastCreatedScriptName: viewModel.scripts.first?.title ?? "")
-                                }
-                                .padding(.horizontal)
+//                                ScrollView(.horizontal, showsIndicators: false) {
+//                                        ProgressCardView(
+//                                            title: "Audience Engagement",
+//                                            progress: 80,
+//                                            fgColor: .white,
+//                                            bgColor: Color(hex: "1A4D2E"),
+//                                            circleColor: .orange,
+//                                            lastCreatedScriptName: viewModel.scripts.first?.title
+//                                        )
+//                                        .frame(width: 300)
+//                                        
+                                        ProgressCardView(
+                                            viewModel: viewModel, title: "Overall Improvement",
+                                            progress: viewModel.overallImprovement,
+                                            fgColor: .black,
+                                            bgColor: .green.opacity(0.1),
+                                            circleColor: .green,
+                                            lastCreatedScriptName: viewModel.scripts.first?.title
+                                        )
+                                        .frame(width: .infinity).padding(.horizontal)
+                                        
+//                                        ProgressCardView(
+//                                            title: "Practice Streak",
+//                                            progress: 60,
+//                                            fgColor: .white,
+//                                            bgColor: Color(hex: "2C3333"),
+//                                            circleColor: .blue,
+//                                            lastCreatedScriptName: viewModel.scripts.first?.title
+//                                        )
+//                                        .frame(width: 300)
+//                                }
+//                                .scrollClipDisabled()
                             }
+                            .padding(.vertical, 8)
 
                             // My Scripts Section
                             VStack(alignment: .leading) {
@@ -98,7 +139,7 @@ struct LandingPageView: View {
                                         .fontWeight(.bold)
                                     Spacer()
                                     if !viewModel.isScriptsEmpty() {
-                                        NavigationLink(destination: Text("All Scripts")) {
+                                        NavigationLink(destination: ScriptsListView(viewModel: viewModel)) {
                                             Text("See all")
                                                 .foregroundColor(.blue)
                                         }
@@ -107,12 +148,12 @@ struct LandingPageView: View {
                                 .padding(.horizontal, 17)
 
                                 if viewModel.isScriptsEmpty() {
-                                    Text("Click on + button to start your first practice")
-                                        .foregroundColor(.gray)
-                                        .padding(.init(top: 40, leading: 35, bottom: 0, trailing: 35))
+                                    emptyScriptsView.padding()
+                                    Spacer()
                                 } else {
                                     ScriptsList(scripts: viewModel.scripts, viewModel: viewModel)
                                         .padding(.horizontal)
+                                    Spacer()
                                 }
                             }
                         }
@@ -164,7 +205,7 @@ struct LandingPageView: View {
                 }
             }
             .navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView()
+                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText)
             }
             .toolbar(.hidden)
         }

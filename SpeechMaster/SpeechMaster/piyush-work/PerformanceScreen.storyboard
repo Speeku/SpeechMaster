@@ -503,7 +503,6 @@
                                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bj6-Mn-aAn" customClass="PaceMeterView" customModule="SpeechMaster" customModuleProvider="target">
                                                     <rect key="frame" x="108" y="34" width="172" height="87"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your Pace is just right! Keep it Up!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vlx-pL-YwN">
                                                     <rect key="frame" x="10" y="194" width="278" height="22"/>
@@ -512,22 +511,11 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="______________________________________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63y-HJ-WBD">
-                                                    <rect key="frame" x="8" y="207" width="356" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63y-HJ-WBD">
+                                                    <rect key="frame" x="8" y="207" width="0.0" height="0.0"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.85622451939315469" green="0.86875463431110322" blue="0.84369440447520605" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gDP-PZ-GYT">
-                                                    <rect key="frame" x="10" y="267" width="371" height="184"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your average pace over time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N0e-Pm-Hfo">
-                                                    <rect key="frame" x="10" y="237" width="228" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" red="0.37640136480000003" green="0.38054805990000001" blue="0.36862584949999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -535,14 +523,13 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <size key="customSize" width="389" height="459"/>
                                         <connections>
-                                            <outlet property="graphPlaceHolder" destination="gDP-PZ-GYT" id="duW-JO-IhM"/>
                                             <outlet property="paceMeter" destination="bj6-Mn-aAn" id="932-4e-7RT"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="PronunciationCell" id="zWn-Ay-Q0i" customClass="PronunciationCVCell" customModule="SpeechMaster" customModuleProvider="target">
                                         <rect key="frame" x="1.6666666666666667" y="1017" width="390" height="336"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="NeH-Nk-16p">
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="NeH-Nk-16p">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="336"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
@@ -641,8 +628,37 @@
                                             <outlet property="labelTwo" destination="s5H-cb-kQ2" id="6HS-YN-67f"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="OriginalityCell" id="8w7-0Y-o98" customClass="OriginalityCVCell" customModule="SpeechMaster" customModuleProvider="target">
+                                        <rect key="frame" x="6.666666666666667" y="1363" width="380" height="125"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="skr-Ro-gtS">
+                                            <rect key="frame" x="0.0" y="0.0" width="380" height="125"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Originality" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6e-oS-1eA">
+                                                    <rect key="frame" x="11.000000000000114" y="8" width="108" height="28"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You avoided reading slide text aloud. That's good for keeping the audience engaged with your message." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAB-sP-o42">
+                                                    <rect key="frame" x="11.000000000000114" y="37" width="345" height="73"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </collectionViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <size key="customSize" width="380" height="125"/>
+                                        <connections>
+                                            <outlet property="originalityStatus" destination="JAB-sP-o42" id="lR3-MD-CUa"/>
+                                        </connections>
+                                    </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="PitchCell" id="Lpw-1w-URc" customClass="PitchCVCell" customModule="SpeechMaster" customModuleProvider="target">
-                                        <rect key="frame" x="1.6666666666666667" y="1363" width="390" height="301"/>
+                                        <rect key="frame" x="1.6666666666666667" y="1498" width="390" height="301"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="jlc-fj-F8r">
                                             <rect key="frame" x="0.0" y="0.0" width="390" height="301"/>
@@ -683,39 +699,11 @@
                                             <outlet property="graphPlaceHolder" destination="TzY-b1-5ep" id="Scy-rn-1y2"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="OriginalityCell" id="8w7-0Y-o98" customClass="OriginalityCVCell" customModule="SpeechMaster" customModuleProvider="target">
-                                        <rect key="frame" x="6.666666666666667" y="1674" width="380" height="125"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" id="skr-Ro-gtS">
-                                            <rect key="frame" x="0.0" y="0.0" width="380" height="125"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Originality" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6e-oS-1eA">
-                                                    <rect key="frame" x="11.000000000000114" y="8" width="108" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You avoided reading slide text aloud. That's good for keeping the audience engaged with your message." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JAB-sP-o42">
-                                                    <rect key="frame" x="11.000000000000114" y="37" width="345" height="73"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </collectionViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <size key="customSize" width="380" height="125"/>
-                                        <connections>
-                                            <outlet property="originalityStatus" destination="JAB-sP-o42" id="lR3-MD-CUa"/>
-                                        </connections>
-                                    </collectionViewCell>
                                 </cells>
                                 <connections>
-                                    <outlet property="dataSource" destination="foB-J5-ugn" id="s0o-K4-rdG"/>
-                                    <outlet property="delegate" destination="foB-J5-ugn" id="UNm-kZ-OFQ"/>
+                                    <outlet property="dataSource" destination="foB-J5-ugn" id="GlE-oI-HoB"/>
+                                    <outlet property="delegate" destination="foB-J5-ugn" id="g3M-XB-0lD"/>
+                                    <outlet property="prefetchDataSource" destination="foB-J5-ugn" id="1nh-7a-gDh"/>
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OE-2o-aLZ">
@@ -987,7 +975,7 @@ If you found yourself filler words in the transitional moment, write down some t
         <!--Selecting KeynoteVC-->
         <scene sceneID="AAk-SJ-PHo">
             <objects>
-                <viewController storyboardIdentifier="KeynoteOptionsVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Oka-Gs-pF1" customClass="SelectingKeynoteVC" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectingKeynoteVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Oka-Gs-pF1" customClass="SelectingKeynoteVC" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aWY-aD-ReE">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1087,7 +1075,6 @@ without keynote also</string>
         <!--Navigation Controller-->
         <scene sceneID="zXu-1O-81R">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gYz-iJ-5i4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="PerformanceScreen" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="98n-WX-upa" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="gxQ-g2-OFp">
@@ -1099,6 +1086,7 @@ without keynote also</string>
                         <segue destination="Oka-Gs-pF1" kind="relationship" relationship="rootViewController" id="dhv-dI-SwF"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gYz-iJ-5i4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="80.152671755725194" y="-38.028169014084511"/>
         </scene>
@@ -1122,16 +1110,16 @@ without keynote also</string>
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGrayColor">
-            <color red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

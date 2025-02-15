@@ -56,8 +56,8 @@ extension QuestionAnswerList : UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "QuestionCell", for: indexPath) as! CustomQuestionCell
-        let que = questionsList[indexPath.item]
-        cell.updateCell(with: que)
+        //let que = questionsList[indexPath.item]
+        //cell.updateCell(with: que)
         return cell
     }
     

@@ -9,7 +9,7 @@ struct ScriptInfoView: View {
             List {
                 Section("Details") {
                     InfoRow(title: "Title", value: script.title)
-                    InfoRow(title: "Created", value: script.date.formatted(date: .long, time: .shortened))
+                    InfoRow(title: "Created", value: script.createdAt.formatted(date: .long, time: .shortened))
                     InfoRow(title: "Size", value: "2.5 MB") // Hardcoded for now
                 }
             }
@@ -38,6 +38,3 @@ struct InfoRow: View {
     }
 }
 
-#Preview {
-    ScriptInfoView(script: Script(title: "Sample Script", date: Date(), isPinned: true))
-} 

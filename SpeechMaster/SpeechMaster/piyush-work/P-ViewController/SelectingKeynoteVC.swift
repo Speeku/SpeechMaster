@@ -13,9 +13,10 @@ import ObjectiveC
 
 class SelectingKeynoteVC: UIViewController,UIDocumentPickerDelegate {
     var currentDocument: URL?
-        
-    @IBOutlet var uploadKeynote: UIButton!
+    var texty: String = ""
+    var scriptId: UUID?
     
+    @IBOutlet var uploadKeynote: UIButton!
     @IBOutlet var withoutKeynote: UIButton!
     override func viewDidLoad() {
             super.viewDidLoad()
@@ -46,6 +47,8 @@ class SelectingKeynoteVC: UIViewController,UIDocumentPickerDelegate {
             if segue.identifier == "showPerformance",
                let destinationVC = segue.destination as? PerformanceScreenVC {
                 destinationVC.selectedKeynoteURL = currentDocument
+                destinationVC.scriptText = texty
+                destinationVC.scriptId = scriptId
             }
         }
 

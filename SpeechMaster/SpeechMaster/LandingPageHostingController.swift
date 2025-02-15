@@ -7,8 +7,6 @@
 
 import UIKit
 import SwiftUI
-import SwiftUI
-import UIKit
 
 class LandingPageHostingController: UIHostingController<LandingPageView> {
     required init?(coder aDecoder: NSCoder) {

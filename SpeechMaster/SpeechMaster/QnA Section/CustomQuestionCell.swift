@@ -17,8 +17,8 @@ class CustomQuestionCell: UICollectionViewCell {
         super.awakeFromNib()
         self.layer.cornerRadius = 10
     }
-    func updateCell(with question : Question){
+    func updateCell(with question : QnAReport){
         questonLabel.text = question.questionText
-        timeTaken.text = question.timeTaken
+        timeTaken.text = String(question.timeTaken)
     }
 }

@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--CyberSecurity-->
+        <!--Progress View Controller-->
         <scene sceneID="4QZ-DK-dsW">
             <objects>
                 <viewController storyboardIdentifier="ScriptDetailedSection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="PdR-uD-nB0" customClass="ProgressViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
@@ -27,12 +27,10 @@
                                             <constraint firstAttribute="height" constant="35" id="CCj-oy-ZE1"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Rehearse Again">
+                                        <buttonConfiguration key="configuration" style="plain">
                                             <backgroundConfiguration key="background" cornerRadius="15">
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             </backgroundConfiguration>
-                                            <fontDescription key="titleFontDescription" type="boldSystem" pointSize="20"/>
-                                            <color key="baseForegroundColor" red="0.26274511220000002" green="0.58823531870000001" blue="0.83529412749999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </buttonConfiguration>
                                         <connections>
                                             <action selector="rehearseButtonTap:" destination="PdR-uD-nB0" eventType="touchUpInside" id="Qz5-9S-5SI"/>
@@ -56,23 +54,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="116" id="4e8-pg-i1h"/>
                                         </constraints>
-                                        <attributedString key="attributedText">
-                                            <fragment>
-                                                <string key="content">Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what </string>
-                                                <attributes>
-                                                    <color key="NSColor" systemColor="labelColor"/>
-                                                    <font key="NSFont" metaFont="system" size="14"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                            <fragment content="take a look at how hackers operate and what hackers operate and what hackers operate ...">
-                                                <attributes>
-                                                    <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
+                                        <attributedString key="attributedText"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y10-Ah-lrO">
@@ -210,7 +192,7 @@
                             <constraint firstAttribute="bottom" secondItem="6oz-si-RRF" secondAttribute="bottom" id="jKp-Xe-FV5"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="CyberSecurity" id="ZIl-XO-T47"/>
+                    <navigationItem key="navigationItem" id="ZIl-XO-T47"/>
                     <connections>
                         <outlet property="collectionView" destination="R1g-QU-sms" id="IeR-wv-YQd"/>
                         <outlet property="pageControll" destination="BbQ-b1-DWF" id="DXl-nV-q2j"/>
@@ -250,7 +232,7 @@
         <!--TextViewController-->
         <scene sceneID="VEp-dm-uRs">
             <objects>
-                <viewController title="TextViewController" id="Dzg-vE-jKV" customClass="TextViewViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="TextViewController" id="Dzg-vE-jKV" customClass="ScriptEditViewController" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="diy-gl-XKV">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -258,7 +240,6 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="gf0-44-c0Y">
                                 <rect key="frame" x="20" y="123" width="353" height="675"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <string key="text">Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...Narrator (Voiceover): "Every day, millions of people connect to the internet. But not everyone online has good intentions. Let's take a look at how hackers operate and what take a look at how hackers operate and what hackers operate and what hackers operate ...take a look at how hackers operate and what hackers operate and what hackers operate ...</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -274,6 +255,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Lxh-rb-PyH"/>
+                    <connections>
+                        <outlet property="ScriptTextView" destination="gf0-44-c0Y" id="XCU-iR-j7I"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gNX-zc-xe1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -282,7 +266,7 @@
         <!--Navigation Controller-->
         <scene sceneID="tqs-f3-ASx">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RfW-31-jGD" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RfW-31-jGD" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3Zt-KY-77s">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>

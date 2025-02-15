@@ -35,39 +35,39 @@ import UIKit
 //}
 
 
-struct Video {
-    var showImage : UIImage
-    var videoURL: URL?
-}
-
-struct Summary {
-    var timeSpent: String
-}
-
-struct Fillers {
-    var noOfFillersWords : String
-}
-
-struct MissingWords {
-    var noOfMissingWords : String
-}
-
-struct Pace {
-   //var wordsPerMin : String
-    var graphPlaceHolder : UIImage
-}
-
-struct Pronunciation {
-    var missPronouncedWords : [UIButton]
-    var practiceWord : String
-    var howToPronunce : String
-}
-
-struct Pitch {
-    var graphPlaceHolder : UIImage
-}
-
-struct Originality {
-    var originalityStatus : String
-}
-
+//struct Video {
+//    var showImage : UIImage
+//    var videoURL: URL?
+//}
+//
+//struct Summary {
+//    var timeSpent: String
+//}
+//
+//struct Fillers {
+//    var noOfFillersWords : String
+//}
+//
+//struct MissingWords {
+//    var noOfMissingWords : String
+//}
+//
+//struct Pace {
+//   //var wordsPerMin : String
+//    var graphPlaceHolder : UIImage
+//}
+//
+//struct Pronunciation {
+//    var missPronouncedWords : [UIButton]
+//    var practiceWord : String
+//    var howToPronunce : String
+//}
+//
+//struct Pitch {
+//    var graphPlaceHolder : UIImage
+//}
+//
+//struct Originality {
+//    var originalityStatus : String
+//}
+//

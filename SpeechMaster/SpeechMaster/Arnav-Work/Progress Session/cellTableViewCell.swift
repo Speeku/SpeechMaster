@@ -19,7 +19,7 @@ class cellTableViewCell: UITableViewCell {
     var dateName : String?
     func setup(){
         titleName.text = topicName ??  "No Name"
-        date.text = dateName ?? "29.02.2025"
+        date.text = dateName ?? Date().description
     }
     
     

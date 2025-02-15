@@ -7,8 +7,7 @@
 
 import Foundation
 
-var questionsList : [Question] = [
-    Question(questionText: "What is the full form of TOC ?"),
-    Question(questionText: "What do you mean by finite Automata ?"),
-    
+var questionsList : [QnAQuestion] = [
+    QnAQuestion(id: UUID(), questionText: "What is the full form of TOC?"),
+    QnAQuestion(id: UUID(), questionText: "What do you mean by JSON?")
 ]

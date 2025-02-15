@@ -77,6 +77,6 @@ struct UserProfileView: View {
 }
 
 #Preview {
-    UserProfileView(viewModel: HomeViewModel())
+    UserProfileView(viewModel: HomeViewModel.shared)
 }
 

@@ -11,8 +11,8 @@ import Charts
 class PaceCVCell: UICollectionViewCell {
     
   //  @IBOutlet var wordPerMin: UILabel!
- 
-   
+    var paceScore : Int = 0
+    
     @IBOutlet var paceMeter: PaceMeterView!
     @IBOutlet var graphPlaceHolder: UIImageView!
     
@@ -30,13 +30,12 @@ class PaceCVCell: UICollectionViewCell {
            ])
     
         // how much pace
-        paceMeter.value = 180
+        paceMeter.value = CGFloat(paceScore)
         
     }
     
-    func updatePace(with pace : Pace){
-      // wordPerMin.text = pace.wordsPerMin
-        graphPlaceHolder.image = pace.graphPlaceHolder
+    func updatePace(with pace : Double){
+       // paceScore = Int(pace)
     }
     
     

@@ -25,7 +25,7 @@ struct SearchBarView: View {
     }
 } 
 #Preview {
-    @Previewable @StateObject var viewModel = HomeViewModel()
+    @Previewable @StateObject var viewModel = HomeViewModel.shared
     SearchBarView(searchText: $viewModel.searchText)
     
 }

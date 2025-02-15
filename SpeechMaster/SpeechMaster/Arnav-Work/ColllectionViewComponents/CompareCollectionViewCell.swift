@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
     
     var progressOfSession : [Progress] = [
@@ -25,12 +24,12 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     let beforeClicking = UIImage(systemName: "chevron.right")
     var stateOfButtonPrevious : Bool = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sessions.count
+        DataController.shared.sessionsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = sessions[indexPath.row].name
+        cell.textLabel?.text = DataController.shared.sessionsArray[indexPath.row].title
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -223,16 +222,6 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     @IBOutlet weak var prounciationP2: RoundedEndProgress!
     @IBOutlet weak var overrallP2: RoundedEndProgress!
     
-    
-    
-    
-    
-    var sessions : [Session] = [
-        Session(name: "Session 1"),
-        Session(name: "Session 2"),
-        Session(name: "Session 3"),
-        Session(name: "Session 4")
-    ]
     
     
     

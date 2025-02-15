@@ -7,60 +7,58 @@
 
 import UIKit
 
-
 class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UICollectionViewDataSource,
                           UITableViewDelegate,
                           UITableViewDataSource,
-                          UICollectionViewDelegateFlowLayout
-                         ,UIContextMenuInteractionDelegate {
+                          UICollectionViewDelegateFlowLayout,
+                          UIContextMenuInteractionDelegate {
     
+    // Add property to use singleton
+    private let dataSource = DataController.shared
+    var scriptId: UUID?  // Add scriptId property
     
     let gifImage = UIImage.gifImageWithName("man")
     
     
-    var sessions : [Sessions] = [
-        Sessions(name: "Session 1", date: "10.01.2025"),
-        Sessions(name: "Session 2", date: "12.01.2025"),
-        Sessions(name: "Session 3", date: "14.01.2025"),
-        Sessions(name: "Session 4", date: "15.01.2025")
-        
-    ]
-    
-    var qna : [QnA] = [
-        QnA(name: "Q/A 1", date: "10.01.2025"),
-        QnA(name: "Q/A 2", date: "12.01.2025"),
-        QnA(name: "Q/A 3", date: "13.01.2025"),
-        QnA(name: "Q/A 4", date: "15.01.2025")
-    ]
+//    var sessions : [Sessions] = [
+//        Sessions(name: "Session 1", date: "10.01.2025"),
+//        Sessions(name: "Session 2", date: "12.01.2025"),
+//        Sessions(name: "Session 3", date: "14.01.2025"),
+//        Sessions(name: "Session 4", date: "15.01.2025")
+//        
+//    ]
+                            
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
-            return sessions.count
-        }else{
-            return qna.count
+            if let scriptId = self.scriptId {
+                return dataSource.getSessions(for: scriptId).count
+            }
+            return 0
+        } else {
+            return dataSource.qnaArray.count
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
-            
             if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
-                cell.topicName = sessions[indexPath.row].name
-                cell.dateName = sessions[indexPath.row].date
-                cell.setup()
-               // reheraseB.titleLabel?.text = "Reherase Again"
-                updateButtonName()
+                if let scriptId = self.scriptId {
+                    let sessions = dataSource.getSessions(for: scriptId)
+                    cell.topicName = sessions[indexPath.row].title
+                    cell.dateName = sessions[indexPath.row].createdAt.description
+                    cell.setup()
+                    updateButtonName()
+                }
                 return cell
             }
         }
         else{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)  as? cellTableViewCell{
-                cell.topicName = qna[indexPath.row].name
-                cell.dateName = qna[indexPath.row].date
+                cell.topicName = dataSource.qnaArray[indexPath.row].title
+                cell.dateName = dataSource.qnaArray[indexPath.row].createdAt.description
                 cell.setup()
-              //  reheraseB.titleLabel?.text = "Practice Q/A"
                 updateButtonName()
                 return cell
             }
@@ -80,13 +78,13 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCollectionViewCell", for: indexPath) as? ProgressCollectionViewCell{
                 print("Sucesss")
                 cell.title1.text = "Audience\nEngagement"
-                cell.topicName1.text = "CyberSecurity"
+                cell.topicName1.text = self.scriptTitle
                 cell.title1Percent.text = "50%"
                 cell.updateCircle1(percentage: 0.5, progresscolor: .orange)
                 
                 // step2
                 cell.title2.text = "Overall\nImprovement"
-                cell.topicName2.text = "CyberSecurity"
+                cell.topicName2.text = self.scriptTitle
                 cell.title2percent.text = "40%"
                 cell.updateCircle2(percentage: 0.4, progresscolor: .systemGreen)
                 cell.image.image = gifImage
@@ -127,6 +125,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                 self.performSegue(withIdentifier: "TextViewController", sender :self)
             }
             
+            
             let regenerate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
                 print("Regenerate Tapped")
             }
@@ -139,16 +138,23 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             return UIMenu(title: "", children: [edit, regenerate, share])
         }
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                                 if segue.identifier == "TextViewController",
+                                    let destinationVC = segue.destination as? ScriptEditViewController {
+                                     destinationVC.editScriptText = scriptText
+                                 }}
+    var scriptTitle : String = ""
+    var scriptText : String = ""
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var segemtedControlOutlet: UISegmentedControl!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var reheraseB: UIButton!
-    
     @IBOutlet weak var pageControll: UIPageControl!
-    
     override func viewDidLoad() {
+        self.navigationItem.title = self.scriptTitle
+        self.title = self.scriptTitle
+        //textView.text = ""
         super.viewDidLoad()
         updateCollectionView()
         round()
@@ -156,7 +162,6 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         
         tableView.dataSource = self
         tableView.delegate = self
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true

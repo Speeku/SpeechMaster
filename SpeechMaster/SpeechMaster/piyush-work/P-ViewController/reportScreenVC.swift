@@ -1,11 +1,64 @@
 import UIKit
 
 class reportScreenVC: UIViewController {
+    let ds = DataController.shared
+    var scriptId: UUID?  // Add this property to store the script ID
+    
     @objc private func saveAndDismiss() {
-        // Pop to the root of the navigation stack
-        navigationController?.popToRootViewController(animated: false)
+        let alert = UIAlertController(title: "Save Session", message: "Enter a name for this session", preferredStyle: .alert)
+        
+        alert.addTextField { textField in
+            textField.placeholder = "Session Name"
+        }
+
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            guard let sessionName = alert.textFields?.first?.text, !sessionName.isEmpty else {
+                // Show error if session name is empty
+                let errorAlert = UIAlertController(title: "Error", message: "Please enter a session name", preferredStyle: .alert)
+                errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(errorAlert, animated: true)
+                return
+            }
+            
+            // Create new report and session
+            let newReport = Report(id: UUID(), 
+                                 missingWords: missingWords, 
+                                 fillerWords: fillers, 
+                                 pace: pace, 
+                                 pitch: pitch, 
+                                 originality: originality, 
+                                 pronunciationScore: 10)
+            
+            let newSession = PracticeSession(id: UUID(), 
+                                           scriptId: self.scriptId ?? UUID(), // Use the passed scriptId or create new one
+                                           recordingURL: "", 
+                                           createdAt: Date(), 
+                                           title: sessionName, 
+                                           hasKeynote: true, 
+                                           reportId: newReport.id)
+            
+            // Save the session using DataController
+            self.ds.addSession(newSession)
+            
+            // Show success message
+            let successAlert = UIAlertController(title: "Success", message: "Session saved successfully!", preferredStyle: .alert)
+            successAlert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                // Pop to the root of the navigation stack after user acknowledges
+                self.navigationController?.popToRootViewController(animated: true)
+            })
+            self.present(successAlert, animated: true)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
     @IBAction func SaveButtonTapped(_ sender: Any) {
+        
         saveAndDismiss()
     }
     
@@ -257,35 +310,35 @@ extension reportScreenVC : UICollectionViewDataSource, UICollectionViewDelegate 
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SummaryCell", for: indexPath) as! SummaryCVCell
-            cell.updateSummary(with: summary[0])
+            cell.updateSummary(with: summary)
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FillerCell", for: indexPath) as! FillersCVCell
-            let userFillers = fillers[indexPath.item]
+            let userFillers = fillers//indexPath.item]
             cell.updateFillers(with: userFillers)
             return cell
         case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MissingWordCell", for: indexPath) as! MissingWordsCVCell
-            let userMissingWords = missingWords[indexPath.item]
+            let userMissingWords = missingWords//[indexPath.item]
             cell.updateMissingWords(with: userMissingWords)
             return cell
         case 5:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaceCell", for: indexPath) as! PaceCVCell
-            let userPace = pace[indexPath.item]
+            let userPace = pace
             cell.updatePace(with: userPace)
-            //performSegue(withIdentifier: "fillersDetail", sender: indexPath)
+            
             return cell
         case 6:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PronunciationCell", for: indexPath) as! PronunciationCVCell
             return cell
         case 7:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PitchCell", for: indexPath) as! PitchCVCell
-            let userPitch = pitch[indexPath.item]
+            let userPitch = pitch
             cell.updatePitch(with: userPitch)
             return cell
         case 8:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OriginalityCell", for: indexPath) as! OriginalityCVCell
-            let userOriginality = originality[indexPath.item]
+            let userOriginality = originality//[indexPath.item]
             cell.updateOriginality(with: userOriginality)
             return cell
         
@@ -305,9 +358,4 @@ extension reportScreenVC : UICollectionViewDataSource, UICollectionViewDelegate 
             break
         }
     }
-    
-    
     }
-
-    
-

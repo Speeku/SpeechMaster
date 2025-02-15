@@ -1,17 +1,32 @@
 import SwiftUI
-
+/*        // Instantiate the desired view controller
+ guard let viewController = storyboard.instantiateViewController(withIdentifier: "ScriptDetailedSection")as? ProgressViewController
+ else{
+     fatalError("Could not instantiate ViewController")
+ }
+ viewController.scriptTitle = script.title
+ return viewController
+}*/
 struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
+    let successText : String
     func makeUIViewController(context: Context) -> UIViewController {
         // Get reference to your storyboard
-        let storyboard = UIStoryboard(name: "PerformanceScreen", bundle: nil)
         
+        let storyboard = UIStoryboard(name: "PerformanceScreen", bundle: nil)
         // Instantiate the desired view controller
-        let viewController = storyboard.instantiateViewController(withIdentifier: "KeynoteOptionsVC")
+        guard let viewController = storyboard.instantiateViewController(withIdentifier: "SelectingKeynoteVC") as? SelectingKeynoteVC
+        else{
+            fatalError("Could not instantiate ViewController")
+        }
+        viewController.texty = successText
         return viewController
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         // Update the view controller if needed
+        if let VC = uiViewController as?  SelectingKeynoteVC{
+            VC.texty = successText
+        }
     }
 }
 
@@ -100,11 +115,7 @@ struct CustomAlertView: View {
                         }
                         
                         // Save script to array
-                        let newScript = Script(
-                            title: scriptName.trimmingCharacters(in: .whitespacesAndNewlines),
-                            date: Date(),
-                            isPinned: false
-                        )
+                        let newScript = Script(id: UUID(), userId: UUID(), title: scriptName, scriptText: scriptText, createdAt: Date(), isKeynoteAssociated: false, isPinned: false)
                         viewModel.addScript(newScript)
                         viewModel.uploadedScriptText = scriptText
                         isPresented = false
@@ -200,7 +211,7 @@ struct ScriptCreationView: View {
 }
 
 #Preview {
-    ScriptCreationView(viewModel: HomeViewModel())
+    ScriptCreationView(viewModel: HomeViewModel.shared)
 }
 
 //import SwiftUI

@@ -172,7 +172,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate {
             answerButton.setTitle("Start Speaking", for: .normal)
             isRecording = false
         }
-        questionsList[currentQuestionIndex].answerText = userAnswer.text
+        //questionsList[currentQuestionIndex].answerText = userAnswer.text
         // Clear the text view
         userAnswer.text = ""
         
