@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F08BC7542D610ACA00524B5E /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = F08BC7532D610ACA00524B5E /* GoogleGenerativeAI */; };
+		961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 961768A22D610C26006C6DAF /* GoogleGenerativeAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F08BC7542D610ACA00524B5E /* GoogleGenerativeAI in Frameworks */,
+				961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +118,7 @@
 			);
 			name = SpeechMaster;
 			packageProductDependencies = (
-				F08BC7532D610ACA00524B5E /* GoogleGenerativeAI */,
+				961768A22D610C26006C6DAF /* GoogleGenerativeAI */,
 			);
 			productName = SpeechMaster;
 			productReference = 05511DDE2D118E7300E26F10 /* SpeechMaster.app */;
@@ -198,7 +198,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				18BD192C2D3A69AA004A1471 /* XCRemoteSwiftPackageReference "Charts" */,
-				F08BC7522D610ACA00524B5E /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 05511DDF2D118E7300E26F10 /* Products */;
@@ -587,9 +587,9 @@
 				minimumVersion = 5.1.0;
 			};
 		};
-		F08BC7522D610ACA00524B5E /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+		961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "/Users/arnavchauhan/Library/Developer/Xcode/DerivedData/ChatWithGemini-cocswkuyawutcgbkcykhikouuakv/SourcePackages/checkouts/generative-ai-swift";
+			repositoryURL = "https://github.com/google-gemini/generative-ai-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.5.6;
@@ -598,9 +598,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F08BC7532D610ACA00524B5E /* GoogleGenerativeAI */ = {
+		961768A22D610C26006C6DAF /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = F08BC7522D610ACA00524B5E /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			package = 961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
 		};
 /* End XCSwiftPackageProductDependency section */

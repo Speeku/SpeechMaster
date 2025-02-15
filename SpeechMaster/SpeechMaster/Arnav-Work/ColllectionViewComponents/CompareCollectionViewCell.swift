@@ -7,7 +7,8 @@
 
 import UIKit
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
-    
+    private let dataSource = DataController.shared
+    let scriptId = HomeViewModel.shared.currentScriptID
     var progressOfSession : [Progress] = [
         Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 123, pronunciation: 1),
         Progress(name: "Session 2", fillerWords: 40, missingWords: 10, pace: 100, pronunciation: 5),
@@ -24,12 +25,12 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     let beforeClicking = UIImage(systemName: "chevron.right")
     var stateOfButtonPrevious : Bool = false
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        DataController.shared.sessionsArray.count
+        dataSource.getSessions(for: scriptId).count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = DataController.shared.sessionsArray[indexPath.row].title
+        cell.textLabel?.text = dataSource.getSessions(for: scriptId)[indexPath.row].title
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

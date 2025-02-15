@@ -1,5 +1,5 @@
 {
-  "originHash" : "514f98be35c5c26124c55f073d65dff372ae3d8ce44deebb8a7f42defcc92b84",
+  "originHash" : "d9ac89cf618a010bbb192df7a5922d342c69a591c87acf7f13b970e58e9165c5",
   "pins" : [
     {
       "identity" : "charts",
@@ -12,8 +12,8 @@
     },
     {
       "identity" : "generative-ai-swift",
-      "kind" : "localSourceControl",
-      "location" : "/Users/arnavchauhan/Library/Developer/Xcode/DerivedData/ChatWithGemini-cocswkuyawutcgbkcykhikouuakv/SourcePackages/checkouts/generative-ai-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google-gemini/generative-ai-swift",
       "state" : {
         "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd",
         "version" : "0.5.6"
