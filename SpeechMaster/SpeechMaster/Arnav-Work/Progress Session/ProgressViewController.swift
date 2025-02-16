@@ -16,7 +16,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     // Add property to use singleton
     private let dataSource = DataController.shared
-    var scriptId: UUID?  // Add scriptId property
+    var scriptId: UUID = HomeViewModel.shared.currentScriptID// Add scriptId property
     
     let gifImage = UIImage.gifImageWithName("man")
     
@@ -32,10 +32,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
-            if let scriptId = self.scriptId {
-                return dataSource.getSessions(for: scriptId).count
-            }
-            return 0
+          return dataSource.getSessions(for: scriptId).count
         } else {
             return dataSource.qnaArray.count
         }
@@ -44,13 +41,10 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
             if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
-                if let scriptId = self.scriptId {
                     let sessions = dataSource.getSessions(for: scriptId)
                     cell.topicName = sessions[indexPath.row].title
                     cell.dateName = sessions[indexPath.row].createdAt.description
                     cell.setup()
-                    
-                }
                 return cell
             }
         }
@@ -165,8 +159,10 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true
         updateLongPress()
+        HomeViewModel.shared.currentScriptID = scriptId
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
+
         }
 
       
