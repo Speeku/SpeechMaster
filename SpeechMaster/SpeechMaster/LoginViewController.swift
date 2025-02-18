@@ -8,13 +8,24 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    @IBOutlet weak var rememberMeCheckbox: UIButton!
+    @IBOutlet weak var rememberMeLabelButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        updateCheckboxState()
         // Do any additional setup after loading the view.
     }
-    
+    @IBAction func rememberMeCheckboxTapped(_ sender: UIButton) {
+        rememberMeCheckbox.isSelected.toggle()
+        updateCheckboxState()
+        
+    }
+    func updateCheckboxState() {
+        let imageName = rememberMeCheckbox.isSelected ? "checkmark.square.fill" : "square"
+        rememberMeCheckbox.setImage(UIImage(systemName: imageName), for: .normal)
+        
+    }
 
     /*
     // MARK: - Navigation

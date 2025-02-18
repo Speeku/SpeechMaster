@@ -70,8 +70,8 @@ class OnBoardingViewController: UIViewController, CustomPageControlDelegate {
 
                // Set up constraints
                NSLayoutConstraint.activate([
-                pageControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                   pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -17),
+                pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                   pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -150),
                    pageControl.heightAnchor.constraint(equalToConstant: 20),
                    pageControl.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5)
                ])
