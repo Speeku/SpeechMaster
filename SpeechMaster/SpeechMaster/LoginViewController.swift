@@ -6,10 +6,11 @@
 //
 
 import UIKit
-
+import GoogleSignIn
 class LoginViewController: UIViewController {
     @IBOutlet weak var rememberMeCheckbox: UIButton!
     @IBOutlet weak var rememberMeLabelButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,6 +26,13 @@ class LoginViewController: UIViewController {
         let imageName = rememberMeCheckbox.isSelected ? "checkmark.square.fill" : "square"
         rememberMeCheckbox.setImage(UIImage(systemName: imageName), for: .normal)
         
+    }
+    @IBAction func signIn(sender: Any) {
+      GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+        guard error == nil else { return }
+
+        // If sign in succeeded, display the app's main content View.
+      }
     }
 
     /*

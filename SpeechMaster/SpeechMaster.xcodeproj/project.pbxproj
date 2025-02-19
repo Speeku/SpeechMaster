@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		009F2A9A2D649E220052FF25 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 009F2A992D649E220052FF25 /* GoogleSignIn */; };
+		009F2A9C2D649E220052FF25 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 009F2A9B2D649E220052FF25 /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		05511DF52D118E7400E26F10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				009F2A9A2D649E220052FF25 /* GoogleSignIn in Frameworks */,
+				009F2A9C2D649E220052FF25 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +132,8 @@
 			);
 			name = SpeechMaster;
 			packageProductDependencies = (
+				009F2A992D649E220052FF25 /* GoogleSignIn */,
+				009F2A9B2D649E220052FF25 /* GoogleSignInSwift */,
 			);
 			productName = SpeechMaster;
 			productReference = 05511DDE2D118E7300E26F10 /* SpeechMaster.app */;
@@ -208,6 +217,9 @@
 			);
 			mainGroup = 05511DD52D118E7300E26F10;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 05511DDF2D118E7300E26F10 /* Products */;
 			projectDirPath = "";
@@ -289,9 +301,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MM968H474S;
+				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -318,9 +331,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MM968H474S;
+				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -571,6 +585,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		009F2A992D649E220052FF25 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		009F2A9B2D649E220052FF25 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 05511DD62D118E7300E26F10 /* Project object */;
 }
