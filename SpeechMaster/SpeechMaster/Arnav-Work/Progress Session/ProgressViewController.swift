@@ -31,15 +31,16 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                             
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if segemtedControlOutlet.selectedSegmentIndex == 0{
-          return dataSource.getSessions(for: scriptId).count
+        if segemtedControlOutlet.selectedSegmentIndex == 0 {
+            return dataSource.getSessions(for: scriptId).count
         } else {
-            return dataSource.qnaArray.count
+            let qnaSessions = dataSource.getQnASessions(for: scriptId)
+            return qnaSessions.count  // Return 0 if empty, no placeholder needed
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if segemtedControlOutlet.selectedSegmentIndex == 0{
+        if segemtedControlOutlet.selectedSegmentIndex == 0 {
             if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
                     let sessions = dataSource.getSessions(for: scriptId)
                     cell.topicName = sessions[indexPath.row].title
@@ -47,17 +48,16 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                     cell.setup()
                 return cell
             }
-        }
-        else{
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)  as? cellTableViewCell{
-                cell.topicName = dataSource.qnaArray[indexPath.row].title
-                cell.dateName = dataSource.qnaArray[indexPath.row].createdAt.description
+        } else {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell {
+                let qnaSessions = dataSource.getQnASessions(for: scriptId)
+                let session = qnaSessions[indexPath.row]
+                cell.topicName = session.title
+                cell.dateName = session.createdAt.description
                 cell.setup()
-               
                 return cell
             }
         }
-        print("Default Called")
         return UITableViewCell()
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -146,28 +146,103 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     @IBOutlet weak var reheraseB: UIButton!
     @IBOutlet weak var pageControll: UIPageControl!
     override func viewDidLoad() {
-        self.navigationItem.title = self.scriptTitle
-        self.title = self.scriptTitle
-        //textView.text = ""
         super.viewDidLoad()
+        
+        // Configure navigation bar properly
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.title = scriptTitle
+        
+        // Ensure back button is visible
+        navigationItem.hidesBackButton = false
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        // Initial setup
         updateCollectionView()
         round()
         updateButtonName()
+        
+        // Configure table view
+        configureTableView()
+        
+        // Configure collection view
+        configureCollectionView()
+        
+        // Other setup
+        updateLongPress()
+        HomeViewModel.shared.currentScriptID = scriptId
+        
+        //navigationBarItem
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        
+        // Add empty state message
+        tableView.backgroundView = createEmptyStateView()
+    }
+    
+    private func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // Basic table view setup
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 60
+        tableView.contentInset = .zero
+        tableView.contentInsetAdjustmentBehavior = .never
+        
+        // Make sure table view is visible
+        tableView.isHidden = false
+        tableView.backgroundColor = .systemBackground
+    }
+    
+    private func configureCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true
-        updateLongPress()
-        HomeViewModel.shared.currentScriptID = scriptId
+        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            
+            // Set collection view height
+            let heightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 250)
+            heightConstraint.priority = .required // Make this required
+            heightConstraint.isActive = true
         }
-
-      
-        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Ensure navigation bar is visible and configured correctly
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+        
+        // Update table view data
+        tableView.reloadData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Set fixed heights
+        let spacing: CGFloat = 16
+        
+        // Make sure table view doesn't overlap with button
+        let tableViewBottom = reheraseB.frame.origin.y - spacing
+        let tableViewTop = segemtedControlOutlet.frame.maxY + spacing
+        let tableViewHeight = tableViewBottom - tableViewTop
+        
+        // Update table view frame
+        tableView.frame = CGRect(
+            x: tableView.frame.origin.x,
+            y: tableViewTop,
+            width: tableView.frame.width,
+            height: tableViewHeight
+        )
+    }
+    
     func updateLongPress(){
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
         textView.addInteraction(contextMenuInteraction)
@@ -204,24 +279,33 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
     }
     
-    func updateButtonName(){
-        if segemtedControlOutlet.selectedSegmentIndex == 0{
+    func updateButtonName() {
+        if segemtedControlOutlet.selectedSegmentIndex == 0 {
             reheraseB.setTitle("Rehearse Again", for: .normal)
             reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-        }else{
+            display = "No Practice Sessions"  // Set message for practice sessions
+        } else {
             reheraseB.setTitle("Practice Q&A", for: .normal)
             reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+            display = "No Q&A Sessions Available"  // Set message for Q&A sessions
+        }
+        
+        // Update visibility based on whether there are sessions
+        if segemtedControlOutlet.selectedSegmentIndex == 0 {
+            let sessions = dataSource.getSessions(for: scriptId)
+            tableView.backgroundView?.isHidden = !sessions.isEmpty
+        } else {
+            let qnaSessions = dataSource.getQnASessions(for: scriptId)
+            tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
         }
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
         tableView.reloadData()
         updateButtonName()
+        updateEmptyStateVisibility()
     }
-    
-    @IBAction func unwindCancel(segue: UIStoryboardSegue){
-        
-    }
+
     
     @IBAction func rehearseButtonTap(_ sender: Any) {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
@@ -254,8 +338,88 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         
     }
     
-
+    @IBAction func unwindToProgressViewController(segue: UIStoryboardSegue) {
+        print("segue called from save button")
+    }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        
+        if segemtedControlOutlet.selectedSegmentIndex == 1 { // Q&A tab
+            let qnaSessions = dataSource.getQnASessions(for: scriptId)
+            
+            // Don't do anything if there are no sessions
+            if qnaSessions.isEmpty {
+                print("No QnA sessions to display")
+                return
+            }
+            
+            // Get the selected Q&A session
+            let selectedSession = qnaSessions[indexPath.row]
+            
+            // Get questions for this session
+            let questions = dataSource.getQuestions(for: selectedSession.id)
+            print("Loading report for session: \(selectedSession.title)")
+            print("Found \(questions.count) questions for session ID: \(selectedSession.id)")
+            
+            // Create and configure QuestionAnswerList
+            if let questionListVC = UIStoryboard(name: "QuestionAndAnswers", bundle: nil)
+                .instantiateViewController(withIdentifier: "QuestionAnswerList") as? QuestionAnswerList {
+                
+                // Pass the questions to QuestionAnswerList and mark as viewing existing session
+                questionListVC.qna_dataController.questions = questions
+                questionListVC.isViewingExistingSession = true
+                
+                // Push the view controller
+                navigationController?.pushViewController(questionListVC, animated: true)
+            }
+        }
+    }
+    
+    // Add this as a property
+    private var emptyStateLabel: UILabel?
+    private var display: String = "" {
+        didSet {
+            emptyStateLabel?.text = display
+        }
+    }
+    
+    private func createEmptyStateView() -> UIView {
+        let view = UIView()
+        let label = UILabel()
+        emptyStateLabel = label  // Store reference to label
+        label.text = display
+        label.textAlignment = .center
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 16)
+        
+        view.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        return view
+    }
+    
+    // Update the text like this:
+    func updateEmptyStateVisibility() {
+        if segemtedControlOutlet.selectedSegmentIndex == 1 {
+            let qnaSessions = dataSource.getQnASessions(for: scriptId)
+            if qnaSessions.isEmpty {
+                display = "No Q&A Sessions Available"
+            }
+            tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
+        } else {
+            let sessions = dataSource.getSessions(for: scriptId)
+            if sessions.isEmpty {
+                display = "No Sessions Available"
+            }
+            tableView.backgroundView?.isHidden = !sessions.isEmpty
+        }
+    }
     
     }
 

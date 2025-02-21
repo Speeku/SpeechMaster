@@ -6,8 +6,11 @@
 //
 
 import Foundation
-
-var questionsList : [QnAQuestion] = [
-    QnAQuestion(id: UUID(), questionText: "What is the full form of TOC?"),
-    QnAQuestion(id: UUID(), questionText: "What do you mean by JSON?")
-]
+//struct q{
+//    var id : UUID
+//    var questionText : String
+//}
+//var questionsList : [q] = [
+//    q(id: UUID(), questionText: "What is the full form of TOC?"),
+//    q(id: UUID(), questionText: "What do you mean by JSON?")
+//]

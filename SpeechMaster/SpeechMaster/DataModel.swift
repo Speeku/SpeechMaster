@@ -60,14 +60,14 @@ struct QnASession: Identifiable, Codable {
     let createdAt: Date
     let title: String
 }
-struct QnAReport: Identifiable, Codable {
-    let id: UUID
-    let QnASessionId: UUID
-    let questionText: String
-    let userAnswer: String
-    let suggestedAnswer: String
-    let timeTaken: TimeInterval
-}
+//struct QnAReport: Identifiable, Codable {
+//    let id: UUID
+//    let QnASessionId: UUID
+//    let questionText: String
+//    let userAnswer: String
+//    let suggestedAnswer: String
+//    let timeTaken: TimeInterval
+//}
 
 // MARK: - Analysis Entities
 
@@ -85,7 +85,11 @@ struct Report: Identifiable{
 
 struct QnAQuestion: Identifiable, Codable {
     let id: UUID
+    let qna_session_Id : UUID
     let questionText: String
+    let userAnswer: String
+    let suggestedAnswer: String
+    let timeTaken : TimeInterval
 }
 
 ////

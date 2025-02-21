@@ -12,6 +12,9 @@ struct LandingPageView: View {
     private func deleteScript(at offsets: IndexSet) {
         viewModel.scripts.remove(atOffsets: offsets)
    }
+    func unwindSegue(_ unwindSegue: UIStoryboardSegue) {
+        
+    }
     private var emptyScriptsView: some View {
         VStack(spacing: 24) {
             Image(systemName: "doc.text.fill")
