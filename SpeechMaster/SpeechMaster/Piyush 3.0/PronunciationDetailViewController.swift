@@ -2,9 +2,10 @@ import UIKit
 import AVFoundation
 import Speech
 
-class PronunciationDetailViewController: UIViewController {
+class PronunciationDetailViewController: UIViewController, UITextFieldDelegate {
     private let pronunciationErrors: [SpeechAnalysisResult.PronunciationError]
     private let synthesizer = AVSpeechSynthesizer()
+    private let indianVoice = AVSpeechSynthesisVoice(language: "en-IN")
     private var selectedWord: String?
     
     private let scrollView: UIScrollView = {
@@ -40,6 +41,16 @@ class PronunciationDetailViewController: UIViewController {
         return label
     }()
     
+    private let practiceTextField: UITextField = {
+        let tf = UITextField()
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.placeholder = "Enter a word to practice"
+        tf.borderStyle = .roundedRect
+        tf.font = .systemFont(ofSize: 16)
+        tf.clearButtonMode = .whileEditing
+        return tf
+    }()
+    
     private let practiceButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -73,14 +84,6 @@ class PronunciationDetailViewController: UIViewController {
         iv.image = UIImage(systemName: "mouth")
         iv.tintColor = .label
         return iv
-    }()
-    
-    private let accentSelector: UISegmentedControl = {
-        let items = ["Indian", "British", "American"]
-        let sc = UISegmentedControl(items: items)
-        sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.selectedSegmentIndex = 0
-        return sc
     }()
     
     private let mouthContainer: UIView = {
@@ -149,10 +152,18 @@ class PronunciationDetailViewController: UIViewController {
         return label
     }()
     
-    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-IN"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
+    
+    private let stackView: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.axis = .vertical
+        sv.spacing = 20
+        return sv
+    }()
     
     init(pronunciationErrors: [SpeechAnalysisResult.PronunciationError]) {
         self.pronunciationErrors = pronunciationErrors
@@ -166,6 +177,16 @@ class PronunciationDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupNavigationBar()
+        addPronunciationErrors()
+        
+        // Add tap gesture recognizer to dismiss keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
+        
+        // Setup text field delegate
+        practiceTextField.delegate = self
+        practiceTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
     
     private func setupUI() {
@@ -183,7 +204,7 @@ class PronunciationDetailViewController: UIViewController {
         scrollView.addSubview(wordsStackView)
         view.addSubview(practiceContainer)
         
-        practiceContainer.addSubview(accentSelector)
+        practiceContainer.addSubview(practiceTextField)
         practiceContainer.addSubview(selectedWordLabel)
         practiceContainer.addSubview(practiceButton)
         practiceContainer.addSubview(speedSwitch)
@@ -213,35 +234,34 @@ class PronunciationDetailViewController: UIViewController {
             practiceContainer.topAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 24),
             practiceContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             practiceContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            practiceContainer.heightAnchor.constraint(equalToConstant: 280),
+            practiceContainer.heightAnchor.constraint(equalToConstant: 260),
             
-            accentSelector.topAnchor.constraint(equalTo: practiceContainer.topAnchor, constant: 16),
-            accentSelector.centerXAnchor.constraint(equalTo: practiceContainer.centerXAnchor),
-            accentSelector.widthAnchor.constraint(equalTo: practiceContainer.widthAnchor, constant: -32),
+            practiceTextField.topAnchor.constraint(equalTo: practiceContainer.topAnchor, constant: 20),
+            practiceTextField.leadingAnchor.constraint(equalTo: practiceContainer.leadingAnchor, constant: 20),
+            practiceTextField.trailingAnchor.constraint(equalTo: practiceContainer.trailingAnchor, constant: -20),
+            practiceTextField.heightAnchor.constraint(equalToConstant: 40),
             
+            selectedWordLabel.topAnchor.constraint(equalTo: practiceTextField.bottomAnchor, constant: 16),
             selectedWordLabel.centerXAnchor.constraint(equalTo: practiceContainer.centerXAnchor),
-            selectedWordLabel.centerYAnchor.constraint(equalTo: practiceContainer.centerYAnchor, constant: -60),
-            selectedWordLabel.leadingAnchor.constraint(equalTo: practiceContainer.leadingAnchor, constant: 20),
-            selectedWordLabel.trailingAnchor.constraint(equalTo: practiceContainer.trailingAnchor, constant: -20),
             
+            practiceButton.topAnchor.constraint(equalTo: selectedWordLabel.bottomAnchor, constant: 16),
             practiceButton.centerXAnchor.constraint(equalTo: practiceContainer.centerXAnchor),
-            practiceButton.bottomAnchor.constraint(equalTo: practiceContainer.bottomAnchor, constant: -40),
             practiceButton.widthAnchor.constraint(equalToConstant: 200),
             practiceButton.heightAnchor.constraint(equalToConstant: 44),
             
-            speedSwitch.leadingAnchor.constraint(equalTo: practiceContainer.leadingAnchor, constant: 16),
-            speedSwitch.bottomAnchor.constraint(equalTo: practiceButton.topAnchor, constant: -16),
+            speedSwitch.topAnchor.constraint(equalTo: practiceButton.bottomAnchor, constant: 20),
+            speedSwitch.leadingAnchor.constraint(equalTo: practiceContainer.leadingAnchor, constant: 20),
             
-            speedLabel.leadingAnchor.constraint(equalTo: speedSwitch.trailingAnchor, constant: 8),
             speedLabel.centerYAnchor.constraint(equalTo: speedSwitch.centerYAnchor),
+            speedLabel.leadingAnchor.constraint(equalTo: speedSwitch.leadingAnchor, constant: 57),
             
-            mouthContainer.topAnchor.constraint(equalTo: practiceContainer.bottomAnchor, constant: 20),
+            mouthContainer.topAnchor.constraint(equalTo: practiceContainer.bottomAnchor, constant: 10),
             mouthContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             mouthContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            mouthContainer.heightAnchor.constraint(equalToConstant: 120),
+            mouthContainer.heightAnchor.constraint(equalToConstant: 100),
             
+            mouthView.topAnchor.constraint(equalTo: mouthContainer.topAnchor, constant: 40),
             mouthView.centerXAnchor.constraint(equalTo: mouthContainer.centerXAnchor),
-            mouthView.centerYAnchor.constraint(equalTo: mouthContainer.centerYAnchor),
             mouthView.widthAnchor.constraint(equalToConstant: 140),
             mouthView.heightAnchor.constraint(equalToConstant: 80),
             
@@ -273,7 +293,7 @@ class PronunciationDetailViewController: UIViewController {
             scoreLabel.centerYAnchor.constraint(equalTo: recordingView.centerYAnchor)
         ])
         
-        practiceButton.addTarget(self, action: #selector(practicePronunciation), for: .touchUpInside)
+        practiceButton.addTarget(self, action: #selector(practiceButtonTapped), for: .touchUpInside)
         recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
         
         setupWordButtons()
@@ -299,7 +319,6 @@ class PronunciationDetailViewController: UIViewController {
     }
     
     private func updatePracticeContainer(_ word: String?) {
-        selectedWord = word
         selectedWordLabel.text = word ?? "Select a word to practice"
         selectedWordLabel.font = word != nil ? .systemFont(ofSize: 32, weight: .bold) : .systemFont(ofSize: 24, weight: .regular)
         practiceButton.isEnabled = word != nil
@@ -321,36 +340,38 @@ class PronunciationDetailViewController: UIViewController {
         sender.backgroundColor = .systemBlue
         sender.setTitleColor(.white, for: .normal)
         
+        selectedWord = word
+        practiceTextField.text = "" // Clear text field when word is selected
         updatePracticeContainer(word)
+        
+        // Pronounce the selected word
+        let utterance = AVSpeechUtterance(string: word)
+        utterance.voice = indianVoice
+        utterance.rate = speedSwitch.isOn ? 0.4 : 0.7
+        utterance.pitchMultiplier = 1.0
+        synthesizer.speak(utterance)
+        
+        // Animate mouth for the selected word
+        animateMouth(for: word)
     }
     
-    @objc private func practicePronunciation() {
-        guard let word = selectedWord else { return }
+    @objc private func practiceButtonTapped() {
+        let wordToPractice = selectedWord ?? ""
+        guard !wordToPractice.isEmpty else { return }
         
-        // Get accent based on selector
-        let accent: String
-        switch accentSelector.selectedSegmentIndex {
-        case 0:
-            accent = "en-IN"
-        case 1:
-            accent = "en-GB"
-        case 2:
-            accent = "en-US"
-        default:
-            accent = "en-IN"
-        }
+        let utterance = AVSpeechUtterance(string: wordToPractice)
+        utterance.voice = indianVoice
+        utterance.rate = speedSwitch.isOn ? 0.4 : 0.7
+        utterance.pitchMultiplier = 1.0
+        synthesizer.speak(utterance)
         
-        let utterance = AVSpeechUtterance(string: word)
-        utterance.voice = AVSpeechSynthesisVoice(language: accent)
-        utterance.rate = speedSwitch.isOn ? 0.3 : 0.5
-        utterance.pitchMultiplier = 1.1
-        utterance.volume = 1.0
-        
-        // Get phonemes for the word
+        // Animate mouth for the word
+        animateMouth(for: wordToPractice)
+    }
+    
+    private func animateMouth(for word: String) {
         let phonemes = PhoneticMapping.getPhonemes(for: word)
         animateMouthSequence(phonemes: phonemes)
-        
-        synthesizer.speak(utterance)
     }
     
     private func animateMouthSequence(phonemes: [Phoneme]) {
@@ -383,7 +404,7 @@ class PronunciationDetailViewController: UIViewController {
     }
     
     @objc private func recordButtonTapped() {
-        guard let word = selectedWord else { return }
+        guard let word = selectedWordLabel.text else { return }
         
         if audioEngine.isRunning {
             stopRecording()
@@ -484,6 +505,32 @@ class PronunciationDetailViewController: UIViewController {
         }
         return last[s2.count]
     }
+    
+    private func setupNavigationBar() {
+        // Implementation of setupNavigationBar method
+    }
+    
+    private func addPronunciationErrors() {
+        // Implementation of addPronunciationErrors method
+    }
+    
+    // Add text field change handler
+    @objc private func textFieldDidChange(_ textField: UITextField) {
+        let word = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        selectedWord = word.isEmpty ? selectedWord : word
+        updatePracticeContainer(selectedWord)
+    }
+    
+    // Add method to dismiss keyboard
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    // Implement text field delegate method to dismiss keyboard on return
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 // Update the Phoneme enum and PhoneticMapping
@@ -578,4 +625,4 @@ private struct PhoneticMapping {
         
         return phonemes.isEmpty ? [.neutral] : phonemes
     }
-} 
+}

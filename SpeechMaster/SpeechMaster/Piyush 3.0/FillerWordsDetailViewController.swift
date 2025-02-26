@@ -75,26 +75,73 @@ class FillerWordsDetailViewController: UIViewController {
     }
     
     private func addSuggestions() {
+        let container = UIView()
+        container.backgroundColor = .systemBackground
+        container.layer.cornerRadius = 16
+        container.layer.shadowColor = UIColor.black.cgColor
+        container.layer.shadowOffset = CGSize(width: 0, height: 2)
+        container.layer.shadowRadius = 6
+        container.layer.shadowOpacity = 0.1
+        
+        let titleView = UIView()
+        titleView.backgroundColor = .systemBlue
+        titleView.layer.cornerRadius = 16
+        titleView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        
         let titleLabel = UILabel()
-        titleLabel.text = "Suggestions for Improvement"
-        titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
-        stackView.addArrangedSubview(titleLabel)
+        titleLabel.text = "💡 Tips for Improvement"
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .center
         
         let suggestions = [
-            "Take a pause instead of using filler words",
-            "Practice being comfortable with silence",
-            "Prepare and rehearse your key points",
-            "Record yourself to identify patterns",
-            "Focus on speaking more slowly and deliberately"
+            (icon: "🎯", title: "Pause and Think", message: "Take a moment to gather your thoughts instead of using filler words"),
+            (icon: "🔄", title: "Replace with Silence", message: "Practice replacing filler words with brief, confident pauses"),
+            (icon: "📝", title: "Prepare Transitions", message: "Plan your transitions between key points in advance"),
+            (icon: "🎤", title: "Record and Review", message: "Record yourself and note when you use filler words most"),
+            (icon: "⚡️", title: "Stay Confident", message: "Remember that occasional pauses show thoughtfulness")
         ]
         
-        suggestions.forEach { suggestion in
-            let label = UILabel()
-            label.text = "• \(suggestion)"
-            label.font = .systemFont(ofSize: 16)
-            label.numberOfLines = 0
-            stackView.addArrangedSubview(label)
+        let suggestionsStackView = UIStackView()
+        suggestionsStackView.axis = .vertical
+        suggestionsStackView.spacing = 16
+        suggestionsStackView.layoutMargins = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
+        suggestionsStackView.isLayoutMarginsRelativeArrangement = true
+        
+        [titleView, titleLabel, suggestionsStackView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
+        
+        container.addSubview(titleView)
+        titleView.addSubview(titleLabel)
+        container.addSubview(suggestionsStackView)
+        
+        NSLayoutConstraint.activate([
+            titleView.topAnchor.constraint(equalTo: container.topAnchor),
+            titleView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            titleView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            titleView.heightAnchor.constraint(equalToConstant: 60),
+            
+            titleLabel.centerYAnchor.constraint(equalTo: titleView.centerYAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: titleView.leadingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: titleView.trailingAnchor, constant: -16),
+            
+            suggestionsStackView.topAnchor.constraint(equalTo: titleView.bottomAnchor),
+            suggestionsStackView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            suggestionsStackView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            suggestionsStackView.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+        ])
+        
+        suggestions.forEach { suggestion in
+            let suggestionView = createSuggestionView(
+                icon: suggestion.icon,
+                title: suggestion.title,
+                message: suggestion.message
+            )
+            suggestionsStackView.addArrangedSubview(suggestionView)
+        }
+        
+        stackView.addArrangedSubview(container)
     }
     
     private func createFillerWordView(word: String, count: Int) -> UIView {
@@ -129,7 +176,53 @@ class FillerWordsDetailViewController: UIViewController {
         return container
     }
     
+    private func createSuggestionView(icon: String, title: String, message: String) -> UIView {
+        let container = UIView()
+        container.backgroundColor = .systemGray6
+        container.layer.cornerRadius = 12
+        
+        let iconLabel = UILabel()
+        iconLabel.text = icon
+        iconLabel.font = .systemFont(ofSize: 30)
+        
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        
+        let messageLabel = UILabel()
+        messageLabel.text = message
+        messageLabel.font = .systemFont(ofSize: 15)
+        messageLabel.textColor = .secondaryLabel
+        messageLabel.numberOfLines = 0
+        
+        let textStack = UIStackView(arrangedSubviews: [titleLabel, messageLabel])
+        textStack.axis = .vertical
+        textStack.spacing = 4
+        
+        [container, iconLabel, textStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        container.addSubview(iconLabel)
+        container.addSubview(textStack)
+        
+        NSLayoutConstraint.activate([
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            
+            iconLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            iconLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            iconLabel.widthAnchor.constraint(equalToConstant: 40),
+            
+            textStack.leadingAnchor.constraint(equalTo: iconLabel.trailingAnchor, constant: 12),
+            textStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            textStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 12),
+            textStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -12)
+        ])
+        
+        return container
+    }
+    
     @objc private func dismissVC() {
         dismiss(animated: true)
     }
-} 
+}

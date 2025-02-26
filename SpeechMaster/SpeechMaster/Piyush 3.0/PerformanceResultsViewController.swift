@@ -9,6 +9,7 @@ class PerformanceResultsViewController: UIViewController {
     var sessionName: String = ""
     private let results: SpeechAnalysisResult
     private let videoURL: URL?
+    private let script = HomeViewModel.shared.uploadedScriptText
     
     // Add motivational quotes
     private let motivationalQuotes = [
@@ -143,13 +144,13 @@ class PerformanceResultsViewController: UIViewController {
         ])
         
         // Add video player view with proper constraints
-        if videoURL != nil {
+        if let videoURL = videoURL {
             setupVideoPlayer()
             stackView.addArrangedSubview(videoPlayerView)
             
             // Increase video height
             NSLayoutConstraint.activate([
-                videoPlayerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2), 
+                videoPlayerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.2),
                 videoPlayerView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
                 videoPlayerView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
             ])
@@ -210,9 +211,9 @@ class PerformanceResultsViewController: UIViewController {
     
     private func setupVideoPlayer() {
         guard let videoURL = videoURL,
-              FileManager.default.fileExists(atPath: videoURL.path) else { 
+              FileManager.default.fileExists(atPath: videoURL.path) else {
             print("Video file not found at path")
-            return 
+            return
         }
         
         // Create AVPlayer and AVPlayerLayer
@@ -312,12 +313,7 @@ class PerformanceResultsViewController: UIViewController {
     }
     
     private func addMissingWordsSection() {
-        let container = createMissingWordsView(count: results.missingWords.count)
-        
-        // Add tap gesture
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(missingWordsSectionTapped))
-        container.addGestureRecognizer(tapGesture)
-        container.isUserInteractionEnabled = true
+        let container = createMissingWordsCell()
         
         stackView.addArrangedSubview(container)
     }
@@ -554,24 +550,44 @@ class PerformanceResultsViewController: UIViewController {
         return container
     }
     
-    private func createMissingWordsView(count: Int) -> UIView {
+    private func createMetricContainer() -> UIView {
         let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
         container.backgroundColor = .systemBackground
         container.layer.cornerRadius = 12
         container.layer.borderWidth = 1
         container.layer.borderColor = UIColor.systemGray4.cgColor
         
+        // Add shadow
+        container.layer.shadowColor = UIColor.black.cgColor
+        container.layer.shadowOffset = CGSize(width: 0, height: 2)
+        container.layer.shadowRadius = 4
+        container.layer.shadowOpacity = 0.1
+        
+        return container
+    }
+    
+    private func createMissingWordsCell() -> UIView {
+        let container = createMetricContainer()
+        
         let titleLabel = UILabel()
         titleLabel.text = "Missing Words"
-        titleLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 16)
         
         let countLabel = UILabel()
-        countLabel.text = "\(count) detected"
-        countLabel.font = .systemFont(ofSize: 16)
-        countLabel.textColor = count > 0 ? .systemRed : .systemGreen
+        // Get the count of unique missing words that appear in the script
+        let uniqueMissingWords = Set(results.missingWords.map { $0.word })
+        let missingWordsInScript = uniqueMissingWords.filter { word in
+            script.range(of: "\\b\(word)\\b",
+                               options: [.regularExpression, .caseInsensitive]) != nil
+        }
+        countLabel.text = "\(missingWordsInScript.count)"
+        countLabel.font = .systemFont(ofSize: 16, weight: .medium)
+        countLabel.textColor = missingWordsInScript.count > 0 ? .systemRed : .systemGreen
         
         let arrowImageView = UIImageView(image: UIImage(systemName: "chevron.right"))
-        arrowImageView.tintColor = .systemGray3
+        arrowImageView.tintColor = .secondaryLabel
+        arrowImageView.contentMode = .scaleAspectFit
         
         [titleLabel, countLabel, arrowImageView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -592,6 +608,10 @@ class PerformanceResultsViewController: UIViewController {
             arrowImageView.widthAnchor.constraint(equalToConstant: 12),
             arrowImageView.heightAnchor.constraint(equalToConstant: 20)
         ])
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(missingWordsSectionTapped))
+        container.addGestureRecognizer(tapGesture)
+        container.isUserInteractionEnabled = true
         
         return container
     }
@@ -731,8 +751,12 @@ class PerformanceResultsViewController: UIViewController {
     }
     
     @objc private func missingWordsSectionTapped() {
-        let vc = MissingWordsDetailViewController(missingWords: results.missingWords)
-        let nav = UINavigationController(rootViewController: vc)
+        let missingWordsVC = MissingWordsDetailViewController(
+            missingWords: results.missingWords
+        )
+        
+        let nav = UINavigationController(rootViewController: missingWordsVC)
+        nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }
     
@@ -881,7 +905,7 @@ class PerformanceResultsViewController: UIViewController {
         
         let okAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             // Pop to root view controller
-            self?.navigationController?.popToRootViewController(animated: true)
+            self?.navigationController?.popToRootViewController(animated: false)
         }
         
         successAlert.addAction(okAction)
@@ -897,4 +921,4 @@ class PerformanceResultsViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-} 
+}

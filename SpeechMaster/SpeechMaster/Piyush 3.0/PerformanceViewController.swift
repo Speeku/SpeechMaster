@@ -230,11 +230,15 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         return documentsPath.appendingPathComponent("performance_recording.mp4")
     }
     
-    var currentKeynoteURL: URL?
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
     
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -276,14 +280,14 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         let scrollSpeedLabel = createSettingLabel(text: "Scroll Speed")
         let autoScrollLabel = createSettingLabel(text: "Auto Scroll (Voice Match)")
         
-        [scriptSizeLabel, scriptSizeSlider, scrollSpeedLabel, scrollSpeedSlider, 
+        [scriptSizeLabel, scriptSizeSlider, scrollSpeedLabel, scrollSpeedSlider,
          autoScrollLabel, autoScrollSwitch].forEach {
             settingsPopupView.addSubview($0)
         }
         
         // Update the keynote container constraint setup
         keynoteHeightConstraint = keynoteContainerView.heightAnchor.constraint(
-            equalTo: view.heightAnchor, 
+            equalTo: view.heightAnchor,
             multiplier: 0.3
         )
         
@@ -420,7 +424,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         captureSession.sessionPreset = .high
         
         // Get front camera
-        guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera, 
+        guard let frontCamera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                        for: .video,
                                                        position: .front) else {
             print("Front camera not available")
@@ -472,7 +476,6 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
     }
     
     private func loadKeynote() {
-        //guard script.hasKeynote else { return }
         
         let previewController = QLPreviewController()
         previewController.dataSource = self
@@ -511,6 +514,8 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
     }
     
     // MARK: - QLPreviewControllerDataSource
+    
+    var currentKeynoteURL: URL?
     
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         return currentKeynoteURL != nil ? 1 : 0
@@ -796,7 +801,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             
             // Create and store new constraint
             keynoteHeightConstraint = keynoteContainerView.heightAnchor.constraint(
-                equalTo: view.heightAnchor, 
+                equalTo: view.heightAnchor,
                 multiplier: clampedMultiplier
             )
             keynoteHeightConstraint?.isActive = true
@@ -861,7 +866,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
     
     private func showResults(_ results: SpeechAnalysisResult) {
         let resultsVC = PerformanceResultsViewController(
-            results: results, 
+            results: results,
             videoURL: recordedVideoURL
         )
         navigationController?.pushViewController(resultsVC, animated: true)
@@ -874,7 +879,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         scrollTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             let currentOffset = self.scriptPreviewTextView.contentOffset
-            let newOffset = CGPoint(x: currentOffset.x, 
+            let newOffset = CGPoint(x: currentOffset.x,
                                   y: currentOffset.y + CGFloat(self.scrollSpeed) * 0.1)
             
             // Check if we've reached the bottom
@@ -956,7 +961,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             wordCount = speechAnalyzer.getCurrentWordCount()
             
             // Calculate speaking rate only if we have been speaking for at least 3 seconds
-            if let startTime = speakingStartTime, 
+            if let startTime = speakingStartTime,
                Date().timeIntervalSince(startTime) >= 3.0 && wordCount > 0 {
                 
                 let duration = Date().timeIntervalSince(startTime)
@@ -1014,4 +1019,4 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         // Video recording started
         print("Started recording video to: \(fileURL.path)")
     }
-} 
+}

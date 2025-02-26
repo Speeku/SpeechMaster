@@ -3,8 +3,7 @@ import Speech
 import AVFoundation
 
 class SpeechAnalyzer {
-    //private let script: Script
-    private let ds = HomeViewModel.shared
+    private let script = HomeViewModel.shared.uploadedScriptText
     private var audioEngine: AVAudioEngine
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
@@ -25,18 +24,26 @@ class SpeechAnalyzer {
     private var recentFillerWords: [(word: String, timestamp: TimeInterval)] = []
     private let recentFillerWordsTimeWindow: TimeInterval = 5.0 // Last 5 seconds
     
+    private var detectionCount = 0
+    private var detectionTexts: [String] = []
+    private var detectionStartTime: Date?
+    private var isCurrentlyDetecting = false
+    private var nonRemovableDetections: [(word: String, timestamp: TimeInterval)] = []
+    
     init() {
         self.audioEngine = AVAudioEngine()
         self.speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
     }
     
     func startRecording() async throws {
-        // Request permission
         try await requestPermissions()
         
         // Setup audio session
-        try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
-        try AVAudioSession.sharedInstance().setActive(true)
+        let session = AVAudioSession.sharedInstance()
+        try session.setCategory(.record, mode: .measurement, options: [.mixWithOthers, .allowBluetooth])
+        try session.setPreferredIOBufferDuration(0.005)
+        try session.setPreferredSampleRate(44100)
+        try session.setActive(true)
         
         // Setup recording URL
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -56,29 +63,53 @@ class SpeechAnalyzer {
         // Enable audio metering
         audioRecorder?.isMeteringEnabled = true
         
-        // Start monitoring audio levels
-        audioMeterTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            self?.audioRecorder?.updateMeters()
-            self?.currentVolume = self?.getCurrentVolume() ?? 0.0
-        }
-        
-        // Start speech recognition
+        // Initialize recognition request
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { return }
-        
-        let inputNode = audioEngine.inputNode
         recognitionRequest.shouldReportPartialResults = true
         
+        // Setup recognition task
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             if let result = result {
+                let transcribedText = result.bestTranscription.formattedString
+                
+                // If there's transcription, remove current detections
+                if !transcribedText.isEmpty {
+                    self.detectionTexts.removeAll()
+                }
+                
                 self.processRecognitionResult(result)
             }
         }
         
+        // Setup audio engine and tap
+        let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+        
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+            guard let self = self else { return }
+            
+            // Feed buffer to speech recognizer
             self.recognitionRequest?.append(buffer)
+            
+            // Process audio levels for filler word detection
+            let channelData = buffer.floatChannelData?.pointee
+            let frameLength = Int(buffer.frameLength)
+            
+            var sumOfSquares: Float = 0.0
+            let sampleStride = 16
+            
+            for i in stride(from: 0, to: frameLength, by: sampleStride) {
+                let sample = channelData?[i] ?? 0
+                sumOfSquares += sample * sample
+            }
+            
+            let rms = sqrt(sumOfSquares / Float(frameLength/sampleStride))
+            self.currentVolume = rms
+            
+            // Process audio level for filler word detection
+            self.processAudioLevel(rms)
         }
         
         audioEngine.prepare()
@@ -96,41 +127,26 @@ class SpeechAnalyzer {
         recognitionRequest?.endAudio()
         audioRecorder?.stop()
         
+        // Reset detection state
+        isCurrentlyDetecting = false
+        detectionStartTime = nil
+        
         let duration = Date().timeIntervalSince(startTime ?? Date())
         
-        // Analyze results
-        return await analyzeRecording()
-    }
-    
-    private func analyzeRecording() async -> SpeechAnalysisResult {
-        // Calculate expected duration based on script length
-        let wordCount = ds.getScriptText(for: ds.currentScriptID).split(separator: " ").count
-        let expectedWordsPerMinute = 150.0 // Average speaking pace
-        let expectedDuration = Double(wordCount ?? 0) / (expectedWordsPerMinute / 60)
-        
-        // Process filler words
-        let fillerWordResults = processFillerWords()
-        
-        // Find missing words
+        // Process final results
+        let fillerWords = processFillerWords()
         let missingWords = findMissingWords()
-        
-        // Analyze pronunciation (simplified version)
         let pronunciationErrors = findPronunciationErrors()
-        
-        // Calculate words per minute
-        let spokenWordCount = transcribedText.split(separator: " ").count
-        let duration = Date().timeIntervalSince(startTime ?? Date())
-        let wordsPerMinute = Double(spokenWordCount) / (duration / 60)
         
         return SpeechAnalysisResult(
             totalDuration: duration,
-            expectedDuration: expectedDuration,
-            fillerWords: fillerWordResults,
+            expectedDuration: calculateExpectedDuration(),
+            fillerWords: fillerWords,
             missingWords: missingWords,
             pronunciationErrors: pronunciationErrors,
-            averageWordsPerMinute: wordsPerMinute,
-            scriptWordCount: wordCount,
-        spokenWordCount: spokenWordCount
+            averageWordsPerMinute: calculateWordsPerMinute(),
+            scriptWordCount: calculateScriptWordCount(),
+            spokenWordCount: calculateSpokenWordCount()
         )
     }
     
@@ -151,12 +167,34 @@ class SpeechAnalyzer {
         }
     }
     
+    private func processAudioLevel(_ rms: Float) {
+        if rms > 0.009 {
+            if !isCurrentlyDetecting {
+                detectionStartTime = Date()
+                isCurrentlyDetecting = true
+                detectionCount += 1
+            }
+        } else {
+            if isCurrentlyDetecting {
+                if let startTime = detectionStartTime {
+                    let duration = Date().timeIntervalSince(startTime)
+                    let timestamp = startTime.timeIntervalSince1970
+                    
+                    // Add to nonRemovableDetections if no transcription
+                    nonRemovableDetections.append((word: "um", timestamp: timestamp))
+                }
+                isCurrentlyDetecting = false
+                detectionStartTime = nil
+            }
+        }
+    }
+    
     // Helper methods for analysis
     private func processFillerWords() -> [SpeechAnalysisResult.FillerWord] {
-        // Group filler words and their timestamps
+        // Group filler words by type and count occurrences
         var fillerWordDict: [String: [TimeInterval]] = [:]
         
-        for (word, timestamp) in detectedFillerWords {
+        for (word, timestamp) in nonRemovableDetections {
             fillerWordDict[word, default: []].append(timestamp)
         }
         
@@ -171,14 +209,14 @@ class SpeechAnalyzer {
     
     private func findMissingWords() -> [SpeechAnalysisResult.MissingWord] {
         // Simple word matching (can be improved with more sophisticated algorithms)
-        let scriptWords = ds.getScriptText(for: ds.currentScriptID).lowercased().split(separator: " ")
+        let scriptWords = script.lowercased().split(separator: " ")
         let spokenWords = transcribedText.lowercased().split(separator: " ")
         
         var missingWords: [SpeechAnalysisResult.MissingWord] = []
         
         for (index, word) in scriptWords.enumerated() {
             if !spokenWords.contains(word) {
-                let context = getContext(around: String(word), in: ds.getScriptText(for: ds.currentScriptID), index: index)
+                let context = getContext(around: String(word), in: script, index: index)
                 missingWords.append(SpeechAnalysisResult.MissingWord(
                     word: String(word),
                     expectedIndex: index,
@@ -191,25 +229,94 @@ class SpeechAnalyzer {
     }
     
     private func findPronunciationErrors() -> [SpeechAnalysisResult.PronunciationError] {
-        // This is a simplified version. In a real app, you'd want to use
-        // a pronunciation dictionary or ML model for better accuracy
-        var errors: [SpeechAnalysisResult.PronunciationError] = []
+        var pronunciationErrors: [SpeechAnalysisResult.PronunciationError] = []
+        let missingWords = findMissingWords()
         
-        // Example implementation (you'd want to enhance this)
+        // Get all words from transcription for comparison
+        let transcribedWords = transcribedText.lowercased().split(separator: " ").map(String.init)
+        let scriptWords = script.lowercased().split(separator: " ").map(String.init)
+        
         for (word, timestamp) in wordTimestamps {
-            // Add your pronunciation checking logic here
-            // This is just a placeholder
-            if word.count > 3 && Bool.random() { // Simulate finding errors
-                errors.append(SpeechAnalysisResult.PronunciationError(
-                    word: word,
-                    timestamp: timestamp,
-                    actualPronunciation: word,
-                    expectedPronunciation: word
-                ))
+            // Skip if the word is in missing words list
+            if missingWords.contains(where: { $0.word.lowercased() == word.lowercased() }) {
+                continue
+            }
+            
+            // Find the best match in script words
+            if let expectedWord = findBestMatch(for: word, in: scriptWords) {
+                let similarity = calculateSimilarity(between: word, and: expectedWord)
+                
+                // Only add to pronunciation errors if similarity is 40% or less
+                if similarity <= 0.4 {
+                    pronunciationErrors.append(
+                        SpeechAnalysisResult.PronunciationError(
+                            word: expectedWord,
+                            timestamp: timestamp,
+                            actualPronunciation: word,
+                            expectedPronunciation: expectedWord
+                        )
+                    )
+                }
             }
         }
         
-        return errors
+        return pronunciationErrors
+    }
+    
+    // Helper function to find best matching word
+    private func findBestMatch(for word: String, in wordList: [String]) -> String? {
+        var bestMatch: String?
+        var highestSimilarity: Double = 0
+        
+        for scriptWord in wordList {
+            let similarity = calculateSimilarity(between: word, and: scriptWord)
+            if similarity > highestSimilarity {
+                highestSimilarity = similarity
+                bestMatch = scriptWord
+            }
+        }
+        
+        return bestMatch
+    }
+    
+    // Calculate similarity between two words using Levenshtein distance
+    private func calculateSimilarity(between str1: String, and str2: String) -> Double {
+        let distance = levenshteinDistance(between: str1, and: str2)
+        let maxLength = Double(max(str1.count, str2.count))
+        return 1.0 - (Double(distance) / maxLength)
+    }
+    
+    // Levenshtein distance calculation
+    private func levenshteinDistance(between str1: String, and str2: String) -> Int {
+        let str1Array = Array(str1.lowercased())
+        let str2Array = Array(str2.lowercased())
+        
+        var matrix = Array(repeating: Array(repeating: 0, count: str2Array.count + 1),
+                          count: str1Array.count + 1)
+        
+        for i in 0...str1Array.count {
+            matrix[i][0] = i
+        }
+        
+        for j in 0...str2Array.count {
+            matrix[0][j] = j
+        }
+        
+        for i in 1...str1Array.count {
+            for j in 1...str2Array.count {
+                if str1Array[i-1] == str2Array[j-1] {
+                    matrix[i][j] = matrix[i-1][j-1]
+                } else {
+                    matrix[i][j] = min(
+                        matrix[i-1][j] + 1,    // deletion
+                        matrix[i][j-1] + 1,    // insertion
+                        matrix[i-1][j-1] + 1   // substitution
+                    )
+                }
+            }
+        }
+        
+        return matrix[str1Array.count][str2Array.count]
     }
     
     private func getContext(around word: String, in text: String, index: Int) -> String {
@@ -231,7 +338,7 @@ class SpeechAnalyzer {
         }
         
         guard authStatus == .authorized else {
-            throw NSError(domain: "SpeechRecognition", code: -1, 
+            throw NSError(domain: "SpeechRecognition", code: -1,
                          userInfo: [NSLocalizedDescriptionKey: "Speech recognition not authorized"])
         }
         
@@ -260,8 +367,8 @@ class SpeechAnalyzer {
     func getRecentFillerWords() -> [String] {
         let currentTime = Date().timeIntervalSince1970
         // Filter filler words from last 5 seconds
-        recentFillerWords = recentFillerWords.filter { 
-            currentTime - $0.timestamp < recentFillerWordsTimeWindow 
+        recentFillerWords = recentFillerWords.filter {
+            currentTime - $0.timestamp < recentFillerWordsTimeWindow
         }
         return recentFillerWords.map { $0.word }
     }
@@ -270,4 +377,25 @@ class SpeechAnalyzer {
         // Return the current word count from the latest transcription
         return transcribedText.split(separator: " ").count
     }
-} 
+    
+    private func calculateExpectedDuration() -> Double {
+        // Calculate expected duration based on script length
+        let wordCount = script.split(separator: " ").count
+        let expectedWordsPerMinute = 150.0 // Average speaking pace
+        return Double(wordCount) / (expectedWordsPerMinute / 60)
+    }
+    
+    private func calculateWordsPerMinute() -> Double {
+        let spokenWordCount = transcribedText.split(separator: " ").count
+        let duration = Date().timeIntervalSince(startTime ?? Date())
+        return Double(spokenWordCount) / (duration / 60)
+    }
+    
+    private func calculateScriptWordCount() -> Int {
+        return script.split(separator: " ").count
+    }
+    
+    private func calculateSpokenWordCount() -> Int {
+        return transcribedText.split(separator: " ").count
+    }
+}
