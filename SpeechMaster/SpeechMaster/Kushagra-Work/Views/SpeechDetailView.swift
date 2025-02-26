@@ -10,7 +10,7 @@ struct SpeechDetailView: View {
     @State private var showingShareSheet = false
     @State private var isBookmarked = false
     
-    private let tabs = ["Overview", "Analysis", "Transcript"]
+    private let tabs = ["Analysis", "Transcript"]
     
     var body: some View {
         ScrollView {
@@ -108,27 +108,11 @@ struct SpeechDetailView: View {
     private var tabContent: some View {
         switch selectedTab {
         case 0:
-            overviewTab
-        case 1:
             analysisTab
-        case 2:
+        case 1:
             transcriptTab
         default:
             EmptyView()
-        }
-    }
-    
-    private var overviewTab: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(speech.description)
-                .font(.body)
-                .padding(.horizontal)
-            
-            if let details = viewModel.videoDetails[speech.imageName] {
-                ForEach(details.summary) { section in
-                    TimeStampSectionView(section: section)
-                }
-            }
         }
     }
     

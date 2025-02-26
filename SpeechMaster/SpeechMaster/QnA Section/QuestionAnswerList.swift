@@ -8,10 +8,10 @@
 import UIKit
 
 class QuestionAnswerList: UIViewController {
-    let dataSource = DataController.shared
+    let dataSource = HomeViewModel.shared
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
-    @IBOutlet weak var answerButton: UIButton!
+    //@IBOutlet weak var answerButton: UIButton!
     
     var isViewingExistingSession: Bool = false
     
@@ -24,7 +24,7 @@ class QuestionAnswerList: UIViewController {
         saveButton.isHidden = isViewingExistingSession
         
         // Disable answer button initially
-        answerButton?.isEnabled = false
+       // answerButton?.isEnabled = false
         
         // Simple navigation setup
         navigationItem.title = "Q/A Report"
@@ -101,8 +101,8 @@ class QuestionAnswerList: UIViewController {
         )
         
         // Save data
-        DataController.shared.addQnASessions(qnaSession)
-        DataController.shared.addQnAQuestions(qna_dataController.questions)
+        dataSource.addQnASessions(qnaSession)
+        dataSource.addQnAQuestions(qna_dataController.questions)
         
         // Show success alert and navigate home
         let alert = UIAlertController(
@@ -186,7 +186,7 @@ extension QuestionAnswerList {
     func questionsGenerated() {
         // Enable answer button once questions are loaded
         DispatchQueue.main.async { [weak self] in
-            self?.answerButton?.isEnabled = true
+            //self?.answerButton?.isEnabled = true
             self?.qna_dataController.isQuestionsLoaded = true
         }
     }

@@ -27,17 +27,34 @@ struct ScriptsListView: View {
     }
     
     var filteredScripts: [Script] {
-        let searchResults = searchText.isEmpty ? viewModel.scripts : viewModel.scripts.filter {
-            $0.title.localizedCaseInsensitiveContains(searchText)
-        }
+        // First filter by search text
+        let searchResults = filterBySearchText(scripts: viewModel.scripts)
         
-        let filtered = switch selectedFilter {
-        case .all: searchResults
-        case .pinned: searchResults.filter { $0.isPinned }
-        case .recent: Array(searchResults.prefix(5))
-        }
+        // Then filter by selected filter
+        let filtered = filterByCategory(scripts: searchResults)
         
-        return filtered.sorted { first, second in
+        // Finally sort the results
+        return sortScripts(filtered)
+    }
+    
+    private func filterBySearchText(scripts: [Script]) -> [Script] {
+        guard !searchText.isEmpty else { return scripts }
+        return scripts.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+    }
+    
+    private func filterByCategory(scripts: [Script]) -> [Script] {
+        switch selectedFilter {
+        case .all:
+            return scripts
+        case .pinned:
+            return scripts.filter { $0.isPinned }
+        case .recent:
+            return Array(scripts.prefix(5))
+        }
+    }
+    
+    private func sortScripts(_ scripts: [Script]) -> [Script] {
+        scripts.sorted { first, second in
             switch sortOrder {
             case .newest:
                 return first.createdAt > second.createdAt
@@ -104,54 +121,52 @@ struct ScriptsListView: View {
             } else {
                 List {
                     ForEach(filteredScripts) { script in
-                        NavigationLink(destination: StoryboardView(script: script)) {
-                            ScriptRow(script: script, viewModel: viewModel)
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button(role: .destructive) {
-                                        withAnimation {
-                                            viewModel.deleteScript(script)
-                                        }
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                    
-                                    Button {
-                                        withAnimation {
-                                            viewModel.togglePin(for: script)
-                                        }
-                                    } label: {
-                                        Label(script.isPinned ? "Unpin" : "Pin", 
-                                              systemImage: script.isPinned ? "pin.slash" : "pin")
-                                    }
-                                    .tint(.blue)
-                                }
-                                .contextMenu {
-                                    Button {
-                                        viewModel.togglePin(for: script)
-                                    } label: {
-                                        Label(script.isPinned ? "Unpin" : "Pin to Top",
-                                              systemImage: script.isPinned ? "pin.slash" : "pin")
-                                    }
-                                    
-                                    Button {
-                                        // Navigate to practice
-                                        let destination = StoryboardView(script: script)
-                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                           let window = windowScene.windows.first,
-                                           let rootViewController = window.rootViewController {
-                                            rootViewController.navigationController?.pushViewController(UIHostingController(rootView: destination), animated: true)
-                                        }
-                                    } label: {
-                                        Label("Practice", systemImage: "mic")
-                                    }
-                                    
-                                    Button(role: .destructive) {
+                        ScriptRow(script: script, viewModel: viewModel)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button(role: .destructive) {
+                                    withAnimation {
                                         viewModel.deleteScript(script)
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
                                     }
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
-                        }
+                                
+                                Button {
+                                    withAnimation {
+                                        viewModel.togglePin(for: script)
+                                    }
+                                } label: {
+                                    Label(script.isPinned ? "Unpin" : "Pin", 
+                                          systemImage: script.isPinned ? "pin.slash" : "pin")
+                                }
+                                .tint(.blue)
+                            }
+                            .contextMenu {
+                                Button {
+                                    viewModel.togglePin(for: script)
+                                } label: {
+                                    Label(script.isPinned ? "Unpin" : "Pin to Top",
+                                          systemImage: script.isPinned ? "pin.slash" : "pin")
+                                }
+                                
+                                Button {
+                                    // Navigate to practice
+                                    let destination = StoryboardView(script: script)
+                                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                       let window = windowScene.windows.first,
+                                       let rootViewController = window.rootViewController {
+                                        rootViewController.navigationController?.pushViewController(UIHostingController(rootView: destination), animated: true)
+                                    }
+                                } label: {
+                                    Label("Practice", systemImage: "mic")
+                                }
+                                
+                                Button(role: .destructive) {
+                                    viewModel.deleteScript(script)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
                     }
                     .animation(.spring(), value: filteredScripts)
                 }
@@ -187,13 +202,13 @@ struct ScriptsListView: View {
         }
         .alert(fileUploadViewModel.alertMessage, isPresented: $fileUploadViewModel.showingAlert) {
             Button("OK") {
-                if fileUploadViewModel.navigateToPiyushScreen {
-                    fileUploadViewModel.navigateToPiyushScreen = false
+                if viewModel.navigateToPiyushScreen {
+                    viewModel.navigateToPiyushScreen = false
                     viewModel.navigateToPiyushScreen = true
                     viewModel.uploadedScriptText = fileUploadViewModel.uploadedScriptText
                 }
             }.navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText,scID: viewModel.currentScriptID)
+                KeyNoteOptionsStoryboardView()
                   }
         }
         NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {

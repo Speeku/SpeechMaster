@@ -15,6 +15,7 @@ class ScriptEditViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         ScriptTextView.text = editScriptText
+        //HomeViewModel.shared.
     }
 
     

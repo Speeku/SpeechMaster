@@ -6,8 +6,6 @@ class FileUploadViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published var alertMessage = ""
     @Published var uploadedScriptText = ""
-    @Published var navigateToPiyushScreen = false
-    
     func handleFileSelection(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -36,7 +34,7 @@ class FileUploadViewModel: ObservableObject {
                 uploadedScriptText = try String(contentsOf: url, encoding: .utf8)
                 alertMessage = "File uploaded successfully"
                 showingAlert = true
-                navigateToPiyushScreen = true
+                HomeViewModel.shared.navigateToPiyushScreen = true
             } catch {
                 alertMessage = "Error reading file: \(error.localizedDescription)"
                 showingAlert = true

@@ -26,7 +26,7 @@ class DataController: ObservableObject {
     // MARK: - Session Management
     func addQnASessions(_ qna: QnASession) {
         self.qnaArray.append(qna)
-        print("Added QnA session: \(qna.title) with ID: \(qna.id)")
+        print("Added QnA session: \(qna.title) with ID: \(qna.id) at \(qna.createdAt)")
         // Add persistence logic here if needed
     }
     
@@ -48,6 +48,10 @@ class DataController: ObservableObject {
     func addQnAQuestions(_ questions: [QnAQuestion]) {
         qnaQuestions.append(contentsOf: questions)
         print("Added \(questions.count) questions to storage")
+        // Print first question's session ID as verification
+        if let firstQuestion = questions.first {
+            print("First question belongs to session: \(firstQuestion.qna_session_Id)")
+        }
     }
     
     func getQuestions(for sessionId: UUID) -> [QnAQuestion] {
@@ -55,7 +59,9 @@ class DataController: ObservableObject {
     }
     
     func getQnASessions(for scriptId: UUID) -> [QnASession] {
-        return qnaArray.filter { $0.scriptId == scriptId }
+        let sessions = qnaArray.filter { $0.scriptId == scriptId }
+        print("Found \(sessions.count) QnA sessions for script \(scriptId)")
+        return sessions.sorted { $0.createdAt > $1.createdAt } // Sort newest first
     }
     
     // MARK: - Data Persistence (TODO)

@@ -3,7 +3,7 @@ import SwiftUI
 struct ScriptsList: View {
     let scripts: [Script]
     @ObservedObject var viewModel: HomeViewModel
-    private let dataSource = DataController.shared
+    //private let dataSource = DataController.shared
     
     var recentScripts: [Script] {
         // Sort scripts by pinned status first, then by date

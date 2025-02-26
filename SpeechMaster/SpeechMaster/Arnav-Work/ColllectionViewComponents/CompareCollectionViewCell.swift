@@ -7,7 +7,7 @@
 
 import UIKit
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
-    private let dataSource = DataController.shared
+    private let dataSource = HomeViewModel.shared
     let scriptId = HomeViewModel.shared.currentScriptID
     var progressOfSession : [Progress] = [
         Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 123, pronunciation: 1),
@@ -240,7 +240,7 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     }
   
     private func setupTableViews() {
-        var table = [TableView1, TableView2]
+        let table = [TableView1, TableView2]
         table.forEach {
             tableView in
             tableView?.delegate = self
@@ -253,7 +253,7 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     }
 
     func setupButtons() {
-        var button = [leftButton, rightButton]
+        let button = [leftButton, rightButton]
             button.forEach { button in
             button?.setImage(beforeClicking, for: .normal)
             button?.tintColor = .label
@@ -262,14 +262,14 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
 
     func setupInitialState() {
         // button when not clicked
-        var button = [leftButton, rightButton]
+        let button = [leftButton, rightButton]
         button.forEach { button in
             button?.tintColor = .label
             button?.setImage(beforeClicking, for: .normal)
         }
         
         // label ui
-        var ui = [previous, current]
+        let ui = [previous, current]
             ui.forEach { label in
             label?.font = .systemFont(ofSize: 16, weight: .medium)
         }

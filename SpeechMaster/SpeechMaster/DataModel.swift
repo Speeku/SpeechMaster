@@ -29,7 +29,7 @@ enum AuthError: Error {
     case unknown(String)
 }
 
-
+//MARK: - Script Model
 struct Script: Identifiable,Codable,Equatable {
     let id: UUID
     //let userId: UUID
@@ -37,22 +37,21 @@ struct Script: Identifiable,Codable,Equatable {
     let scriptText: String
     //var progress: Double = 0
     let createdAt: Date
-    var isKeynoteAssociated: Bool
-    var keynoteURL: String?
+    //var isKeynoteAssociated: Bool
+    //var keynoteURL: String?
     var isPinned: Bool
     static func == (lhs: Script, rhs: Script) -> Bool {
             lhs.id == rhs.id
         }
 }
 
+//MARK: - Practice Session Model
 struct PracticeSession: Identifiable, Codable {
     let id: UUID
     let scriptId: UUID
-    let recordingURL: String
+    //let userId: UUID
     let createdAt: Date
     let title: String
-    let hasKeynote: Bool
-    let reportId: UUID
 }
 struct QnASession: Identifiable, Codable {
     let id: UUID
@@ -72,16 +71,16 @@ struct QnASession: Identifiable, Codable {
 // MARK: - Analysis Entities
 
 
-struct Report: Identifiable{
-    let id: UUID
-   // let sessionId: UUID
-    let missingWords: MissingWords
-    let fillerWords: Fillers
-    var pace: Double // Words per minute
-    let pitch: Pitch
-    let originality: Originality
-    let pronunciationScore: Double
-}
+//struct Report: Identifiable{
+//    let id: UUID
+//    let sessionId: UUID
+//    let missingWords: MissingWords
+//    let fillerWords: Fillers
+//    var pace: Double // Words per minute
+//    let pitch: Pitch
+//    let originality: Originality
+//    let pronunciationScore: Double
+//}
 
 struct QnAQuestion: Identifiable, Codable {
     let id: UUID
@@ -90,6 +89,84 @@ struct QnAQuestion: Identifiable, Codable {
     let userAnswer: String
     let suggestedAnswer: String
     let timeTaken : TimeInterval
+}
+
+//MARK: - Performance Report
+struct PerformanceReport: Codable {
+    let sessionID: UUID
+    let wordsPerMinute: Int
+    let fillerWords: [SpeechAnalysisResult.FillerWord]
+    let missingWords: [SpeechAnalysisResult.MissingWord]
+    let pronunciationErrors: [SpeechAnalysisResult.PronunciationError]
+    let duration: TimeInterval
+    let videoURL: URL?
+}
+
+//MARK: - Speech Analysis Result
+struct SpeechAnalysisResult: Codable {
+    struct FillerWord: Codable {
+        let word: String
+        let count: Int
+        let timestamps: [TimeInterval]
+    }
+    
+    struct MissingWord: Codable {
+        let word: String
+        let expectedIndex: Int
+        let context: String
+    }
+    
+    struct PronunciationError: Codable {
+        let word: String
+        let timestamp: TimeInterval
+        let actualPronunciation: String
+        let expectedPronunciation: String
+    }
+    
+    let totalDuration: TimeInterval
+    let expectedDuration: TimeInterval
+    let fillerWords: [FillerWord]
+    let missingWords: [MissingWord]
+    let pronunciationErrors: [PronunciationError]
+    let averageWordsPerMinute: Double
+    let scriptWordCount: Int
+    let spokenWordCount: Int
+    
+    var durationScore: Double {
+        // Calculate score
+        let difference = abs(totalDuration - expectedDuration)
+        let percentageDiff = difference / expectedDuration
+        return max(0, 100 * (1 - percentageDiff))
+    }
+    
+    var fillerWordsScore: Double {
+        // filler word frequency
+        let totalFillerCount = fillerWords.reduce(0) { $0 + $1.count }
+        let fillerRatio = Double(totalFillerCount) / Double(spokenWordCount)
+        return max(0, 100 * (1 - (fillerRatio * 5)))
+    }
+    
+    var missingWordsScore: Double {
+        // Score based on percentage
+        let missingCount = missingWords.count
+        let missingRatio = Double(missingCount) / Double(scriptWordCount)
+        return max(0, 100 * (1 - missingRatio))
+    }
+    
+    var pronunciationScore: Double {
+        // Score based on pronunciation accuracy
+        let errorCount = pronunciationErrors.count
+        let errorRatio = Double(errorCount) / Double(spokenWordCount)
+        return max(0, 100 * (1 - (errorRatio * 2)))
+    }
+    
+    var overallScore: Double {
+        // Weighted average of all scores
+        return (durationScore * 0.25 +
+                fillerWordsScore * 0.25 +
+                missingWordsScore * 0.25 +
+                pronunciationScore * 0.25)
+    }
 }
 
 ////
@@ -167,38 +244,38 @@ struct QnAQuestion: Identifiable, Codable {
 //    // description
 //}
 //
-struct Video {
-    var showImage : UIImage
-    var videoURL: URL?
-}
-
-struct Summary {
-    var timeSpent: String
-}
-
-struct Fillers {
-    var noOfFillersWords : String
-}
-
-struct MissingWords {
-    var noOfMissingWords : String
-}
-
-struct Pace {
-    //var wordsPerMin : String
-    var graphPlaceHolder : UIImage
-}
-
-struct Pronunciation {
-    var missPronouncedWords : [UIButton]
-    var practiceWord : String
-    var howToPronunce : String
-}
-
-struct Pitch {
-    var graphPlaceHolder : UIImage
-}
-
-struct Originality {
-    var originalityStatus : String
-}
+//struct Video {
+//    var showImage : UIImage
+//    var videoURL: URL?
+//}
+//
+//struct Summary {
+//    var timeSpent: String
+//}
+//
+//struct Fillers {
+//    var noOfFillersWords : String
+//}
+//
+//struct MissingWords {
+//    var noOfMissingWords : String
+//}
+//
+//struct Pace {
+//    //var wordsPerMin : String
+//    var graphPlaceHolder : UIImage
+//}
+//
+//struct Pronunciation {
+//    var missPronouncedWords : [UIButton]
+//    var practiceWord : String
+//    var howToPronunce : String
+//}
+//
+//struct Pitch {
+//    var graphPlaceHolder : UIImage
+//}
+//
+//struct Originality {
+//    var originalityStatus : String
+//}

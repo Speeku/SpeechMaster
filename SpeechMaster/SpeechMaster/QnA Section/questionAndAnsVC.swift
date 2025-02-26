@@ -35,14 +35,21 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     // First, update viewDidLoad to set initial state
     override func viewDidLoad() {
         super.viewDidLoad()
-        //setupActivityIndicator()
+        
+        // Force refresh script from HomeViewModel
+        qna_dataController.refreshScript()
+        
+        // Debug print script info
+        print("📝 Initial Script Content: \(script)")
+        print("📊 Initial Word Count: \(script.split(separator: " ").count)")
+        
         setupInitialUI()
         setupSpeechRecognition()
         generateQuestions()
-        setupKeyboardHandling()
         
         // Setup TextView delegate
         userAnswer.delegate = self
+        userAnswer.isEditable = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -71,7 +78,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         
         // Configure userAnswer TextView
         userAnswer.text = ""
-        userAnswer.isEditable = true
+        userAnswer.isEditable = false
         userAnswer.backgroundColor = .systemBackground
         userAnswer.layer.borderColor = UIColor.systemGray4.cgColor
         userAnswer.layer.borderWidth = 1
@@ -87,7 +94,6 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         redoButton.tintColor = .systemGray
         redoButton.isEnabled = false
         answerButton.isEnabled = false
-        answerButton.tintColor = .systemGray
         answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
         
         backwardButton.isEnabled = false
@@ -109,9 +115,48 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     }
     
     private func generateQuestions() {
+        // Force refresh script first
+        qna_dataController.updateScript()
+        
+        // Debug print to check script content
+        print("�� Script Content: \(qna_dataController.script)")
+        print("📊 Script Word Count: \(qna_dataController.script.split(separator: " ").count)")
+        
         // Show activity indicator
         activityIndicator.startAnimating()
         questions.isHidden = true
+        
+        // Validate script length first
+        let wordCount = qna_dataController.script.trimmingCharacters(in: .whitespacesAndNewlines)
+            .split(separator: " ")
+            .filter { !$0.isEmpty }
+            .count
+        
+        print("📊 Cleaned Script Word Count: \(wordCount)")
+        
+        guard wordCount >= 50 else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicator.stopAnimating()
+                self.questions.isHidden = false
+                
+                // Show alert with word count info
+                let alert = UIAlertController(
+                    title: "Script Too Short",
+                    message: "Your script needs to be at least 50 words long to generate meaningful questions. Current word count: \(wordCount)",
+                    preferredStyle: .alert
+                )
+                
+                // Add action to dismiss and pop view controller
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                    self?.navigationController?.popViewController(animated: true)
+                })
+                
+                // Present alert
+                self.present(alert, animated: true)
+            }
+            return // Early return to prevent API call
+        }
         
         // Disable answer area and button during generation
         userAnswer.isUserInteractionEnabled = false
@@ -123,11 +168,10 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         answerButton.isEnabled = false
         answerButton.tintColor = .systemGray
         
-        generateQuestionsAndAnswers(from: script) { [weak self] questions in
+        generateQuestionsAndAnswers(from: qna_dataController.script) { [weak self] questions in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                // Hide activity indicator
                 self.activityIndicator.stopAnimating()
                 self.questions.isHidden = false
                 
@@ -145,19 +189,33 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
                     self.answerButton.isEnabled = true
                     self.answerButton.tintColor = .systemBlue
                 } else {
-                    print("Error in API call")
-                    self.questions.text = "Failed to load questions. Please try again."
+                    // Handle error case
+                    self.questions.text = "Failed to generate questions. Please ensure your script contains meaningful content."
+                    
+                    // Show alert with more details
+                    let alert = UIAlertController(
+                        title: "Generation Failed",
+                        message: "Unable to generate questions. Please ensure your script contains meaningful content and try again.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
                 }
             }
         }
     }
     
-    var script = QnaDataController.shared.script
-    var words: Int {
-            return script.split(separator: " ").count
+    var script = QnaDataController.shared.script {
+        didSet {
+            print("🔄 Script Updated - Word Count: \(script.split(separator: " ").count)")
         }
+    }
     
-    let model = GenerativeModel(name: "models/gemini-2.0-flash-lite-preview-02-05", apiKey: APIKey.default)
+    var words: Int {
+        return script.split(separator: " ").count
+    }
+    
+    let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
     
     func setQuestionNumber()->Int{
         switch words{
@@ -174,27 +232,28 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         }
     }
     func generateQuestionsAndAnswers(from script: String, completion: @escaping ([QnAQuestion]?) -> Void) {
+        
         let prompt = """
-        Based on the following script, generate exactly \(setQuestionNumber()) challenging and professional questions, along with their answers, focused on a **startup pitch** for a **product or prototype**.  
-
+        Based on the following script, generate exactly \(setQuestionNumber()) challenging and professional questions, along with their answers, focused on a startup pitch** for a product or prototype.  
+        
         ### **Instructions:**  
-        - Assume the questions are coming from **investors, judges, or business experts** evaluating a pitch.  
-        - The questions should be **indirect, thought-provoking, and require deep reasoning**.  
-        - Ensure **the tone is relevant to entrepreneurs** presenting their **product or prototype**.  
+        - Assume the questions are coming from investors, judges, or business experts** evaluating a pitch.  
+        - The questions should be indirect, thought-provoking, and require deep reasoning.  
+        - Ensure the tone is relevant to entrepreneurs** presenting their **product or prototype.  
         - Each question should encourage the presenter to **justify decisions, defend their market position, or clarify strategy**.  
         - Format:  
-
-        **Example Format:**  
+        
+        **Example Format:  
         Question: [A challenging, expert-level question]  
         Answer: [An insightful, articulate response]  
         Do not number the questions
-        ### **Example Good Questions:**  
-        ✅ *"What market inefficiency does your product exploit, and why hasn't it been solved before?"*  
-        ✅ *"How does your revenue model scale beyond early adopters, and what obstacles might hinder mass adoption?"*  
-        ✅ *"What data or trends validate your product-market fit, and how will you adjust if consumer behavior shifts?"*  
-
-        Now, generate **\(setQuestionNumber())** expert-level questions and answers based on the following pitch:  
-
+        ### Example Good Questions:  
+        ✅ "What market inefficiency does your product exploit, and why hasn't it been solved before?"
+        ✅ "How does your revenue model scale beyond early adopters, and what obstacles might hinder mass adoption?" 
+        ✅ "What data or trends validate your product-market fit, and how will you adjust if consumer behavior shifts?"
+        
+        Now, generate \(setQuestionNumber()) expert-level questions and answers based on the following pitch:  
+        
         \(script)
         """
         
@@ -260,7 +319,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     private func saveCurrentAnswer() {
         if !currentAnswer.isEmpty {
             qna_dataController.updateUserAnswer(at: currentQuestionIndex, with: currentAnswer)
-            print("Saved answer for question \(currentQuestionIndex): \(currentAnswer)") 
+            print("Saved answer for question \(currentQuestionIndex): \(currentAnswer)")
         }
     }
     
@@ -308,10 +367,11 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         navigationItem.title = "Question \(currentQuestionIndex + 1)"
     }
     
-    // Add property to store recording start time
+    // Add recording start time property at class level
     private var recordingStartTime: Date?
     
     private func startRecording() {
+        recordingStartTime = Date()
         // Reset state
         userAnswer.text = ""
         lastTranscribedText = ""
@@ -319,12 +379,12 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         isRecording = true
         
         // Update UI for recording state
+        answerButton.tintColor = .systemRed
         answerButton.setImage(UIImage(systemName: "waveform.circle.fill"), for: .normal)
         sumbitedButton.tintColor = .gray
         redoButton.isEnabled = false
         
         // Store start time
-        recordingStartTime = Date()
         print("⏱️ Recording started at: \(recordingStartTime!)")
         
         // Cancel any existing task
@@ -411,7 +471,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         recognitionTask?.cancel()
         recognitionTask = nil
         
-        // Update data model
+        // Update data model with the final text and duration
         if !finalText.isEmpty {
             qna_dataController.updateUserAnswer(
                 at: currentQuestionIndex,
@@ -429,8 +489,8 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
             guard let self = self else { return }
             
             // Update recording state
-            self.isRecording = false
             self.recordingStartTime = nil
+            self.answerButton.tintColor = .systemBlue
             self.answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
             
             if !finalText.isEmpty {
@@ -453,40 +513,33 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         present(alert, animated: true)
     }
     
-    @IBAction func answerButton(_ sender: Any) {
-        if isRecording {
-            if let duration = recordingStartTime.map({ Date().timeIntervalSince($0) }) {
-                print("⏱️ Recording duration: \(duration) seconds")
-                stopRecording(withFinalText: userAnswer.text ?? "", duration: duration)
-            }
-        } else {
+    @IBAction func answerButtonTapped(_ sender: Any) {
+        if !isRecording {
+            // Starting recording
+            recordingStartTime = Date() // Set start time when recording begins
             startRecording()
+            answerButton.setImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
+            answerButton.tintColor = .systemRed
+            isRecording = true
+        } else {
+            // Calculate duration when stopping
+            let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
+            stopRecording(withFinalText: userAnswer.text, duration: duration)
+            isRecording = false
         }
     }
     
     // Update redo button action
     @IBAction func redoButtonTapped(_ sender: Any) {
-        // Clear the current answer and time
+        // Clear text only when redo button is explicitly tapped
         userAnswer.text = ""
-        currentAnswer = ""
-        recordingStartTime = nil  // Reset the start time
-        
-        // Update data model with empty answer and zero time
-        qna_dataController.updateUserAnswer(
-            at: currentQuestionIndex, 
-            with: "", 
-            timeTaken: 0  // Explicitly reset time to zero
-        )
-        
-        // Reset UI state
-        sumbitedButton.tintColor = .gray
-        redoButton.tintColor = .systemGray
-        redoButton.isEnabled = false
-        
-        // Update end button state
-        endButton.isEnabled = checkAllQuestionsAnswered()
-        
-        print("Answer and time cleared for question \(currentQuestionIndex)") 
+        recordingStartTime = nil
+        if isRecording {
+            stopRecording()
+            answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
+            answerButton.tintColor = .systemBlue
+            isRecording = false
+        }
     }
     
     
@@ -510,15 +563,44 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     
     // Add method to save all answers when finishing the session
     private func saveSession() {
-        // Save the last answer if there is one
-        if !userAnswer.text.isEmpty {
-            qna_dataController.updateUserAnswer(at: currentQuestionIndex, with: userAnswer.text)
+        // Get the next session number
+        let sessionNumber = DataController.shared.getQnASessions(for: HomeViewModel.shared.currentScriptID).count + 1
+        let sessionName = "Q&A Session \(sessionNumber)"
+        
+        // Create session ID
+        let sessionId = UUID()
+        
+        // Create and save session with current date
+        let qnaSession = QnASession(
+            id: sessionId,
+            scriptId: HomeViewModel.shared.currentScriptID,
+            createdAt: Date(),
+            title: sessionName
+        )
+        
+        // Create new questions array with updated session ID
+        let updatedQuestions = qna_dataController.questions.map { question in
+            return QnAQuestion(
+                id: question.id,
+                qna_session_Id: sessionId,  // Use the new session ID
+                questionText: question.questionText,
+                userAnswer: question.userAnswer,
+                suggestedAnswer: question.suggestedAnswer,
+                timeTaken: question.timeTaken
+            )
         }
         
-        // Create reports from questions
-       
+        // Update the data controller's questions
+        qna_dataController.questions = updatedQuestions
+        
+        // Save both session and questions
+        print("Saving session: \(sessionName) with ID: \(sessionId)")
+        print("Number of questions being saved: \(updatedQuestions.count)")
+        
+        DataController.shared.addQnASessions(qnaSession)
+        DataController.shared.addQnAQuestions(updatedQuestions)
     }
-   
+    
     // Add this line
     
     @IBAction func endSessionButtonTapped(_ sender: Any) {
@@ -529,8 +611,8 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         saveCurrentAnswer() // Save the final answer
         // Show confirmation alert
         let alert = UIAlertController(
-            title: "End Session", 
-            message: "Are you sure you want to end this Q&A session?", 
+            title: "End Session",
+            message: "Are you sure you want to end this Q&A session?",
             preferredStyle: .alert
         )
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)
@@ -576,62 +658,6 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         present(alert, animated: true)
     }
     
-    private func setupKeyboardHandling() {
-        // Add tap gesture to dismiss keyboard
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-        
-        // Register for keyboard notifications
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
-    }
-    
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
-    @objc private func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        
-        let contentInsets = UIEdgeInsets(
-            top: 0.0,
-            left: 0.0,
-            bottom: keyboardSize.height,
-            right: 0.0
-        )
-        
-        // Adjust the bottom content inset of userAnswer
-        userAnswer.contentInset = contentInsets
-        userAnswer.scrollIndicatorInsets = contentInsets
-        
-        // Scroll to the cursor position
-        if userAnswer.isFirstResponder {
-            let selectedRange = userAnswer.selectedRange
-            userAnswer.scrollRangeToVisible(selectedRange)
-        }
-    }
-    
-    @objc private func keyboardWillHide(notification: NSNotification) {
-        // Reset the content insets
-        let contentInsets = UIEdgeInsets.zero
-        userAnswer.contentInset = contentInsets
-        userAnswer.scrollIndicatorInsets = contentInsets
-    }
-    
     @IBAction func saveButtonTapped(_ sender: Any) {
         if audioEngine.isRunning {
             let currentText = userAnswer.text ?? ""
@@ -641,8 +667,8 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         
         // Show confirmation alert
         let alert = UIAlertController(
-            title: "Save Session", 
-            message: "Are you sure you want to save this Q&A session?", 
+            title: "Save Session",
+            message: "Are you sure you want to save this Q&A session?",
             preferredStyle: .alert
         )
         
@@ -662,18 +688,36 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         present(alert, animated: true)
     }
     
-    // MARK: - UITextViewDelegate
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        // Scroll to cursor position when editing begins
-        let selectedRange = textView.selectedRange
-        textView.scrollRangeToVisible(selectedRange)
+    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, didFinishRecognition result: SFSpeechRecognitionResult) {
+        let finalText = result.bestTranscription.formattedString
+        let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
+        
+        qna_dataController.updateUserAnswer(
+            at: currentQuestionIndex,
+            with: finalText,
+            timeTaken: duration
+        )
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        print("📝 TextView content changed: \(textView.text ?? "")")
-        // Scroll to cursor position as user types
-        let selectedRange = textView.selectedRange
-        textView.scrollRangeToVisible(selectedRange)
+    func stopRecording() {
+        // Get the final duration
+        let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
+        
+        // Update the answer with final text and duration
+        qna_dataController.updateUserAnswer(
+            at: currentQuestionIndex,
+            with: userAnswer.text,
+            timeTaken: duration
+        )
+        
+        // Stop recording
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
+        
+        // Reset UI
+        answerButton.isEnabled = true
+        answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
+        answerButton.tintColor = .systemBlue
     }
 }
 

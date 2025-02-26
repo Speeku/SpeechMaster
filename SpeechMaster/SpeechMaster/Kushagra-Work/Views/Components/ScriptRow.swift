@@ -38,28 +38,35 @@ struct ScriptRow: View {
     let script: Script
     @ObservedObject var viewModel: HomeViewModel
     @State private var showingInfoSheet = false
-    private let dataSource = DataController.shared
+    //private let dataSource = DataController.shared
     var body: some View {
         HStack(spacing: 16) {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(script.title)
-                        .font(.headline)
-                    if script.isPinned {
-                        Image(systemName: "pin.fill")
-                            .foregroundColor(.blue)
-                            .font(.caption)
+            NavigationLink(destination: StoryboardView(script: script)) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(script.title)
+                            .font(.headline)
+                        if script.isPinned {
+                            Image(systemName: "pin.fill")
+                                .foregroundColor(.blue)
+                                .font(.caption)
+                        }
                     }
+                    Text(script.createdAt, style: .date)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-                Text(script.createdAt, style: .date)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
             }
             Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
-                .font(.system(size: 14, weight: .semibold))
-                .padding(.trailing, 8)
+            Button {
+                viewModel.currentScriptID = script.id
+                viewModel.uploadedScriptText = script.scriptText
+                viewModel.navigateToPiyushScreen = true
+            } label: {
+                Image(systemName: "arrow.clockwise.circle")
+                    .foregroundColor(.gray)
+                    .font(.system(size: 18, weight: .semibold))
+            }
         }
         .padding()
         .contentShape(Rectangle())
@@ -92,4 +99,6 @@ struct ScriptRow: View {
         }
         .buttonStyle(.plain)
     }
+}
+#Preview {
 }

@@ -15,7 +15,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UIContextMenuInteractionDelegate {
     
     // Add property to use singleton
-    private let dataSource = DataController.shared
+    private let dataSource = HomeViewModel.shared
     var scriptId: UUID = HomeViewModel.shared.currentScriptID// Add scriptId property
     
     let gifImage = UIImage.gifImageWithName("man")
@@ -52,9 +52,22 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell {
                 let qnaSessions = dataSource.getQnASessions(for: scriptId)
                 let session = qnaSessions[indexPath.row]
+                
+                // Format the date
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .short
+                let formattedDate = dateFormatter.string(from: session.createdAt)
+                
                 cell.topicName = session.title
-                cell.dateName = session.createdAt.description
+                cell.dateName = formattedDate
                 cell.setup()
+                
+                // Debug print
+                print("Displaying QnA session: \(session.title)")
+                print("Created at: \(formattedDate)")
+                print("Session ID: \(session.id)")
+                
                 return cell
             }
         }
@@ -177,6 +190,8 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         
         // Add empty state message
         tableView.backgroundView = createEmptyStateView()
+        
+        
     }
     
     private func configureTableView() {

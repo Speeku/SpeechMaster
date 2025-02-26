@@ -37,7 +37,7 @@ struct LandingPageView: View {
                         
                         // Header
                         HStack {
-                            Text("Hi \(viewModel.userName)")
+                            Text("Eloquence")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             Spacer()
@@ -52,9 +52,9 @@ struct LandingPageView: View {
                         .padding(.horizontal, 17)
                         
                         // Search Bar
-                        SearchBarView(searchText: $viewModel.searchText)
-                    }.padding(.bottom,20)
-                        .padding(.top, 22)
+                        //SearchBarView(searchText: $viewModel.searchText)
+                    }.padding(.top, 22)
+                        .padding(.bottom,5)
                         //.background(Color.white)
                     
                     ScrollView(showsIndicators: false){
@@ -67,8 +67,10 @@ struct LandingPageView: View {
                                     .padding(.horizontal, 17)
                                 NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
                                 Image("Highlights").resizable()
-                                        .frame(width: .infinity, height:135)
-                                    //.clipShape(.rect(cornerRadius: 10))
+                                        .frame(height:120)
+                                        .clipShape(.rect(cornerRadius: 10))
+                                        .padding(.horizontal)
+                                    
 
                                 }
                                 
@@ -188,6 +190,9 @@ struct LandingPageView: View {
             NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {
 
             }
+            NavigationLink(destination: KeyNoteOptionsStoryboardView(), isActive: $viewModel.navigateToPiyushScreen) {
+                
+            }
 //            .sheet(isPresented: $showingScriptCreation) {
 //                ScriptCreationView(viewModel: viewModel)
 //            }
@@ -200,15 +205,14 @@ struct LandingPageView: View {
             }
             .alert(fileUploadViewModel.alertMessage, isPresented: $fileUploadViewModel.showingAlert) {
                 Button("OK") {
-                    if fileUploadViewModel.navigateToPiyushScreen {
-                        fileUploadViewModel.navigateToPiyushScreen = false
+                    if viewModel.navigateToPiyushScreen {
+                        viewModel.navigateToPiyushScreen = false
                         viewModel.navigateToPiyushScreen = true
                         viewModel.uploadedScriptText = fileUploadViewModel.uploadedScriptText
+                        let newScript = Script(id: UUID(), title:"Script \(viewModel.scripts.count + 1)", scriptText: fileUploadViewModel.uploadedScriptText, createdAt: Date(), isPinned: false)
                     }
                 }
-            }
-            .navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView(successText: viewModel.uploadedScriptText,scID: viewModel.currentScriptID)
+                
             }
             .toolbar(.hidden)
         }

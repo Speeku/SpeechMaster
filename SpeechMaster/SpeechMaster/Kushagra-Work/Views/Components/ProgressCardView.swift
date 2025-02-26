@@ -2,7 +2,7 @@ import SwiftUI
 import Charts
 
 struct ProgressCardView: View {
-    private let dataSource = DataController.shared
+    private let dataSource = HomeViewModel.shared
     @ObservedObject var viewModel: HomeViewModel
     let title: String
     let progress: Double
@@ -80,7 +80,7 @@ struct ProgressCardView: View {
                         Spacer()
                         StatItem(
                             icon: "chart.line.uptrend.xyaxis",
-                            value: "+5%",
+                            value: "0%",
                             label: "Growth",
                             color: fgColor
                         )
