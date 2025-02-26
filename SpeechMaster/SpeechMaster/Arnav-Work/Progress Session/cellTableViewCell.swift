@@ -1,9 +1,4 @@
-//
-//  cellTableViewCell.swift
-//  SpeechMaster
-//
-//  Created by Arnav Chauhan on 21/01/25.
-//
+
 
 import UIKit
 
