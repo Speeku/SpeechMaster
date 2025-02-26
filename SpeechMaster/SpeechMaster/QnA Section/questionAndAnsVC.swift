@@ -564,7 +564,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     // Add method to save all answers when finishing the session
     private func saveSession() {
         // Get the next session number
-        let sessionNumber = DataController.shared.getQnASessions(for: HomeViewModel.shared.currentScriptID).count + 1
+        let sessionNumber = HomeViewModel.shared.getQnASessions(for: HomeViewModel.shared.currentScriptID).count + 1
         let sessionName = "Q&A Session \(sessionNumber)"
         
         // Create session ID
@@ -597,8 +597,8 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         print("Saving session: \(sessionName) with ID: \(sessionId)")
         print("Number of questions being saved: \(updatedQuestions.count)")
         
-        DataController.shared.addQnASessions(qnaSession)
-        DataController.shared.addQnAQuestions(updatedQuestions)
+        HomeViewModel.shared.addQnASessions(qnaSession)
+        HomeViewModel.shared.addQnAQuestions(updatedQuestions)
     }
     
     // Add this line
