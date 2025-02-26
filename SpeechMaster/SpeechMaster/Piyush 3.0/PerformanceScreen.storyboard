@@ -74,7 +74,6 @@ without keynote also</string>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="selectKeynote:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="puR-Wh-Lhb"/>
                                     <action selector="withoutKeynoteTapped:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="ke7-uF-QAF"/>
                                 </connections>
                             </button>
