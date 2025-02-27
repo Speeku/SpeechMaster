@@ -82,25 +82,37 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0{
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCollectionViewCell", for: indexPath) as? ProgressCollectionViewCell{
-                print("Sucesss")
-                cell.title1.text = "Audience\nEngagement"
-                cell.topicName1.text = self.scriptTitle
-                cell.title1Percent.text = "50%"
-                cell.updateCircle1(percentage: 0.5, progresscolor: .orange)
-                
-                // step2
-                cell.title2.text = "Overall\nImprovement"
-                cell.topicName2.text = self.scriptTitle
-                cell.title2percent.text = "40%"
-                cell.updateCircle2(percentage: 0.4, progresscolor: .systemGreen)
-                cell.image.image = gifImage
-                
-                
-                pageControll.currentPage = indexPath.row
-                return cell
+//            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCollectionViewCell", for: indexPath) as? ProgressCollectionViewCell{
+//                print("Sucesss")
+//                cell.title1.text = "Audience\nEngagement"
+//                cell.topicName1.text = self.scriptTitle
+//                cell.title1Percent.text = "50%"
+//                cell.updateCircle1(percentage: 0.5, progresscolor: .orange)
+//                
+//                // step2
+//                cell.title2.text = "Overall\nImprovement"
+//                cell.topicName2.text = self.scriptTitle
+//                cell.title2percent.text = "40%"
+//                cell.updateCircle2(percentage: 0.4, progresscolor: .systemGreen)
+//                cell.image.image = gifImage
+//                
+//                
+//                pageControll.currentPage = indexPath.row
+//                return cell
+           
+              if let cell =   collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCellCollectionViewCell", for: indexPath)
+                as? ProgressCellCollectionViewCell{
+                  cell.title.text = "Overall\nEngagement"
+                 // cell.fileName.text = self.scriptTitle
+                  cell.percent1.text = "40%"
+                  cell.image.image = gifImage
+                  cell.updateCircle1(percentage: 0.4, progresscolor: .systemGreen)
+                  return cell
+                }
+           
             }
-        }
+            
+        
         if indexPath.row == 1{
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell{
                 print("Yeah")
@@ -111,6 +123,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             print("Failed")
             return UICollectionViewCell()
         }
+       
         return UICollectionViewCell()
     }
     
@@ -266,10 +279,11 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
        
         
         
-        let progressNib = UINib(nibName: "ProgressCollectionViewCell", bundle: nil)
+        let progressNib = UINib(nibName: "ProgressCellCollectionViewCell", bundle: nil)
         let compareNib = UINib(nibName: "CompareCollectionViewCell", bundle: nil)
         collectionView.register(compareNib, forCellWithReuseIdentifier: "CompareCollectionViewCell")
-        collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCollectionViewCell")
+        collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCellCollectionViewCell")
+//        collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCollectionViewCell")
         
     }
     

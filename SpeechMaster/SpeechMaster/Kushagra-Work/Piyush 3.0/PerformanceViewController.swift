@@ -238,10 +238,12 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hide the back button
+        navigationItem.hidesBackButton = true
+        
         loadSavedSettings()
         // Set timer as navigation title
         navigationItem.titleView = timerLabel

@@ -1,6 +1,16 @@
 import Foundation
 import GoogleGenerativeAI
 
+private enum StorageKeys {
+    static let scripts = "saved_scripts"
+    static let sessions = "practice_sessions"
+    static let qnaSessions = "qna_sessions"
+    static let qnaQuestions = "qna_questions"
+    static let performanceReports = "performance_reports"
+    static let userName = "user_name"
+//    static let overallImprovement = "overall_improvement"
+}
+
 class HomeViewModel: ObservableObject {
     // MARK: - Singleton
     static let shared = HomeViewModel()
@@ -10,7 +20,7 @@ class HomeViewModel: ObservableObject {
     @Published var scripts: [Script] = []
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
-    @Published var overallImprovement: Double = 0
+    @Published var overallImprovement: Double = 80
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     @Published var currentScriptID: UUID = UUID()
@@ -29,7 +39,7 @@ class HomeViewModel: ObservableObject {
     // MARK: - Initialization
     private init() {
         // Private initializer to ensure singleton pattern
-        // Load any saved data here if needed
+        loadData()
     }
     
     // MARK: - AI Content Generation
@@ -74,6 +84,7 @@ class HomeViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.scripts.append(script)
             self.sortScripts()
+            self.saveData()
         }
     }
     
@@ -81,6 +92,7 @@ class HomeViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.scripts.removeAll { $0.id == script.id }
             self.sortScripts()
+            self.saveData()
         }
     }
     
@@ -88,6 +100,7 @@ class HomeViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.scripts.remove(atOffsets: indexSet)
             self.sortScripts()
+            self.saveData()
         }
     }
     
@@ -144,13 +157,17 @@ class HomeViewModel: ObservableObject {
     // MARK: -  QNA Session Management
     
     func addQnASessions(_ qna: QnASession) {
-        self.qnaArray.append(qna)
-        // Add persistence logic here if needed
+        DispatchQueue.main.async {
+            self.qnaArray.append(qna)
+            self.saveData()
+        }
     }
     
     func addSession(_ session: PracticeSession) {
-        self.sessionsArray.append(session)
-        // Add persistence logic here if needed
+        DispatchQueue.main.async {
+            self.sessionsArray.append(session)
+            self.saveData()
+        }
     }
     
     func getAllSessions() -> [PracticeSession] {
@@ -168,8 +185,11 @@ class HomeViewModel: ObservableObject {
     // MARK: - Qna methods
     
     func addQnAQuestions(_ questions: [QnAQuestion]) {
-        qnaQuestions.append(contentsOf: questions)
-        print("Added \(questions.count) questions to storage")
+        DispatchQueue.main.async {
+            self.qnaQuestions.append(contentsOf: questions)
+            self.saveData()
+            print("Added \(questions.count) questions to storage")
+        }
     }
     
     func getQuestions(for sessionId: UUID) -> [QnAQuestion] {
@@ -182,14 +202,12 @@ class HomeViewModel: ObservableObject {
     }
         func addPerformanceReport(_ report: PerformanceReport) {
             DispatchQueue.main.async {
-                // Check if a report with this session ID already exists
                 if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
-                    // Update existing report
                     self.userPerformanceReports[existingIndex] = report
                 } else {
-                    // Add new report
                     self.userPerformanceReports.append(report)
                 }
+                self.saveData()
                 self.objectWillChange.send()
             }
         }
@@ -202,13 +220,59 @@ class HomeViewModel: ObservableObject {
             return userPerformanceReports.sorted { $0.sessionID > $1.sessionID }
         }
         
-        // MARK: - Data Persistence (TODO)
+        // MARK: - Data Persistence
         private func saveData() {
-            // Implement data saving logic
+            let encoder = JSONEncoder()
+            if let scriptsData = try? encoder.encode(scripts) {
+                UserDefaults.standard.set(scriptsData, forKey: StorageKeys.scripts)
+            }
+            if let sessionsData = try? encoder.encode(sessionsArray) {
+                UserDefaults.standard.set(sessionsData, forKey: StorageKeys.sessions)
+            }
+            if let qnaSessionsData = try? encoder.encode(qnaArray) {
+                UserDefaults.standard.set(qnaSessionsData, forKey: StorageKeys.qnaSessions)
+            }
+            if let qnaQuestionsData = try? encoder.encode(qnaQuestions) {
+                UserDefaults.standard.set(qnaQuestionsData, forKey: StorageKeys.qnaQuestions)
+            }
+            if let reportsData = try? encoder.encode(userPerformanceReports) {
+                UserDefaults.standard.set(reportsData, forKey: StorageKeys.performanceReports)
+            }
+            
+            UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
+           // UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
         }
         
         private func loadData() {
-            // Implement data loading logic
+            let decoder = JSONDecoder()
+            
+            if let scriptsData = UserDefaults.standard.data(forKey: StorageKeys.scripts),
+               let decodedScripts = try? decoder.decode([Script].self, from: scriptsData) {
+                scripts = decodedScripts
+            }
+            
+            if let sessionsData = UserDefaults.standard.data(forKey: StorageKeys.sessions),
+               let decodedSessions = try? decoder.decode([PracticeSession].self, from: sessionsData) {
+                sessionsArray = decodedSessions
+            }
+            
+            if let qnaSessionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaSessions),
+               let decodedQnASessions = try? decoder.decode([QnASession].self, from: qnaSessionsData) {
+                qnaArray = decodedQnASessions
+            }
+            
+            if let qnaQuestionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaQuestions),
+               let decodedQuestions = try? decoder.decode([QnAQuestion].self, from: qnaQuestionsData) {
+                qnaQuestions = decodedQuestions
+            }
+            
+            if let reportsData = UserDefaults.standard.data(forKey: StorageKeys.performanceReports),
+               let decodedReports = try? decoder.decode([PerformanceReport].self, from: reportsData) {
+                userPerformanceReports = decodedReports
+            }
+            
+            userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
+           // overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
         }
         // MARK: - Top Speeches
         @Published var selectedCategory: SpeechCategory?

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="98n-WX-upa">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -16,84 +16,79 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speech Practice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzA-Ww-zVr">
-                                <rect key="frame" x="20" y="110.00000000000001" width="353" height="39.666666666666671"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="33"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.and.person.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-N5-jfh">
-                                <rect key="frame" x="71" y="197.66666666666663" width="254" height="161.00000000000006"/>
-                                <color key="tintColor" red="0.7883364558" green="0.65269988779999999" blue="0.80001550909999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="251.33000000000001" id="3po-Je-84A"/>
-                                    <constraint firstAttribute="height" constant="160" id="op4-IP-fHE"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6c-uu-9as">
-                                <rect key="frame" x="40" y="376" width="313" height="61"/>
-                                <string key="text">We can start rehersal now you just have
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="1np-Gs-aSc">
+                                <rect key="frame" x="20" y="165.33333333333334" width="353" height="482.66666666666663"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speech Practice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzA-Ww-zVr">
+                                        <rect key="frame" x="55.000000000000014" y="0.0" width="243.33333333333337" height="39.666666666666664"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="33"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.and.person.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-N5-jfh">
+                                        <rect key="frame" x="51" y="67.333333333333314" width="254" height="161"/>
+                                        <color key="tintColor" red="0.7883364558" green="0.65269988779999999" blue="0.80001550909999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="251.33000000000001" id="3po-Je-84A"/>
+                                            <constraint firstAttribute="height" constant="160" id="op4-IP-fHE"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6c-uu-9as">
+                                        <rect key="frame" x="22.333333333333343" y="253.66666666666663" width="308.33333333333326" height="61"/>
+                                        <string key="text">We can start rehersal now you just have
 to upload keynote or we can proceed
 without keynote also</string>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hky-2O-AMR">
-                                <rect key="frame" x="42.666666666666657" y="461" width="308" height="57"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="308" id="GAC-ND-T9T"/>
-                                    <constraint firstAttribute="height" constant="57" id="hXq-Ox-DaD"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Upload Keynote">
-                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
-                                </buttonConfiguration>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="selectKeynote:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="giC-Q3-KGO"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKb-zl-3ho">
-                                <rect key="frame" x="43" y="538" width="307" height="57"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="307" id="naz-zo-t1b"/>
-                                    <constraint firstAttribute="height" constant="57" id="pdx-w1-GjM"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Without Keynote">
-                                    <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
-                                </buttonConfiguration>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="13"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="withoutKeynoteTapped:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="ke7-uF-QAF"/>
-                                </connections>
-                            </button>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hky-2O-AMR">
+                                        <rect key="frame" x="22.666666666666657" y="341.66666666666663" width="308" height="57"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="308" id="GAC-ND-T9T"/>
+                                            <constraint firstAttribute="height" constant="57" id="hXq-Ox-DaD"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Upload Keynote">
+                                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="selectKeynote:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="giC-Q3-KGO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKb-zl-3ho">
+                                        <rect key="frame" x="23" y="425.66666666666663" width="307" height="57"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="307" id="naz-zo-t1b"/>
+                                            <constraint firstAttribute="height" constant="57" id="pdx-w1-GjM"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Without Keynote">
+                                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="withoutKeynoteTapped:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="ke7-uF-QAF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Xgb-fr-Kqd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="n2u-N5-jfh" firstAttribute="top" secondItem="mzA-Ww-zVr" secondAttribute="bottom" constant="47.329999999999998" id="HA5-cz-zXU"/>
-                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="20" id="SBC-Sl-d36"/>
-                            <constraint firstItem="n2u-N5-jfh" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="WJA-S2-e31"/>
-                            <constraint firstItem="h6c-uu-9as" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="40" id="YSf-p0-6Sl"/>
-                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="trailing" secondItem="h6c-uu-9as" secondAttribute="trailing" constant="40" id="cNq-Wo-DeH"/>
-                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="d9S-6h-Tqz"/>
-                            <constraint firstItem="h6c-uu-9as" firstAttribute="top" secondItem="n2u-N5-jfh" secondAttribute="bottom" constant="19" id="gc1-le-fCz"/>
-                            <constraint firstItem="hky-2O-AMR" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="gjJ-XC-lZC"/>
-                            <constraint firstItem="mzA-Ww-zVr" firstAttribute="top" secondItem="Xgb-fr-Kqd" secondAttribute="top" constant="7" id="ibb-He-u49"/>
-                            <constraint firstItem="KKb-zl-3ho" firstAttribute="top" secondItem="hky-2O-AMR" secondAttribute="bottom" constant="20" id="k5E-BH-o0t"/>
-                            <constraint firstItem="hky-2O-AMR" firstAttribute="top" secondItem="h6c-uu-9as" secondAttribute="bottom" constant="24" id="nrZ-Ag-QD7"/>
-                            <constraint firstItem="h6c-uu-9as" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="oaZ-QA-xGY"/>
-                            <constraint firstItem="KKb-zl-3ho" firstAttribute="centerX" secondItem="aWY-aD-ReE" secondAttribute="centerX" id="yk4-eP-abG"/>
+                            <constraint firstItem="1np-Gs-aSc" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="20" id="Hhl-Z4-he7"/>
+                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="bottom" secondItem="1np-Gs-aSc" secondAttribute="bottom" constant="170" id="fkV-RT-CdC"/>
+                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="trailing" secondItem="1np-Gs-aSc" secondAttribute="trailing" constant="20" id="m3c-Dj-J5V"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nv6-2T-2zE"/>
@@ -105,24 +100,6 @@ without keynote also</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5bC-RR-ieP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1010" y="-38"/>
-        </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="zXu-1O-81R">
-            <objects>
-                <navigationController storyboardIdentifier="PerformanceScreen" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="98n-WX-upa" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gxQ-g2-OFp">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Oka-Gs-pF1" kind="relationship" relationship="rootViewController" id="dhv-dI-SwF"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gYz-iJ-5i4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="80.152671755725194" y="-38.028169014084511"/>
         </scene>
     </scenes>
     <resources>
