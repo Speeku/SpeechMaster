@@ -33,7 +33,7 @@ struct TopSpeechCard: View {
                         .background(categoryColor(for: speech.category))
                         .foregroundColor(.white)
                         .clipShape(Capsule())
-                    
+                      
                     Spacer()
                 }
                 
@@ -80,21 +80,21 @@ struct TopSpeechCard: View {
     private func categoryColor(for category: SpeechCategory) -> Color {
         switch category {
         case .technology:
-            return .blue
+            return Color.blue.opacity(0.6)
         case .leadership:
-            return .purple
+            return Color.purple.opacity(0.6)
         case .education:
-            return .green
+            return Color.green.opacity(0.6)
         case .motivation:
-            return .orange
+            return Color.orange.opacity(0.6)
         case .sports:
-            return .red
+            return Color.red.opacity(0.6)
         case .politics:
-            return .indigo
+            return Color.indigo.opacity(0.6)
         case .literature:
-            return .pink
+            return Color.pink.opacity(0.6)
         case .other:
-            return .gray
+            return Color.gray.opacity(0.6)
         }
     }
 }
