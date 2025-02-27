@@ -96,7 +96,7 @@ struct LandingPageView: View {
 
                             // Progress Section
                             VStack(alignment: .leading, spacing: 16) {
-                                Text("Progress")
+                                Text("Recent Progress")
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .padding(.horizontal, 17)
