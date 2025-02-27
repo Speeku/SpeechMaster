@@ -4,7 +4,6 @@ import Speech
 
 class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextViewDelegate {
     
-    // MARK: - Outlets
     @IBOutlet var questionProgressBar: UIProgressView!
     @IBOutlet var questions: UITextView!
     @IBOutlet var userAnswer: UITextView!
@@ -16,26 +15,37 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
     @IBOutlet weak var sumbitedButton: UIImageView!
     @IBOutlet weak var redoButton: UIButton!
     
-    // MARK: - Properties
     private var isAnimating = false
-    private var isRecording = false
-    private var recordingStartTime: Date?
-    private var lastTranscribedText: String = ""
-    private var isLoadingQuestions = false
-    private var currentQuestionIndex = 0
     
     // Speech recognition properties
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
+    private var isRecording = false
     
-    // Data controller
+    // Add property for data controller
     let qna_dataController = QnaDataController.shared
     let activityIndicator = UIActivityIndicatorView(style: .large)
     private var scrollView: UIScrollView!
     
-    // MARK: - Lifecycle Methods
+    private var lastTranscribedText: String = ""
+    
+    // Add this property at the top of the class
+    private var isLoadingQuestions = false {
+        didSet {
+            // Automatically update UI when loading state changes
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if self.isLoadingQuestions {
+                    self.disableAllInteractions()
+                }
+            }
+        }
+    }
+    
+    // Update viewDidLoad to remove keyboard setup
+    // First, update viewDidLoad to set initial state
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,17 +53,14 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         qna_dataController.refreshScript()
         
         // Debug print script info
-        let script = qna_dataController.script
         print("📝 Initial Script Content: \(script)")
         print("📊 Initial Word Count: \(script.split(separator: " ").count)")
         
         setupInitialUI()
         setupSpeechRecognition()
-        generateQuestions()
         
-        // Setup TextView delegate
-        userAnswer.delegate = self
-        userAnswer.isEditable = false
+        // Start generating questions immediately
+        startQuestionGeneration()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -98,6 +105,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         redoButton.tintColor = .systemGray
         redoButton.isEnabled = false
         answerButton.isEnabled = false
+        answerButton.tintColor = .systemGray
         answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
         
         backwardButton.isEnabled = false
@@ -118,110 +126,234 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         userAnswer.text = "Please wait while questions are loading..."
     }
     
-    private func generateQuestions() {
-        // Set loading state
-        isLoadingQuestions = true
-        answerButton.isEnabled = false
-        answerButton.tintColor = .systemGray
-        
-        // Force refresh script first
-        qna_dataController.updateScript()
-        
-        // Debug print to check script content
-        
+    var script = QnaDataController.shared.script {
+        didSet {
+            print("🔄 Script Updated - Word Count: \(script.split(separator: " ").count)")
+        }
     }
     
-    // MARK: - Setup Methods
+    var words: Int {
+        return script.split(separator: " ").count
+    }
+    
+    let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
+    
+    func setQuestionNumber()->Int{
+        switch words{
+        case 100...199:
+            return 5
+        case 200...299:
+            return 7
+        case 300...399:
+            return 10
+        case 400...:
+            return 15
+        default:
+            return 5
+        }
+    }
+    func generateQuestionsAndAnswers(from script: String, completion: @escaping ([QnAQuestion]?) -> Void) {
+        
+        let prompt = """
+        Based on this script, generate exactly \(setQuestionNumber()) questions and answers. Format EXACTLY as shown:
+
+        Question: [Your question here]
+        Answer: [Your detailed answer here]
+
+        Question: [Your next question]
+        Answer: [Your next answer]
+
+        (and so on...)
+
+        Use this script:
+        \(script)
+        """
+        
+        Task {
+            do {
+                let result = try await model.generateContent(prompt)
+                if let responseText = result.text {
+                    print("API Response: \(responseText)")
+                    
+                    // Create a new session ID when generating questions
+                    let sessionId = UUID()
+                    
+                    // Parse and create questions with IDs and session ID
+                    let questionsAndAnswers = qna_dataController.parseQuestionsAndAnswers(from: responseText, sessionId: sessionId)
+                    print(questionsAndAnswers)
+                    completion(questionsAndAnswers)
+                } else {
+                    completion(nil)
+                }
+            } catch {
+                print("Error generating content: \(error.localizedDescription)")
+                completion(nil)
+            }
+        }
+    }
+    private func checkAllQuestionsAnswered() -> Bool {
+        for question in qna_dataController.questions {
+            if question.userAnswer.isEmpty {
+                return false
+            }
+        }
+        return true
+    }
     private func setupSpeechRecognition() {
         speechRecognizer.delegate = self
         
         SFSpeechRecognizer.requestAuthorization { authStatus in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
+            OperationQueue.main.addOperation {
                 switch authStatus {
                 case .authorized:
                     self.answerButton.isEnabled = true
                 case .denied:
-                    self.showAlert(title: "Speech Recognition Denied", message: "Please enable speech recognition in Settings.")
+                    self.answerButton.isEnabled = false
+                    self.showAlert(title: "Speech Recognition Error", message: "Speech recognition access denied")
                 case .restricted:
-                    self.showAlert(title: "Speech Recognition Restricted", message: "Speech recognition is not available on this device.")
+                    self.answerButton.isEnabled = false
+                    self.showAlert(title: "Speech Recognition Error", message: "Speech recognition restricted on this device")
                 case .notDetermined:
-                    self.showAlert(title: "Speech Recognition Not Determined", message: "Speech recognition is not yet authorized.")
+                    self.answerButton.isEnabled = false
+                    self.showAlert(title: "Speech Recognition Error", message: "Speech recognition not authorized")
                 @unknown default:
-                    self.showAlert(title: "Speech Recognition Error", message: "Unknown authorization status.")
+                    fatalError("Unknown authorization status")
                 }
             }
         }
     }
     
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
+    var currentQuestionIndex = 0
     
-    // MARK: - Button Actions
-    @IBAction func answerButtonTapped(_ sender: Any) {
-        guard !isLoadingQuestions else { return }
-        
-        if !isRecording {
-            // Starting recording
-            do {
-                try startRecording()
-                recordingStartTime = Date()
-                answerButton.setImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
-                answerButton.tintColor = .systemRed
-                isRecording = true
-                userAnswer.isEditable = true
-                userAnswer.backgroundColor = .systemBackground
-                userAnswer.alpha = 1.0
-            } catch {
-                print("❌ Recording failed to start: \(error)")
-                showAlert(title: "Recording Error", message: error.localizedDescription)
-            }
-        } else {
-            // Stopping recording
-            let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
-            stopRecording(withFinalText: userAnswer.text, duration: duration)
-            answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
-            answerButton.tintColor = .systemBlue
-            isRecording = false
-            userAnswer.isEditable = false
+    // Add persistent property for current answer
+    private var currentAnswer: String = ""
+    
+    private func saveCurrentAnswer() {
+        if !currentAnswer.isEmpty {
+            qna_dataController.updateUserAnswer(at: currentQuestionIndex, with: currentAnswer)
+            print("Saved answer for question \(currentQuestionIndex): \(currentAnswer)")
         }
     }
     
-    private func startRecording() throws {
-        // Configure audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+    func updateUI() {
+        guard currentQuestionIndex < qna_dataController.questions.count else { return }
         
-        // Create recognition request
+        let currentQuestion = qna_dataController.questions[currentQuestionIndex]
+        questions.text = currentQuestion.questionText
+        
+        // Update progress bar with animation
+        let progress = Float(currentQuestionIndex + 1) / Float(qna_dataController.questions.count)
+        questionProgressBar.setProgress(progress, animated: true)
+        print("📊 Progress updated: \(progress)")
+        
+        // Reset transcription state
+        lastTranscribedText = ""
+        
+        // Update answer text view
+        userAnswer.text = currentQuestion.userAnswer
+        currentAnswer = currentQuestion.userAnswer
+        
+        // Force layout update
+        userAnswer.layoutIfNeeded()
+        
+        // Update navigation buttons state
+        backwardButton.isEnabled = currentQuestionIndex > 0
+        backwardButton.tintColor = currentQuestionIndex > 0 ? .systemBlue : .systemGray
+        forwardButton.isEnabled = currentQuestionIndex < qna_dataController.questions.count - 1
+        forwardButton.tintColor = currentQuestionIndex < qna_dataController.questions.count - 1 ? .systemBlue : .systemGray
+        
+        // Update UI state based on saved answer
+        if !currentQuestion.userAnswer.isEmpty {
+            print("💬 Answer exists - updating UI state")
+            sumbitedButton.tintColor = .systemGreen
+            redoButton.tintColor = .systemBlue
+            redoButton.isEnabled = true
+        } else {
+            print("💬 No answer - resetting UI state")
+            sumbitedButton.tintColor = .gray
+            redoButton.tintColor = .systemGray
+            redoButton.isEnabled = false
+        }
+        
+        // Update navigation title
+        navigationItem.title = "Question \(currentQuestionIndex + 1)"
+        
+        // Update end button state - only enable if all questions are answered
+        endButton.isEnabled = checkAllQuestionsAnswered()
+    }
+    
+    // Add recording start time property at class level
+    private var recordingStartTime: Date?
+    
+    private func startRecording() {
+        recordingStartTime = Date()
+        // Reset state
+        userAnswer.text = ""
+        lastTranscribedText = ""
+        currentAnswer = ""
+        isRecording = true
+        
+        // Update UI for recording state
+        answerButton.tintColor = .systemRed
+        answerButton.setImage(UIImage(systemName: "waveform.circle.fill"), for: .normal)
+        sumbitedButton.tintColor = .gray
+        redoButton.isEnabled = false
+        
+        // Store start time
+        print("⏱️ Recording started at: \(recordingStartTime!)")
+        
+        // Cancel any existing task
+        recognitionTask?.cancel()
+        recognitionTask = nil
+        
+        // Setup audio session
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
+            try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print("Audio session setup failed: \(error)")
+            showAlert(title: "Speech Recognition Error", message: "Audio session setup failed")
+            return
+        }
+        
+        // Create and configure recognition request
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else {
-            throw NSError(domain: "Speech", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unable to create recognition request"])
+            showAlert(title: "Speech Recognition Error", message: "Unable to create recognition request")
+            return
         }
         recognitionRequest.shouldReportPartialResults = true
         
-        // Start recognition task
+        // Create recognition task
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             
+            var isFinal = false
+            
             if let result = result {
                 let transcribedText = result.bestTranscription.formattedString
+                isFinal = result.isFinal
+                print("🎤 Live transcription: \(transcribedText)")
+                
                 DispatchQueue.main.async {
+                    // Update UI with transcribed text
                     self.userAnswer.text = transcribedText
-                    self.lastTranscribedText = transcribedText
+                    
+                    // Ensure text is visible
+                    self.userAnswer.scrollRangeToVisible(NSRange(location: self.userAnswer.text.count, length: 0))
                 }
             }
             
-            if error != nil {
-                self.stopRecording(withFinalText: self.lastTranscribedText, duration: 0)
+            if error != nil || isFinal {
+                // Stop recording if there's an error or we have final result
+                if let duration = self.recordingStartTime.map({ Date().timeIntervalSince($0) }) {
+                    self.stopRecording(withFinalText: self.userAnswer.text ?? "", duration: duration)
+                }
             }
         }
         
-        // Configure audio engine
+        // Setup audio engine
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         
@@ -230,11 +362,19 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         }
         
         audioEngine.prepare()
-        try audioEngine.start()
+        
+        do {
+            try audioEngine.start()
+        } catch {
+            print("Audio engine start failed: \(error)")
+            showAlert(title: "Speech Recognition Error", message: "Audio engine failed to start")
+        }
     }
     
     private func stopRecording(withFinalText finalText: String, duration: TimeInterval) {
-        // Stop audio engine and remove tap
+        print("🎤 Stopping recording with text: \(finalText) and duration: \(duration)")
+        
+        // Stop audio engine first
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         
@@ -246,19 +386,364 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         recognitionTask?.cancel()
         recognitionTask = nil
         
-        // Update data model
+        // Update data model with the final text and duration
+        if !finalText.isEmpty {
+            qna_dataController.updateUserAnswer(
+                at: currentQuestionIndex,
+                with: finalText,
+                timeTaken: duration
+            )
+            
+            // Verify save
+            let savedQuestion = qna_dataController.questions[currentQuestionIndex]
+            print("💾 Saved answer verification: \(savedQuestion.userAnswer)")
+        }
+        
+        // Update UI on main thread
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // Update recording state
+            self.recordingStartTime = nil
+            self.answerButton.tintColor = .systemBlue
+            self.answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
+            
+            if !finalText.isEmpty {
+                // Update UI state for completed answer
+                self.userAnswer.text = finalText
+                self.currentAnswer = finalText
+                self.sumbitedButton.tintColor = .systemGreen
+                self.redoButton.tintColor = .systemBlue
+                self.redoButton.isEnabled = true
+            }
+            
+            // Update end button state
+            self.endButton.isEnabled = self.checkAllQuestionsAnswered()
+        }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    private func startQuestionGeneration() {
+        // Set loading state
+        isLoadingQuestions = true
+        
+        // Show loading UI
+        activityIndicator.startAnimating()
+        questions.isHidden = true
+        
+        // Ensure all interactions are disabled
+        disableAllInteractions()
+        
+        // Generate questions
+        generateQuestionsAndAnswers(from: qna_dataController.script) { [weak self] questions in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                
+                // Update loading state
+                self.isLoadingQuestions = false
+                self.activityIndicator.stopAnimating()
+                self.questions.isHidden = false
+                
+                if let questions = questions, !questions.isEmpty {
+                    self.qna_dataController.questions = questions
+                    self.updateUI()
+                    self.enableInteractionsAfterLoading()
+                } else {
+                    self.handleQuestionGenerationError()
+                }
+            }
+        }
+    }
+    
+    @IBAction func answerButtonTapped(_ sender: Any) {
+        // Multiple safety checks
+        guard !isLoadingQuestions, 
+              !qna_dataController.questions.isEmpty,
+              answerButton.isEnabled else { 
+            print("⚠️ Answer button tapped while loading or disabled")
+            return 
+        }
+        
+        if !isRecording {
+            // Starting recording
+            recordingStartTime = Date() // Set start time when recording begins
+            startRecording()
+            answerButton.setImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
+            answerButton.tintColor = .systemRed
+            isRecording = true
+        } else {
+            // Calculate duration when stopping
+            let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
+            stopRecording(withFinalText: userAnswer.text, duration: duration)
+            isRecording = false
+        }
+    }
+    
+    // Update redo button action
+    @IBAction func redoButtonTapped(_ sender: Any) {
+        // Clear text only when redo button is explicitly tapped
+        userAnswer.text = ""
+        recordingStartTime = nil
+        if isRecording {
+            stopRecording()
+            answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
+            answerButton.tintColor = .systemBlue
+            isRecording = false
+        }
+    }
+    
+    
+    @IBAction func forwardButton(_ sender: Any) {
+        if currentQuestionIndex < qna_dataController.questions.count - 1 {
+            currentQuestionIndex += 1
+            updateUI()
+        }
+    }
+    
+    // Update backwardButton to reset submit button state
+    @IBAction func backwardButton(_ sender: Any) {
+        if currentQuestionIndex > 0 {
+            currentQuestionIndex -= 1
+            updateUI()
+        }
+    }
+    
+    // Update updateUI to handle submit button state
+    
+    
+    // Add method to save all answers when finishing the session
+    private func saveSession() {
+        // Get the next session number
+        let sessionNumber = HomeViewModel.shared.getQnASessions(for: HomeViewModel.shared.currentScriptID).count + 1
+        let sessionName = "Q&A Session \(sessionNumber)"
+        
+        // Create session ID
+        let sessionId = UUID()
+        
+        // Create and save session with current date
+        let qnaSession = QnASession(
+            id: sessionId,
+            scriptId: HomeViewModel.shared.currentScriptID,
+            createdAt: Date(),
+            title: sessionName
+        )
+        
+        // Create new questions array with updated session ID
+        let updatedQuestions = qna_dataController.questions.map { question in
+            return QnAQuestion(
+                id: question.id,
+                qna_session_Id: sessionId,  // Use the new session ID
+                questionText: question.questionText,
+                userAnswer: question.userAnswer,
+                suggestedAnswer: question.suggestedAnswer,
+                timeTaken: question.timeTaken
+            )
+        }
+        
+        // Update the data controller's questions
+        qna_dataController.questions = updatedQuestions
+        
+        // Save both session and questions
+        print("Saving session: \(sessionName) with ID: \(sessionId)")
+        print("Number of questions being saved: \(updatedQuestions.count)")
+        
+        HomeViewModel.shared.addQnASessions(qnaSession)
+        HomeViewModel.shared.addQnAQuestions(updatedQuestions)
+    }
+    
+    // Add this line
+    
+    @IBAction func endSessionButtonTapped(_ sender: Any) {
+        if audioEngine.isRunning {
+            let currentText = userAnswer.text ?? ""
+            stopRecording(withFinalText: currentText, duration: 0)
+        }
+        saveCurrentAnswer() // Save the final answer
+        // Show confirmation alert
+        let alert = UIAlertController(
+            title: "End Session",
+            message: "Are you sure you want to end this Q&A session?",
+            preferredStyle: .alert
+        )
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        cancel.setValue(UIColor.red, forKey: "titleTextColor")
+        alert.addAction(cancel)
+        
+        alert.addAction(UIAlertAction(title: "End Session", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            
+            // Save session and navigate
+            if let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionAnswerList") {
+                self.navigationController?.setViewControllers([destinationVC], animated: true)
+            }
+        })
+        
+        present(alert, animated: true)
+    }
+    
+    @IBAction func cancelButton(_ sender: Any) {
+        if isRecording {
+            let currentText = userAnswer.text ?? ""
+            if let duration = recordingStartTime.map({ Date().timeIntervalSince($0) }) {
+                stopRecording(withFinalText: currentText, duration: duration)
+            }
+        }
+        
+        // Show confirmation alert
+        let alert = UIAlertController(
+            title: "Cancel Session",
+            message: "Are you sure you want to cancel this Q&A session? All progress will be lost.",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "No, Continue", style: .cancel)
+        let confirmAction = UIAlertAction(title: "Yes, Cancel", style: .destructive) { [weak self] _ in
+            guard let self = self else { return }
+            self.performSegue(withIdentifier: "moveToSession", sender: self)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(confirmAction)
+        
+        present(alert, animated: true)
+    }
+    
+    @IBAction func saveButtonTapped(_ sender: Any) {
+        if audioEngine.isRunning {
+            let currentText = userAnswer.text ?? ""
+            stopRecording(withFinalText: currentText, duration: 0)
+        }
+        saveCurrentAnswer() // Save the final answer
+        
+        // Show confirmation alert
+        let alert = UIAlertController(
+            title: "Save Session",
+            message: "Are you sure you want to save this Q&A session?",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        cancelAction.setValue(UIColor.red, forKey: "titleTextColor")
+        alert.addAction(cancelAction)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            
+            // Save session and navigate back
+            self.saveSession()
+            self.navigationController?.popViewController(animated: true)
+        }
+        alert.addAction(saveAction)
+        
+        present(alert, animated: true)
+    }
+    
+    func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, didFinishRecognition result: SFSpeechRecognitionResult) {
+        let finalText = result.bestTranscription.formattedString
+        let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
+        
         qna_dataController.updateUserAnswer(
             at: currentQuestionIndex,
             with: finalText,
             timeTaken: duration
         )
+    }
+    
+    func stopRecording() {
+        // Get the final duration
+        let duration = Date().timeIntervalSince(recordingStartTime ?? Date())
         
-        // Update UI
+        // Update the answer with final text and duration
+        qna_dataController.updateUserAnswer(
+            at: currentQuestionIndex,
+            with: userAnswer.text,
+            timeTaken: duration
+        )
+        
+        // Stop recording
+        audioEngine.stop()
+        recognitionRequest?.endAudio()
+        
+        // Reset UI
+        answerButton.isEnabled = true
+        answerButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
+        answerButton.tintColor = .systemBlue
+    }
+    
+    // Add these helper methods
+    private func disableAllInteractions() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.sumbitedButton.tintColor = .systemGreen
-            self.redoButton.isEnabled = true
-            self.redoButton.tintColor = .systemBlue
+            
+            // Disable all buttons and ensure they look disabled
+            self.answerButton.isEnabled = false
+            self.answerButton.tintColor = .systemGray
+            self.answerButton.isUserInteractionEnabled = false  // Add this
+            
+            self.backwardButton.isEnabled = false
+            self.backwardButton.isUserInteractionEnabled = false
+            
+            self.forwardButton.isEnabled = false
+            self.forwardButton.isUserInteractionEnabled = false
+            
+            self.redoButton.isEnabled = false
+            self.redoButton.isUserInteractionEnabled = false
+            
+            self.endButton.isEnabled = false
+            
+            // Disable text view
+            self.userAnswer.isEditable = false
+            self.userAnswer.isUserInteractionEnabled = false
+            self.userAnswer.text = "Please wait while questions are loading..."
+            self.userAnswer.alpha = 0.5
         }
+    }
+    
+    private func enableInteractionsAfterLoading() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard !self.isLoadingQuestions else { return }
+            
+            // Enable answer button and restore interaction
+            self.answerButton.isEnabled = true
+            self.answerButton.tintColor = .systemBlue
+            self.answerButton.isUserInteractionEnabled = true
+            
+            // Enable navigation buttons based on position
+            self.backwardButton.isEnabled = self.currentQuestionIndex > 0
+            self.backwardButton.isUserInteractionEnabled = true
+            
+            self.forwardButton.isEnabled = self.currentQuestionIndex < self.qna_dataController.questions.count - 1
+            self.forwardButton.isUserInteractionEnabled = true
+            
+            // Reset text view
+            self.userAnswer.isEditable = true
+            self.userAnswer.isUserInteractionEnabled = true
+            self.userAnswer.text = ""
+            self.userAnswer.alpha = 1.0
+            self.userAnswer.backgroundColor = .systemBackground
+            
+            // End button should only be enabled when all questions are answered
+            self.endButton.isEnabled = self.checkAllQuestionsAnswered()
+            
+            // Update question display - using nil coalescing instead of safe subscript
+            if currentQuestionIndex < self.qna_dataController.questions.count {
+                self.questions.text = self.qna_dataController.questions[currentQuestionIndex].questionText
+            }
+            
+            // Update progress bar
+            let progress = Float(self.currentQuestionIndex + 1) / Float(self.qna_dataController.questions.count)
+            self.questionProgressBar.progress = progress
+        }
+    }
+    
+    private func handleQuestionGenerationError() {
+        showAlert(title: "Error", message: "Failed to generate questions. Please try again.")
+        navigationController?.popViewController(animated: true)
     }
 }
