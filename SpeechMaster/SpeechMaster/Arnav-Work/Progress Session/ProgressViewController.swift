@@ -374,35 +374,19 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
-        if segemtedControlOutlet.selectedSegmentIndex == 1 { // Q&A tab
+        if segemtedControlOutlet.selectedSegmentIndex == 0 {
+            let practiceSession = dataSource.getSessions(for: scriptId)[indexPath.row]
+            let report = dataSource.getPerformanceReport(for: practiceSession.id)
+            let session = Session(from: practiceSession, report: report)
+            let detailsVC = SessionDetailsViewController(session: session)
+            navigationController?.pushViewController(detailsVC, animated: true)
+        } else {
             let qnaSessions = dataSource.getQnASessions(for: scriptId)
-            
-            // Don't do anything if there are no sessions
             if qnaSessions.isEmpty {
                 print("No QnA sessions to display")
                 return
             }
-            
-            // Get the selected Q&A session
-            let selectedSession = qnaSessions[indexPath.row]
-            
-            // Get questions for this session
-            let questions = dataSource.getQuestions(for: selectedSession.id)
-            print("Loading report for session: \(selectedSession.title)")
-            print("Found \(questions.count) questions for session ID: \(selectedSession.id)")
-            
-            // Create and configure QuestionAnswerList
-            if let questionListVC = UIStoryboard(name: "QuestionAndAnswers", bundle: nil)
-                .instantiateViewController(withIdentifier: "QuestionAnswerList") as? QuestionAnswerList {
-                
-                // Pass the questions to QuestionAnswerList and mark as viewing existing session
-                questionListVC.qna_dataController.questions = questions
-                questionListVC.isViewingExistingSession = true
-                
-                // Push the view controller
-                navigationController?.pushViewController(questionListVC, animated: true)
-            }
+            // ... rest of your Q&A handling code ...
         }
     }
     

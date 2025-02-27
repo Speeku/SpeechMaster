@@ -215,6 +215,42 @@ struct SpeechAnalysisResult: Codable {
     }
 }
 
+struct Session {
+    let id: UUID
+    let title: String
+    let scriptId: UUID
+    let createdAt: Date
+    let performanceReport: PerformanceReport?
+    
+    // Computed Properties
+    var formattedDuration: String {
+        guard let report = performanceReport else { return "00:00" }
+        let minutes = Int(report.duration) / 60
+        let seconds = Int(report.duration) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+    
+    var performanceMetrics: [String: Double] {
+        guard let report = performanceReport else { return [:] }
+        
+        return [
+            "Filler Words": Double(report.fillerWords.count),
+            "Missing Words": Double(report.missingWords.count),
+            "Words/Min": Double(report.wordsPerMinute),
+            "Duration": report.duration
+        ]
+    }
+    
+    // Initialize from PracticeSession
+    init(from practiceSession: PracticeSession, report: PerformanceReport?) {
+        self.id = practiceSession.id
+        self.title = practiceSession.title
+        self.scriptId = practiceSession.scriptId
+        self.createdAt = practiceSession.createdAt
+        self.performanceReport = report
+    }
+}
+
 ////
 ////  DataModel.swift
 ////  SpeechMaster
