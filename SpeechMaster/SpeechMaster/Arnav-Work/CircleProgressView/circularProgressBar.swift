@@ -47,6 +47,7 @@ class circularProgressBar: UIView {
             )
             progressPath.lineWidth = lineWidth
             progressColor.setStroke()
+            
             progressPath.stroke()
         }
     }
