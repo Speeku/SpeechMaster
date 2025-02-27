@@ -747,3 +747,8 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         navigationController?.popViewController(animated: true)
     }
 }
+#Preview{
+    let storyboard = UIStoryboard(name: "QuestionAndAnswers", bundle: nil)
+    let vc = storyboard.instantiateViewController(withIdentifier: "QuestionAnswer")
+    return vc
+}
