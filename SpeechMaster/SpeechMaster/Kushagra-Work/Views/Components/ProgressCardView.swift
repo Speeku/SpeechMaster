@@ -51,7 +51,7 @@ struct ProgressCardView: View {
                 // Updated Insights Button
                 Button(action: { showingInsights = true }) {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
-                        .font(.system(size: 24))
+                        .font(.system(size: 30))
                         .foregroundColor(.blue)
                         .padding(8)
                         .background(Color.blue.opacity(0.1))
@@ -139,7 +139,7 @@ struct ProgressCardView: View {
             BottomContentView(lastCreatedScriptName: lastCreatedScriptName)
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 20)
+        .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
         .background(Color.green.opacity(0.1))
         .cornerRadius(16)
@@ -166,13 +166,13 @@ private struct BottomContentView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(lastCreatedScriptName ?? "No recent scripts")
+            Text("Script: \(lastCreatedScriptName ?? "No recent scripts")")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.black.opacity(0.6))
             
             Text("Overall Improvement")
-                .font(.system(size: 26, weight: .semibold))
-                .foregroundColor(.black.opacity(0.7))
+                .font(.system(size: 26, weight: .bold))
+                .foregroundColor(.black.opacity(0.5))
         }
     }
 }
