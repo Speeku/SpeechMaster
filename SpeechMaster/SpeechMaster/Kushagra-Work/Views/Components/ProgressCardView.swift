@@ -54,7 +54,7 @@ struct ProgressCardView: View {
                         .font(.system(size: 30))
                         .foregroundColor(.blue)
                         .padding(8)
-                        .background(Color.blue.opacity(0.1))
+                        .background(Color.blue.opacity(0.2))
                         .clipShape(Circle())
                 }
                 .sheet(isPresented: $showingInsights) {
