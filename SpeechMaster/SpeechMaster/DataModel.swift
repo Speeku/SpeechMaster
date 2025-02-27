@@ -100,6 +100,52 @@ struct PerformanceReport: Codable {
     let pronunciationErrors: [SpeechAnalysisResult.PronunciationError]
     let duration: TimeInterval
     let videoURL: URL?
+    
+    init(sessionID: UUID, 
+         wordsPerMinute: Int,
+         fillerWords: [SpeechAnalysisResult.FillerWord],
+         missingWords: [SpeechAnalysisResult.MissingWord],
+         pronunciationErrors: [SpeechAnalysisResult.PronunciationError],
+         duration: TimeInterval,
+         videoURL: URL?) {
+        self.sessionID = sessionID
+        self.wordsPerMinute = wordsPerMinute
+        self.fillerWords = fillerWords
+        self.missingWords = missingWords
+        self.pronunciationErrors = pronunciationErrors
+        self.duration = duration
+        self.videoURL = videoURL
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case sessionID, wordsPerMinute, fillerWords, missingWords, pronunciationErrors, duration, videoURLString
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        sessionID = try container.decode(UUID.self, forKey: .sessionID)
+        wordsPerMinute = try container.decode(Int.self, forKey: .wordsPerMinute)
+        fillerWords = try container.decode([SpeechAnalysisResult.FillerWord].self, forKey: .fillerWords)
+        missingWords = try container.decode([SpeechAnalysisResult.MissingWord].self, forKey: .missingWords)
+        pronunciationErrors = try container.decode([SpeechAnalysisResult.PronunciationError].self, forKey: .pronunciationErrors)
+        duration = try container.decode(TimeInterval.self, forKey: .duration)
+        if let urlString = try container.decodeIfPresent(String.self, forKey: .videoURLString) {
+            videoURL = URL(string: urlString)
+        } else {
+            videoURL = nil
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(sessionID, forKey: .sessionID)
+        try container.encode(wordsPerMinute, forKey: .wordsPerMinute)
+        try container.encode(fillerWords, forKey: .fillerWords)
+        try container.encode(missingWords, forKey: .missingWords)
+        try container.encode(pronunciationErrors, forKey: .pronunciationErrors)
+        try container.encode(duration, forKey: .duration)
+        try container.encodeIfPresent(videoURL?.absoluteString, forKey: .videoURLString)
+    }
 }
 
 //MARK: - Speech Analysis Result

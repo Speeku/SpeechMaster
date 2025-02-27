@@ -99,40 +99,18 @@ struct LandingPageView: View {
                                 Text("Progress")
                                     .font(.title2)
                                     .fontWeight(.bold)
-                                    .padding(.horizontal)
+                                    .padding(.horizontal, 17)
 
-//                                ScrollView(.horizontal, showsIndicators: false) {
-//                                        ProgressCardView(
-//                                            title: "Audience Engagement",
-//                                            progress: 80,
-//                                            fgColor: .white,
-//                                            bgColor: Color(hex: "1A4D2E"),
-//                                            circleColor: .orange,
-//                                            lastCreatedScriptName: viewModel.scripts.first?.title
-//                                        )
-//                                        .frame(width: 300)
-//                                        
-                                        ProgressCardView(
-                                            viewModel: viewModel, title: "Overall Improvement",
-                                            progress: viewModel.overallImprovement,
-                                            fgColor: .black,
-                                            bgColor: .green.opacity(0.1),
-                                            circleColor: .green,
-                                            lastCreatedScriptName: viewModel.scripts.first?.title
-                                        )
-                                        .frame(width: .infinity).padding(.horizontal)
-                                        
-//                                        ProgressCardView(
-//                                            title: "Practice Streak",
-//                                            progress: 60,
-//                                            fgColor: .white,
-//                                            bgColor: Color(hex: "2C3333"),
-//                                            circleColor: .blue,
-//                                            lastCreatedScriptName: viewModel.scripts.first?.title
-//                                        )
-//                                        .frame(width: 300)
-//                                }
-//                                .scrollClipDisabled()
+                                ProgressCardView(
+                                    viewModel: viewModel,
+                                    title: "Overall Improvement",
+                                    progress: viewModel.overallImprovement,
+                                    fgColor: .black,
+                                    bgColor: Color.green.opacity(0.1),
+                                    circleColor: .green,
+                                    lastCreatedScriptName: viewModel.scripts.first?.title ?? "No recent scripts"
+                                )
+                                .padding(.horizontal, 17)
                             }
                             .padding(.vertical, 8)
 
@@ -193,6 +171,8 @@ struct LandingPageView: View {
             NavigationLink(destination: KeyNoteOptionsStoryboardView(), isActive: $viewModel.navigateToPiyushScreen) {
                 
             }
+            
+          
 //            .sheet(isPresented: $showingScriptCreation) {
 //                ScriptCreationView(viewModel: viewModel)
 //            }

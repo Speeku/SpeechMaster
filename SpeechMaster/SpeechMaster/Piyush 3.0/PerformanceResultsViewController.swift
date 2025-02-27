@@ -782,6 +782,19 @@ class PerformanceResultsViewController: UIViewController {
     }
     
     private func setupNavigationBar() {
+        // Hide the back button
+        navigationItem.hidesBackButton = true
+        
+        // Add Cancel button on the left
+        let cancelButton = UIBarButtonItem(
+            title: "Cancel",
+            style: .plain,
+            target: self,
+            action: #selector(cancelButtonTapped)
+        )
+        navigationItem.leftBarButtonItem = cancelButton
+        
+        // Keep the existing Save button on the right
         let saveButton = UIBarButtonItem(
             title: "Save",
             style: .done,
@@ -789,6 +802,25 @@ class PerformanceResultsViewController: UIViewController {
             action: #selector(saveReportTapped)
         )
         navigationItem.rightBarButtonItem = saveButton
+    }
+    
+    @objc private func cancelButtonTapped() {
+        // Show confirmation alert before dismissing
+        let alert = UIAlertController(
+            title: "Discard Changes",
+            message: "Are you sure you want to discard this performance report?",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let discardAction = UIAlertAction(title: "Discard", style: .destructive) { [weak self] _ in
+            // Pop to root view controller (landing page)
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(discardAction)
+        present(alert, animated: true)
     }
     
     @objc private func saveReportTapped() {
@@ -850,7 +882,8 @@ class PerformanceResultsViewController: UIViewController {
         } completionHandler: { [weak self] success, error in
             guard let self = self else { return }
             
-            DispatchQueue.main.async {
+            // Create a dispatch work item for the main queue
+            DispatchQueue.main.async(execute: DispatchWorkItem {
                 if success {
                     // Delete the video file from app storage
                     do {
@@ -864,8 +897,17 @@ class PerformanceResultsViewController: UIViewController {
                                                    scriptId: self.scriptId,
                                                    createdAt: Date(),
                                                    title: self.sessionName)
-                    // Create and save the report without video URL
-                    let newReport = PerformanceReport(sessionID: newSession.id, wordsPerMinute: Int(self.results.averageWordsPerMinute), fillerWords: self.results.fillerWords, missingWords: self.results.missingWords, pronunciationErrors: self.results.pronunciationErrors, duration: self.results.totalDuration, videoURL: nil)
+                    
+                    // Create and save the report
+                    let newReport = PerformanceReport(
+                        sessionID: newSession.id,
+                        wordsPerMinute: Int(self.results.averageWordsPerMinute),
+                        fillerWords: self.results.fillerWords,
+                        missingWords: self.results.missingWords,
+                        pronunciationErrors: self.results.pronunciationErrors,
+                        duration: self.results.totalDuration,
+                        videoURL: nil
+                    )
                     
                     // Save Session and Report
                     self.ds.addSession(newSession)
@@ -874,7 +916,7 @@ class PerformanceResultsViewController: UIViewController {
                 } else {
                     self.showError("Failed to save video: \(error?.localizedDescription ?? "Unknown error")")
                 }
-            }
+            })
         }
     }
     
@@ -886,8 +928,17 @@ class PerformanceResultsViewController: UIViewController {
                                        scriptId: self.scriptId,
                                        createdAt: Date(),
                                        title: self.sessionName)
-        // Create and save the report without video URL
-        let newReport = PerformanceReport(sessionID: newSession.id, wordsPerMinute: Int(self.results.averageWordsPerMinute), fillerWords: self.results.fillerWords, missingWords: self.results.missingWords, pronunciationErrors: self.results.pronunciationErrors, duration: self.results.totalDuration, videoURL: nil)
+        
+        // Create and save the report
+        let newReport = PerformanceReport(
+            sessionID: newSession.id,
+            wordsPerMinute: Int(self.results.averageWordsPerMinute),
+            fillerWords: self.results.fillerWords,
+            missingWords: self.results.missingWords,
+            pronunciationErrors: self.results.pronunciationErrors,
+            duration: self.results.totalDuration,
+            videoURL: nil
+        )
         
         // Save Session and Report
         self.ds.addSession(newSession)
