@@ -277,70 +277,70 @@ class HomeViewModel: ObservableObject {
         // MARK: - Top Speeches
         @Published var selectedCategory: SpeechCategory?
         @Published var selectedTags: Set<String> = []
-        
-        let topSpeeches: [TopSpeech] = [
-            TopSpeech(
-                title: "Steve Jobs",
-                description: "Unveiling the iPhone (2007)",
+    
+    let topSpeeches: [TopSpeech] = [
+        TopSpeech(
+            title: "Steve Jobs",
+            description: "Unveiling the iPhone (2007)",
                 imageName: "steve_jobs",
                 category: .technology,
                 year: 2007,
                 duration: 2220, // 37 minutes
                 tags: ["innovation", "product launch", "technology", "apple"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "Barack Obama",
-                description: "Speech on Education (2004)",
+        ),
+        TopSpeech(
+            title: "Barack Obama",
+            description: "Speech on Education (2004)",
                 imageName: "barack_obama",
                 category: .education,
                 year: 2004,
                 duration: 1500, // 25 minutes
                 tags: ["education", "policy", "reform", "leadership"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "Roger Federer",
-                description: "Cambridge Union Speech (2019)",
+        ),
+        TopSpeech(
+            title: "Roger Federer",
+            description: "Cambridge Union Speech (2019)",
                 imageName: "roger_federer",
                 category: .sports,
                 year: 2019,
                 duration: 1800, // 30 minutes
                 tags: ["sports", "tennis", "success", "perseverance"],
                 isFeatured: false
-            ),
-            TopSpeech(
-                title: "Martin Luther King Jr.",
-                description: "I Have a Dream (1963)",
+        ),
+        TopSpeech(
+            title: "Martin Luther King Jr.",
+            description: "I Have a Dream (1963)",
                 imageName: "martin_luther_king",
                 category: .politics,
                 year: 1963,
                 duration: 1020, // 17 minutes
                 tags: ["civil rights", "equality", "justice", "history"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "Simon Sinek",
-                description: "How Great Leaders Inspire Action (2009)",
+        ),
+        TopSpeech(
+            title: "Simon Sinek",
+            description: "How Great Leaders Inspire Action (2009)",
                 imageName: "simon_sinek",
                 category: .leadership,
                 year: 2009,
                 duration: 1080, // 18 minutes
                 tags: ["leadership", "motivation", "business", "inspiration"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "Brene Brown",
-                description: "The Power of Vulnerability (2010)",
+        ),
+        TopSpeech(
+            title: "Brene Brown",
+            description: "The Power of Vulnerability (2010)",
                 imageName: "brene_brown",
                 category: .motivation,
                 year: 2010,
                 duration: 1200, // 20 minutes
                 tags: ["vulnerability", "personal growth", "psychology"],
                 isFeatured: false
-            ),
-            TopSpeech(
-                title: "Elon Musk",
+        ),
+        TopSpeech(
+            title: "Elon Musk",
                 description: "Tesla and SpaceX Vision (2016)",
                 imageName: "elon_musk",
                 category: .technology,
@@ -348,30 +348,30 @@ class HomeViewModel: ObservableObject {
                 duration: 2400, // 40 minutes
                 tags: ["space", "electric vehicles", "innovation", "future"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "Malala Yousafzai",
-                description: "UN Youth Assembly Speech (2013)",
+        ),
+        TopSpeech(
+            title: "Malala Yousafzai",
+            description: "UN Youth Assembly Speech (2013)",
                 imageName: "malala_yousafzai",
                 category: .education,
                 year: 2013,
                 duration: 900, // 15 minutes
                 tags: ["education", "human rights", "youth", "activism"],
                 isFeatured: true
-            ),
-            TopSpeech(
-                title: "J.K. Rowling",
-                description: "Harvard Commencement Speech (2008)",
+        ),
+        TopSpeech(
+            title: "J.K. Rowling",
+            description: "Harvard Commencement Speech (2008)",
                 imageName: "jk_rowling",
                 category: .literature,
                 year: 2008,
                 duration: 1500, // 25 minutes
                 tags: ["creativity", "perseverance", "success", "writing"],
                 isFeatured: false
-            ),
-            TopSpeech(
-                title: "Winston Churchill",
-                description: "We Shall Fight on the Beaches (1940)",
+        ),
+        TopSpeech(
+            title: "Winston Churchill",
+            description: "We Shall Fight on the Beaches (1940)",
                 imageName: "winston_churchill",
                 category: .politics,
                 year: 1940,

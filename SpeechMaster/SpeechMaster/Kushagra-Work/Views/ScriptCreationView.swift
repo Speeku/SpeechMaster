@@ -735,8 +735,11 @@ struct ScriptCreationView: View {
                 // Custom Text Editor using UIViewRepresentable
                 CustomTextView(text: $scriptText, isBold: $isBold, fontSize: $fontSize, textColor: $textColor)
                     .padding(.horizontal)
-                
-                // AI Button
+            }
+            
+            // Floating AI Button
+            VStack {
+                Spacer()
                 HStack {
                     Spacer()
                     Button(action: { 
@@ -751,9 +754,11 @@ struct ScriptCreationView: View {
                             .font(.system(size: 24))
                             .foregroundColor(.white)
                             .frame(width: 56, height: 56)
-                            .background(Color.blue)
-                            .clipShape(Circle())
-                            .shadow(radius: 5)
+                            .background(
+                                Circle()
+                                    .fill(Color.blue)
+                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
+                            )
                     }
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
@@ -926,12 +931,18 @@ struct CustomTextView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UITextView, context: Context) {
+        // Update text if it changed externally
+        if uiView.text != text {
+            uiView.text = text
+        }
+        
+        // Update formatting
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: fontSize, weight: isBold ? .bold : .regular),
+            .foregroundColor: UIColor(textColor)
+        ]
+        
         if let selectedRange = uiView.selectedTextRange {
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: fontSize, weight: isBold ? .bold : .regular),
-                .foregroundColor: UIColor(textColor)
-            ]
-            
             if selectedRange.isEmpty {
                 // Apply to new text
                 uiView.typingAttributes = attributes
@@ -961,7 +972,7 @@ struct CustomTextView: UIViewRepresentable {
 
 #Preview {
     NavigationView {
-        ScriptCreationView(viewModel: HomeViewModel.shared)
+    ScriptCreationView(viewModel: HomeViewModel.shared)
     }
 }
 

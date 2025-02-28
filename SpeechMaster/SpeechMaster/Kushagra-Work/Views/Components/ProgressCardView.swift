@@ -46,7 +46,7 @@ struct ProgressCardView: View {
     private var recentImprovement: Double {
         viewModel.calculateRecentImprovement(for: currentScriptId)
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             // Top row
@@ -284,7 +284,7 @@ struct LabeledDivider: View {
     let text: String
     
     var body: some View {
-        HStack {
+    HStack {
             Text(text)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
