@@ -1,4 +1,5 @@
 import SwiftUI
+import GoogleGenerativeAI
 
 struct KeyNoteOptionsStoryboardView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
@@ -96,7 +97,7 @@ struct TextEditorToolbar: View {
                 Divider()
                 
                 // Alignment Controls
-                HStack(spacing: 12) {
+                /*HStack(spacing: 12) {
                     Button(action: { alignment = .leading }) {
                         Image(systemName: "text.alignleft")
                             .foregroundColor(alignment == .leading ? .blue : .primary)
@@ -111,7 +112,7 @@ struct TextEditorToolbar: View {
                         Image(systemName: "text.alignright")
                             .foregroundColor(alignment == .trailing ? .blue : .primary)
                     }
-                }
+                }*/
             }
             .padding(.horizontal)
         }
@@ -404,6 +405,277 @@ struct AIGenerationLoadingView: View {
     }
 }
 
+struct FormattingToolbar: View {
+    @Binding var fontSize: CGFloat
+    @Binding var isBold: Bool
+    @Binding var textColor: Color
+    @Binding var showingClearAlert: Bool
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Main Toolbar
+            HStack(spacing: 20) {
+                // Font Size Control with modern design
+                HStack(spacing: 8) {
+                    Text("\(Int(fontSize))")
+                        .frame(width: 28)
+                        .font(.system(size: 15, weight: .medium))
+                    
+                    VStack(spacing: 4) {
+                        Button(action: { fontSize = min(fontSize + 2, 32) }) {
+                            Image(systemName: "chevron.up")
+                                .font(.system(size: 10, weight: .bold))
+                        }
+                        Button(action: { fontSize = max(fontSize - 2, 12) }) {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 10, weight: .bold))
+                        }
+                    }
+                    .frame(width: 20)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                
+                Divider()
+                    .frame(height: 20)
+                
+                // Bold Button
+                Button(action: { isBold.toggle() }) {
+                    Image(systemName: "bold")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(isBold ? .blue : .primary)
+                        .frame(width: 32, height: 32)
+                        .background(isBold ? Color.blue.opacity(0.1) : Color.clear)
+                        .cornerRadius(6)
+                }
+                
+                Divider()
+                    .frame(height: 20)
+                
+                // Color Picker with custom design
+                ColorPicker("", selection: $textColor)
+                    .labelsHidden()
+                    .frame(width: 32, height: 32)
+                
+                Divider()
+                    .frame(height: 20)
+                
+                // Delete Button
+                Button(action: { showingClearAlert = true }) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 14))
+                        .foregroundColor(.red)
+                        .frame(width: 32, height: 32)
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color(.systemBackground))
+            
+            Divider()
+        }
+    }
+}
+
+struct WordCountBadge: View {
+    let wordCount: Int
+    let characterCount: Int
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Text("\(wordCount) words")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.secondary)
+            
+            Text("•")
+                .font(.system(size: 12))
+                .foregroundColor(.secondary)
+            
+            Text("\(characterCount) characters")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.secondary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(Color(.systemGray6).opacity(0.8))
+        .cornerRadius(6)
+    }
+}
+
+struct GlowingTextField: View {
+    @Binding var text: String
+    @Binding var isVisible: Bool
+    let onSubmit: () -> Void
+    @State private var isBlueGlow = true
+    @State private var shadowRadius: CGFloat = 20
+    @State private var shadowOpacity: CGFloat = 0.8
+    @FocusState private var isFocused: Bool
+    @State private var keyboardHeight: CGFloat = 0
+    @State private var isHovered = false
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                // Blurred background
+                Color.black
+                    .opacity(0.3)
+                    .background(.ultraThinMaterial)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        isVisible = false
+                        text = ""
+                    }
+                
+                VStack {
+                    Spacer()
+                        .frame(minHeight: geometry.size.height * 0.8)
+                    
+                    // Text field container
+                    HStack(spacing: 12) {
+                        Image(systemName: "wand.and.stars")
+                            .font(.system(size: 20))
+                            .foregroundColor(.blue)
+                            .padding(.leading, 16)
+                        
+                        TextField("Describe Your Script", text: $text)
+                            .font(.system(size: 16))
+                            .padding(.vertical, 16)
+                            .focused($isFocused)
+                            .submitLabel(.send)
+                            .textInputAutocapitalization(.sentences)
+                        
+                        Button(action: onSubmit) {
+                            Image(systemName: "arrow.up")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(width: 32, height: 32)
+                                .background(
+                                    Group {
+                                        if text.isEmpty {
+                                            Circle().fill(Color.gray)
+                                        } else {
+                                            Circle().fill(
+                                                LinearGradient(
+                                                    gradient: Gradient(colors: [Color.blue, Color.blue.opacity(0.8)]),
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                        }
+                                    }
+                                )
+                                .scaleEffect(isHovered ? 1.1 : 1.0)
+                                .animation(.spring(response: 0.3), value: isHovered)
+                        }
+                        .disabled(text.isEmpty)
+                        .onHover { hovering in
+                            isHovered = hovering && !text.isEmpty
+                        }
+                        .padding(.trailing, 16)
+                    }
+                    .background(Color(.systemBackground))
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color(.systemGray4), lineWidth: 0.5)
+                    )
+                    .shadow(color: isBlueGlow ? .blue.opacity(shadowOpacity) : .pink.opacity(shadowOpacity),
+                            radius: shadowRadius,
+                            x: 0,
+                            y: 0)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, keyboardHeight > 0 ? keyboardHeight + 10 : geometry.safeAreaInsets.bottom + 8)
+                    
+                    Spacer()
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: isVisible)
+            .onAppear {
+                isFocused = true
+                startGlowAnimation()
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+                    if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                        keyboardHeight = keyboardFrame.height
+                    }
+                }
+                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                    keyboardHeight = 0
+                }
+            }
+        }
+    }
+    
+    private func startGlowAnimation() {
+        let timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+            withAnimation(.easeInOut(duration: 1.0)) {
+                isBlueGlow.toggle()
+                shadowRadius = 25
+                shadowOpacity = 0.9
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        shadowRadius = 20
+                        shadowOpacity = 0.8
+                    }
+                }
+            }
+        }
+        
+        // Start first animation immediately
+        withAnimation(.easeInOut(duration: 1.0)) {
+            shadowRadius = 25
+            shadowOpacity = 0.9
+        }
+        
+        // Store timer in ViewState to prevent it from being deallocated
+        objc_setAssociatedObject(self, "timer", timer, .OBJC_ASSOCIATION_RETAIN)
+    }
+}
+
+struct PromptInputView: View {
+    @Binding var promptText: String
+    let onGenerate: () -> Void
+    let onCancel: () -> Void
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Generate Script")
+                .font(.headline)
+            
+            TextEditor(text: $promptText)
+                .frame(height: 120)
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.systemGray4), lineWidth: 0.5)
+                )
+            
+            Text("What would you like to create a script about?")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            
+//            HStack(spacing: 100) {
+//                Button("Cancel", role: .cancel, action: onCancel)
+//                    .buttonStyle(.bordered)
+//                
+//                Button("Generate", action: onGenerate)
+//                    .buttonStyle(.borderedProminent)
+//                    .disabled(promptText.isEmpty)
+//            }
+        }
+        .padding(24)
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(radius: 20)
+    }
+}
+
 struct ScriptCreationView: View {
     @ObservedObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
@@ -417,25 +689,21 @@ struct ScriptCreationView: View {
     
     // Text Formatting State
     @State private var isBold = false
-    @State private var isItalic = false
-    @State private var isUnderline = false
     @State private var fontSize: CGFloat = 16
-    @State private var selectedFont = "SF Pro"
     @State private var textColor: Color = .primary
-    @State private var alignment: TextAlignment = .leading
+    
+    // AI Generation State
+    @State private var showingPromptInput = false
+    @State private var promptText = ""
+    @State private var isGenerating = false
+    @State private var currentStage = 0
+    @State private var showingGenerationError = false
+    @State private var generationError = ""
+    private let model = GenerativeModel(name: "gemini-pro", apiKey: "AIzaSyBbpl3vZYTRTwcfra97T-NdsR2TIfCICOY")
     
     // UI State
-    @State private var showingWordCount = true
     @FocusState private var isEditorFocused: Bool
-    @State private var isGeneratingAI = false
-    @State private var showingAIError = false
-    @State private var aiErrorMessage = ""
-    @State private var showingAIPrompt = false
-    @State private var aiPrompt = ""
-    @State private var generationStage = 0
-    
-    private let availableFonts = ["SF Pro", "Helvetica Neue", "Georgia", "Times New Roman"]
-    private let fontSizes: [CGFloat] = [12, 14, 16, 18, 20, 24, 28, 32]
+    @State private var textStorage = NSTextStorage()
     
     private var wordCount: Int {
         scriptText.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count
@@ -449,68 +717,69 @@ struct ScriptCreationView: View {
         ZStack {
             VStack(spacing: 0) {
                 FormattingToolbar(
-                    selectedFont: $selectedFont,
                     fontSize: $fontSize,
                     isBold: $isBold,
-                    isItalic: $isItalic,
-                    isUnderline: $isUnderline,
-                    alignment: $alignment,
                     textColor: $textColor,
-                    showingClearAlert: $showingClearAlert,
-                    availableFonts: availableFonts
+                    showingClearAlert: $showingClearAlert
                 )
                 
-                TextEditor(text: $scriptText)
-                    .font(.custom(selectedFont, size: fontSize))
-                    .fontWeight(isBold ? .bold : .regular)
-                    .italic(isItalic)
-                    .underline(isUnderline)
-                    .foregroundColor(textColor)
-                    .multilineTextAlignment(alignment)
-                    .focused($isEditorFocused)
-                    .scrollContentBackground(.hidden)
-                    .background(Color(.systemBackground))
-                    .padding(.horizontal)
-                    .overlay(alignment: .bottomTrailing) {
-                        if showingWordCount {
-                            WordCountBadge(wordCount: wordCount, characterCount: characterCount)
-                        }
-                    }
-            }
-            
-            if isGeneratingAI {
-                Color.black.opacity(0.3)
-                    .ignoresSafeArea()
-                    .transition(.opacity)
-                
-                AIGenerationLoadingView(currentStage: $generationStage)
-                    .transition(.scale.combined(with: .opacity))
-            }
-            
-            // Floating Generate Button
-            VStack {
-                Spacer()
+                // Word Count Badge positioned below toolbar
                 HStack {
                     Spacer()
-                    Button(action: { showingAIPrompt = true }) {
-                        HStack(spacing: 8) {
-                            if isGeneratingAI {
-                                ProgressView()
-                                    .tint(.white)
-                            }
-                            Image(systemName: "wand.and.stars")
-                                .imageScale(.large)
-                        }
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .clipShape(Capsule())
-                        .shadow(radius: 5)
-                    }
-                    .disabled(isGeneratingAI)
-                    .padding()
+                    WordCountBadge(wordCount: wordCount, characterCount: characterCount)
+                        .padding(.trailing, 16)
+                        .padding(.top, 8)
+                        .padding(.bottom, 12)
                 }
-            }.padding(.bottom, 30)
+                
+                // Custom Text Editor using UIViewRepresentable
+                CustomTextView(text: $scriptText, isBold: $isBold, fontSize: $fontSize, textColor: $textColor)
+                    .padding(.horizontal)
+                
+                // AI Button
+                HStack {
+                    Spacer()
+                    Button(action: { 
+                        withAnimation {
+                            showingPromptInput.toggle()
+                            if !showingPromptInput {
+                                promptText = ""
+                            }
+                        }
+                    }) {
+                        Image(systemName: "wand.and.stars")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white)
+                            .frame(width: 56, height: 56)
+                            .background(Color.blue)
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 20)
+                }
+            }
+            
+            // AI Generation Loading View
+            if isGenerating {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                AIGenerationLoadingView(currentStage: $currentStage)
+            }
+            
+            // Glowing Text Field
+            if showingPromptInput {
+                GlowingTextField(
+                    text: $promptText,
+                    isVisible: $showingPromptInput,
+                    onSubmit: {
+                        if !promptText.isEmpty {
+                            showingPromptInput = false
+                            generateScript()
+                        }
+                    }
+                )
+            }
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
@@ -532,9 +801,7 @@ struct ScriptCreationView: View {
             }
         }
         .alert("Discard Changes?", isPresented: $showingCancelAlert) {
-            Button("Discard", role: .destructive) {
-                dismiss()
-            }
+            Button("Discard", role: .destructive) { dismiss() }
             Button("Keep Editing", role: .cancel) {}
         } message: {
             Text("Are you sure you want to discard your changes?")
@@ -558,26 +825,10 @@ struct ScriptCreationView: View {
         } message: {
             Text("Are you sure you want to clear all text? This cannot be undone.")
         }
-        .alert("Error", isPresented: $showingAIError) {
+        .alert("Generation Error", isPresented: $showingGenerationError) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text(aiErrorMessage)
-        }
-        .alert("Generate with AI", isPresented: $showingAIPrompt) {
-            TextField("What should the script be about?", text: $aiPrompt)
-            Button("Cancel", role: .cancel) {
-                aiPrompt = ""
-            }
-            Button("Generate") {
-                if !aiPrompt.isEmpty {
-                    Task {
-                        await generateAIContent(aiPrompt)
-                        aiPrompt = ""
-                    }
-                }
-            }
-        } message: {
-            Text("Describe what you'd like the AI to generate")
+            Text(generationError)
         }
     }
     
@@ -595,172 +846,114 @@ struct ScriptCreationView: View {
         viewModel.navigateToPiyushScreen = true
     }
     
-    private func generateAIContent(_ prompt: String) async {
-        guard !prompt.isEmpty else { return }
+    private func generateScript() {
+        isGenerating = true
+        currentStage = 0
         
-        isGeneratingAI = true
-        generationStage = 0
-        
-        do {
-            // Simulate different stages of generation
-            for stage in 1...4 {
-                try await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds per stage
-                generationStage = stage - 1
-            }
-            
-            let generatedText = try await viewModel.generateScript(prompt: prompt)
-            DispatchQueue.main.async {
-                self.scriptText = generatedText
-                self.isGeneratingAI = false
-                self.generationStage = 0
-            }
-        } catch {
-            DispatchQueue.main.async {
-                let message: String
+        Task {
+            do {
+                let promptText = """
+                You are a professional speech writer. Create a well-structured presentation script that is:
+                1. Clear and engaging
+                2. Organized with proper sections
+                3. Includes natural transitions
+                4. Has a strong opening and conclusion
+                5. Uses appropriate pacing for verbal delivery
+
+                Create a presentation script about: \(self.promptText)
                 
-                if error.localizedDescription.contains("429") {
-                    message = "Rate limit exceeded. Please try again later."
-                } else if error.localizedDescription.contains("400") {
-                    message = "Invalid request. Please check your input."
-                } else if error.localizedDescription.contains("500") {
-                    message = "Internal server error. Please try again."
+                Format the output as a proper speech script with clear sections.
+                """
+                
+                // Create a chat session
+                let chat = model.startChat()
+                
+                // Update stages
+                await MainActor.run {
+                    currentStage = 1
+                }
+                
+                // Generate content
+                let response = try await chat.sendMessage(promptText)
+                
+                await MainActor.run {
+                    currentStage = 2
+                }
+                
+                if let responseText = response.text {
+                    // Final stage and update UI
+                    await MainActor.run {
+                        currentStage = 3
+                        scriptText = responseText
+                        isGenerating = false
+                        self.promptText = ""
+                    }
                 } else {
-                    message = "An error occurred: \(error.localizedDescription)"
+                    throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate response"])
                 }
-                
-                self.aiErrorMessage = message
-                self.showingAIError = true
-                self.isGeneratingAI = false
-                self.generationStage = 0
+            } catch {
+                await MainActor.run {
+                    isGenerating = false
+                    generationError = "Failed to generate script: \(error.localizedDescription)"
+                    showingGenerationError = true
+                }
             }
         }
     }
 }
 
-struct FormattingToolbar: View {
-    @Binding var selectedFont: String
-    @Binding var fontSize: CGFloat
+struct CustomTextView: UIViewRepresentable {
+    @Binding var text: String
     @Binding var isBold: Bool
-    @Binding var isItalic: Bool
-    @Binding var isUnderline: Bool
-    @Binding var alignment: TextAlignment
+    @Binding var fontSize: CGFloat
     @Binding var textColor: Color
-    @Binding var showingClearAlert: Bool
-    let availableFonts: [String]
     
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                // Font Menu
-                Menu {
-                    ForEach(availableFonts, id: \.self) { font in
-                        Button(action: { selectedFont = font }) {
-                            HStack {
-                                Text(font)
-                                    .font(.custom(font, size: 17))
-                                if selectedFont == font {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    Image(systemName: "textformat")
-                }
-                
-                // Font Size Control
-                HStack {
-                    Text("\(Int(fontSize))")
-                        .frame(width: 30)
-                        .font(.system(size: 15))
-                    VStack(spacing: 2) {
-                        Button(action: { fontSize = min(fontSize + 2, 32) }) {
-                            Image(systemName: "chevron.up")
-                                .font(.system(size: 10, weight: .bold))
-                        }
-                        Button(action: { fontSize = max(fontSize - 2, 12) }) {
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 10, weight: .bold))
-                        }
-                    }
-                    .frame(width: 20)
-                }
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2)
-                .background(Color(.systemGray6))
-                .cornerRadius(6)
-                
-                // Style Buttons
-                StyleControls(isBold: $isBold, isItalic: $isItalic, isUnderline: $isUnderline)
-                
-                // Alignment Buttons
-                AlignmentControls(alignment: $alignment)
-                
-                // Color Picker
-                ColorPicker("", selection: $textColor)
-                    .labelsHidden()
-                
-                // Clear Button
-                Button(action: { showingClearAlert = true }) {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-        }
-        .background(Color(.systemBackground))
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(Color(.systemGray4))
-                .opacity(0.5),
-            alignment: .bottom
-        )
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
     }
-}
-
-struct WordCountBadge: View {
-    let wordCount: Int
-    let characterCount: Int
     
-    var body: some View {
-        HStack(spacing: 12) {
-            Label("\(wordCount) words", systemImage: "text.word.spacing")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-            
-            Label("\(characterCount) characters", systemImage: "character.textbox")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-        }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(Color(.systemGray6).opacity(0.9))
-        .cornerRadius(6)
-        .padding(12)
+    func makeUIView(context: Context) -> UITextView {
+        let textView = UITextView()
+        textView.delegate = context.coordinator
+        textView.font = .systemFont(ofSize: fontSize)
+        textView.backgroundColor = .clear
+        textView.textColor = UIColor(textColor)
+        textView.isScrollEnabled = true
+        textView.isEditable = true
+        textView.text = text
+        return textView
     }
-}
-
-struct AlignmentControls: View {
-    @Binding var alignment: TextAlignment
     
-    var body: some View {
-        Group {
-            Button(action: { alignment = .leading }) {
-                Image(systemName: "text.alignleft")
-                    .foregroundColor(alignment == .leading ? .blue : .primary)
-            }
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        if let selectedRange = uiView.selectedTextRange {
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: fontSize, weight: isBold ? .bold : .regular),
+                .foregroundColor: UIColor(textColor)
+            ]
             
-            Button(action: { alignment = .center }) {
-                Image(systemName: "text.aligncenter")
-                    .foregroundColor(alignment == .center ? .blue : .primary)
+            if selectedRange.isEmpty {
+                // Apply to new text
+                uiView.typingAttributes = attributes
+            } else {
+                // Apply to selected text
+                let location = uiView.offset(from: uiView.beginningOfDocument, to: selectedRange.start)
+                let length = uiView.offset(from: selectedRange.start, to: selectedRange.end)
+                let mutableAttrText = NSMutableAttributedString(attributedString: uiView.attributedText)
+                mutableAttrText.addAttributes(attributes, range: NSRange(location: location, length: length))
+                uiView.attributedText = mutableAttrText
             }
-            
-            Button(action: { alignment = .trailing }) {
-                Image(systemName: "text.alignright")
-                    .foregroundColor(alignment == .trailing ? .blue : .primary)
-            }
+        }
+    }
+    
+    class Coordinator: NSObject, UITextViewDelegate {
+        var parent: CustomTextView
+        
+        init(_ parent: CustomTextView) {
+            self.parent = parent
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            parent.text = textView.text
         }
     }
 }

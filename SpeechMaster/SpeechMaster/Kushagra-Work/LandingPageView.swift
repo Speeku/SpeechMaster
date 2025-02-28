@@ -41,13 +41,13 @@ struct LandingPageView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             Spacer()
-                            NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 38, height: 38)
-                                    .clipShape(Circle())
-                                    .foregroundColor(.gray)
-                            }
+                            //NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
+                               // Image(systemName: "person.circle.fill")
+                               //     .resizable()
+                                //    .frame(width: 38, height: 38)
+                                //    .clipShape(Circle())
+                                //    .foregroundColor(.gray)
+                          //  }
                         }
                         .padding(.horizontal, 17)
                         
