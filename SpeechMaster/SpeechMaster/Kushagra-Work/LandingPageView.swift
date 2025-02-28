@@ -104,7 +104,7 @@ struct LandingPageView: View {
                                 ProgressCardView(
                                     viewModel: viewModel,
                                     title: "Overall Improvement",
-                                    progress: viewModel.overallImprovement,
+                                    progress: viewModel.calculateOverallImprovement(for: viewModel.scripts.first?.id),
                                     fgColor: .black,
                                     bgColor: Color.green.opacity(0.1),
                                     circleColor: .green,

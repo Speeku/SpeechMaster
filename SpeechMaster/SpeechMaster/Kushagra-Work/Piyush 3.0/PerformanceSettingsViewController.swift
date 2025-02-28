@@ -11,12 +11,14 @@ enum PreviewRatio: String {
     case thirty70 = "thirty70"
     case fifty50 = "fifty50"
     case twenty80 = "twenty80"
+    case zero100 = "zero100"
     
     var keynoteMultiplier: CGFloat {
         switch self {
         case .thirty70: return 0.3
         case .fifty50: return 0.5
         case .twenty80: return 0.2
+        case .zero100: return 0.0
         }
     }
 }
@@ -93,7 +95,7 @@ class PerformanceSettingsViewController: UIViewController {
     }()
     
     private lazy var ratioSegmentedControl: UISegmentedControl = {
-        let items = ["30:70", "50:50", "20:80"]
+        let items = ["30:70", "50:50", "20:80", "0:100"]
         let sc = UISegmentedControl(items: items)
         sc.selectedSegmentIndex = 0
         sc.translatesAutoresizingMaskIntoConstraints = false
@@ -118,6 +120,8 @@ class PerformanceSettingsViewController: UIViewController {
             ratioSegmentedControl.selectedSegmentIndex = 1
         case .twenty80:
             ratioSegmentedControl.selectedSegmentIndex = 2
+        case .zero100:
+            ratioSegmentedControl.selectedSegmentIndex = 3
         }
         
         // Add value change handlers
@@ -211,6 +215,7 @@ class PerformanceSettingsViewController: UIViewController {
         case 0: ratio = .thirty70
         case 1: ratio = .fifty50
         case 2: ratio = .twenty80
+        case 3: ratio = .zero100
         default: ratio = .thirty70
         }
         delegate?.didSelectPreviewRatio(ratio)

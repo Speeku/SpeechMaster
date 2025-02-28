@@ -109,29 +109,53 @@ class SessionDetailsViewController: UIViewController {
     
     private func createCard(title: String, content: () -> UIView) -> UIView {
         let container = UIView()
-        container.backgroundColor = .secondarySystemBackground
-        container.layer.cornerRadius = 12
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.backgroundColor = .systemBackground
         
+        // Add shadow and corner radius for card-like appearance
+        container.layer.cornerRadius = 16
+        container.layer.shadowColor = UIColor.black.cgColor
+        container.layer.shadowOffset = CGSize(width: 0, height: 2)
+        container.layer.shadowRadius = 6
+        container.layer.shadowOpacity = 0.1
+        
+        // Create title label with updated styling
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        titleLabel.textColor = .label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let contentView = content()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
+        // Add subtle background tint
+        let backgroundTintView = UIView()
+        backgroundTintView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundTintView.backgroundColor = .systemBlue.withAlphaComponent(0.1)
+        backgroundTintView.layer.cornerRadius = 16
+        
+        container.addSubview(backgroundTintView)
         container.addSubview(titleLabel)
         container.addSubview(contentView)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            // Background tint constraints
+            backgroundTintView.topAnchor.constraint(equalTo: container.topAnchor),
+            backgroundTintView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            backgroundTintView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            backgroundTintView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
             
+            // Title constraints
+            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+            
+            // Content constraints
             contentView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            contentView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            contentView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
-            contentView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16)
+            contentView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+            contentView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+            contentView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20)
         ])
         
         return container
@@ -140,14 +164,31 @@ class SessionDetailsViewController: UIViewController {
     private func createMetricView(title: String, value: String, icon: String) -> UIView {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 12
+        stack.spacing = 16
         stack.alignment = .center
+        
+        // Create circular background for icon
+        let iconContainer = UIView()
+        iconContainer.translatesAutoresizingMaskIntoConstraints = false
+        iconContainer.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+        iconContainer.layer.cornerRadius = 20
         
         let iconView = UIImageView(image: UIImage(systemName: icon))
         iconView.tintColor = .systemBlue
         iconView.contentMode = .scaleAspectFit
-        iconView.widthAnchor.constraint(equalToConstant: 24).isActive = true
-        iconView.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        
+        iconContainer.addSubview(iconView)
+        
+        NSLayoutConstraint.activate([
+            iconContainer.widthAnchor.constraint(equalToConstant: 40),
+            iconContainer.heightAnchor.constraint(equalToConstant: 40),
+            
+            iconView.centerXAnchor.constraint(equalTo: iconContainer.centerXAnchor),
+            iconView.centerYAnchor.constraint(equalTo: iconContainer.centerYAnchor),
+            iconView.widthAnchor.constraint(equalToConstant: 20),
+            iconView.heightAnchor.constraint(equalToConstant: 20)
+        ])
         
         let textStack = UIStackView()
         textStack.axis = .vertical
@@ -155,17 +196,18 @@ class SessionDetailsViewController: UIViewController {
         
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = .systemFont(ofSize: 16)
+        titleLabel.font = .systemFont(ofSize: 14)
+        titleLabel.textColor = .secondaryLabel
         
         let valueLabel = UILabel()
         valueLabel.text = value
-        valueLabel.font = .systemFont(ofSize: 16, weight: .medium)
-        valueLabel.textColor = .systemBlue
+        valueLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        valueLabel.textColor = .label
         
         textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(valueLabel)
         
-        stack.addArrangedSubview(iconView)
+        stack.addArrangedSubview(iconContainer)
         stack.addArrangedSubview(textStack)
         
         return stack
