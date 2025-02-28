@@ -20,7 +20,7 @@ class HomeViewModel: ObservableObject {
     @Published var scripts: [Script] = []
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
-    @Published var overallImprovement: Double = 80
+    @Published var overallImprovement: Double = 10
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     @Published var currentScriptID: UUID = UUID()
