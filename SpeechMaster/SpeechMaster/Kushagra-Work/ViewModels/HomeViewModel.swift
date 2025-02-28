@@ -8,7 +8,7 @@ private enum StorageKeys {
     static let qnaQuestions = "qna_questions"
     static let performanceReports = "performance_reports"
     static let userName = "user_name"
-//    static let overallImprovement = "overall_improvement"
+    static let overallImprovement = "overall_improvement"
 }
 
 class HomeViewModel: ObservableObject {
@@ -20,7 +20,7 @@ class HomeViewModel: ObservableObject {
     @Published var scripts: [Script] = []
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
-    @Published var overallImprovement: Double = 10
+    @Published var overallImprovement: Double = 50
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     @Published var currentScriptID: UUID = UUID()
@@ -240,7 +240,7 @@ class HomeViewModel: ObservableObject {
             }
             
             UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
-           // UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
+            UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
         }
         
         private func loadData() {
@@ -272,7 +272,7 @@ class HomeViewModel: ObservableObject {
             }
             
             userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
-           // overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
+            overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
         }
         // MARK: - Top Speeches
         @Published var selectedCategory: SpeechCategory?
@@ -437,6 +437,83 @@ class HomeViewModel: ObservableObject {
                     return "Invalid data received from the server."
                 }
             }
+        }
+        
+        func calculateOverallImprovement(for scriptId: UUID? = nil) -> Double {
+            // If no scriptId provided, use the most recent script's ID
+            let targetScriptId = scriptId ?? scripts.first?.id
+            
+            guard let scriptId = targetScriptId else { 
+                DispatchQueue.main.async {
+                    self.overallImprovement = 0
+                }
+                return 0 
+            }
+            
+            // Filter reports for the specific script
+            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
+            let scriptSessionIds = Set(scriptSessions.map { $0.id })
+            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+            
+            guard !scriptReports.isEmpty else {
+                DispatchQueue.main.async {
+                    self.overallImprovement = 0
+                }
+                return 0
+            }
+            
+            // Calculate average scores from script's reports
+            var totalScore = 0.0
+            
+            for report in scriptReports {
+                let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
+                let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
+                let paceScore = min(100, Double(report.wordsPerMinute))
+                
+                let reportScore = (fillerWordsScore * 0.3 +
+                                 missingWordsScore * 0.3 +
+                                 paceScore * 0.4)
+                
+                totalScore += reportScore
+            }
+            
+            let averageScore = totalScore / Double(scriptReports.count)
+            
+            // Update the published property
+            DispatchQueue.main.async {
+                self.overallImprovement = averageScore
+            }
+            
+            return averageScore
+        }
+        
+        func calculateRecentImprovement(for scriptId: UUID? = nil) -> Double {
+            guard let scriptId = scriptId else { return 0 }
+            
+            // Filter reports for the specific script
+            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
+            let scriptSessionIds = Set(scriptSessions.map { $0.id })
+            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+            .sorted { $0.sessionID > $1.sessionID }
+            
+            guard scriptReports.count >= 2 else { return 0 }
+            
+            let latest = scriptReports[0]
+            let previous = scriptReports[1]
+            
+            func calculateScore(for report: PerformanceReport) -> Double {
+                let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
+                let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
+                let paceScore = min(100, Double(report.wordsPerMinute))
+                
+                return (fillerWordsScore * 0.3 + missingWordsScore * 0.3 + paceScore * 0.4)
+            }
+            
+            let latestScore = calculateScore(for: latest)
+            let previousScore = calculateScore(for: previous)
+            
+            let improvement = ((latestScore - previousScore) / previousScore) * 100
+            return max(-100, min(100, improvement))
         }
     }
 

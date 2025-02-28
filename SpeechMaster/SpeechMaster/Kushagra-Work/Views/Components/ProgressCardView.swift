@@ -11,11 +11,16 @@ struct ProgressCardView: View {
     let circleColor: Color
     let lastCreatedScriptName: String?
     
+    private var currentScriptId: UUID? {
+        viewModel.scripts.first?.id
+    }
+    
     private var progressPercentage: Int {
-        Int(progress)
+        Int(viewModel.calculateOverallImprovement(for: currentScriptId))
     }
     
     private var improvementStatus: String {
+        let progress = Double(progressPercentage)
         switch progress {
         case 0..<30: return "Getting Started 🌱"
         case 30..<60: return "Making Progress ⭐️"
@@ -25,14 +30,21 @@ struct ProgressCardView: View {
     }
     
     private var averageSessionDuration: String {
-        // Calculate average duration from viewModel's sessions
-        let totalMinutes = 45 // Replace with actual calculation from sessions
-        return "\(totalMinutes) min"
+        guard let scriptId = currentScriptId else { return "0 min" }
+        
+        let scriptSessions = viewModel.sessionsArray.filter { $0.scriptId == scriptId }
+        let scriptSessionIds = Set(scriptSessions.map { $0.id })
+        let scriptReports = viewModel.userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+        
+        guard !scriptReports.isEmpty else { return "0 min" }
+        
+        let totalDuration = scriptReports.reduce(0.0) { $0 + $1.duration }
+        let averageMinutes = Int(totalDuration / Double(scriptReports.count) / 60.0)
+        return "\(averageMinutes) min"
     }
     
     private var recentImprovement: Double {
-        // Calculate improvement between last two sessions
-        return 15.0 // Replace with actual calculation
+        viewModel.calculateRecentImprovement(for: currentScriptId)
     }
     
     var body: some View {
@@ -153,11 +165,25 @@ private struct ProgressBarsView: View {
     var body: some View {
         HStack(spacing: 4) {
             ForEach(1...10, id: \.self) { index in
+                let barProgress = progress / 10.0
+                let barIndex = Double(index)
+                
                 Rectangle()
-                    .fill(Double(index) * 10 <= progress ? Color.green : Color.gray.opacity(0.3))
+                    .fill(getBarColor(barIndex: barIndex, barProgress: barProgress))
                     .frame(width: 8, height: 28)
                     .cornerRadius(4)
             }
+        }
+    }
+    
+    private func getBarColor(barIndex: Double, barProgress: Double) -> Color {
+        if barIndex <= floor(barProgress) {
+            return Color.green
+        } else if barIndex <= ceil(barProgress) {
+            let partialFill = progress.truncatingRemainder(dividingBy: 10) / 10
+            return Color.green.opacity(partialFill)
+        } else {
+            return Color.gray.opacity(0.3)
         }
     }
 }
