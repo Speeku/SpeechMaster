@@ -699,7 +699,7 @@ struct ScriptCreationView: View {
     @State private var currentStage = 0
     @State private var showingGenerationError = false
     @State private var generationError = ""
-    private let model = GenerativeModel(name: "gemini-pro", apiKey: "AIzaSyBbpl3vZYTRTwcfra97T-NdsR2TIfCICOY")
+    private let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: "AIzaSyBO1kDM-13zCl9hPyjtNd6Wkcr9_igKfzc")
     
     // UI State
     @FocusState private var isEditorFocused: Bool
@@ -854,16 +854,17 @@ struct ScriptCreationView: View {
             do {
                 let promptText = """
                 You are a professional speech writer. Create a well-structured presentation script that is:
-                1. Clear and engaging
-                2. Organized with proper sections
-                3. Includes natural transitions
-                4. Has a strong opening and conclusion
-                5. Uses appropriate pacing for verbal delivery
-
+                1. Clear and engagin
+                2. Includes natural transitions
+                3. Has a strong opening and conclusion
+                4. Uses appropriate pacing for verbal delivery
+                5. generate it like a essay no hiphens and colens at all in one flow
                 Create a presentation script about: \(self.promptText)
                 
-                Format the output as a proper speech script with clear sections.
+                
                 """
+                
+
                 
                 // Create a chat session
                 let chat = model.startChat()
