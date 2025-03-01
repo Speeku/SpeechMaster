@@ -7,6 +7,7 @@
 
 import UIKit
 import GoogleSignIn
+import Supabase
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

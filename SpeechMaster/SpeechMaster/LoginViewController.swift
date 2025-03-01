@@ -27,6 +27,15 @@ class LoginViewController: UIViewController {
         rememberMeCheckbox.setImage(UIImage(systemName: imageName), for: .normal)
         
     }
+    
+    func handleGoogleSignIn() {
+        guard let currentUser = GIDSignIn.sharedInstance.currentUser else { return }
+        
+        let homeVC = UIStoryboard(name: "FakeLandingViewController", bundle: nil).instantiateViewController(withIdentifier: "FakeLandingViewController") as! FakeLandingViewController
+        homeVC.modalPresentationStyle = .fullScreen
+        present(homeVC, animated: true, completion: nil)
+    }
+    
     @IBAction func signIn(sender: Any) {
       GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
         guard error == nil else { return }

@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		009F2A9A2D649E220052FF25 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 009F2A992D649E220052FF25 /* GoogleSignIn */; };
-		009F2A9C2D649E220052FF25 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 009F2A9B2D649E220052FF25 /* GoogleSignInSwift */; };
+		7B60C2F0D4926C11ABD3C634 /* Pods_SpeechMaster_SpeechMasterUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90328A779FAAD80F68DDDA2C /* Pods_SpeechMaster_SpeechMasterUITests.framework */; };
+		F81AC247492A5758855292B2 /* Pods_SpeechMasterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACA95641BE77A6763660DB48 /* Pods_SpeechMasterTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +32,9 @@
 		05511DDE2D118E7300E26F10 /* SpeechMaster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeechMaster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DF42D118E7400E26F10 /* SpeechMasterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeechMasterUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		90328A779FAAD80F68DDDA2C /* Pods_SpeechMaster_SpeechMasterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpeechMaster_SpeechMasterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACA95641BE77A6763660DB48 /* Pods_SpeechMasterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpeechMasterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA3A7056B5F1854ACFD1EC77 /* Pods_SpeechMaster.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpeechMaster.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -70,8 +73,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				009F2A9A2D649E220052FF25 /* GoogleSignIn in Frameworks */,
-				009F2A9C2D649E220052FF25 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F81AC247492A5758855292B2 /* Pods_SpeechMasterTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B60C2F0D4926C11ABD3C634 /* Pods_SpeechMaster_SpeechMasterUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +102,7 @@
 				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
 				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 				05511DDF2D118E7300E26F10 /* Products */,
+				21088E90B1AFA592D04AA7C8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +116,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		21088E90B1AFA592D04AA7C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CA3A7056B5F1854ACFD1EC77 /* Pods_SpeechMaster.framework */,
+				90328A779FAAD80F68DDDA2C /* Pods_SpeechMaster_SpeechMasterUITests.framework */,
+				ACA95641BE77A6763660DB48 /* Pods_SpeechMasterTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,6 +133,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 05511E072D118E7400E26F10 /* Build configuration list for PBXNativeTarget "SpeechMaster" */;
 			buildPhases = (
+				B5D00F4DD1C6898A034A6C43 /* [CP] Check Pods Manifest.lock */,
 				05511DDA2D118E7300E26F10 /* Sources */,
 				05511DDB2D118E7300E26F10 /* Frameworks */,
 				05511DDC2D118E7300E26F10 /* Resources */,
@@ -132,8 +147,6 @@
 			);
 			name = SpeechMaster;
 			packageProductDependencies = (
-				009F2A992D649E220052FF25 /* GoogleSignIn */,
-				009F2A9B2D649E220052FF25 /* GoogleSignInSwift */,
 			);
 			productName = SpeechMaster;
 			productReference = 05511DDE2D118E7300E26F10 /* SpeechMaster.app */;
@@ -143,6 +156,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 05511E0C2D118E7400E26F10 /* Build configuration list for PBXNativeTarget "SpeechMasterTests" */;
 			buildPhases = (
+				37AE03F41A80CFF327029AA0 /* [CP] Check Pods Manifest.lock */,
 				05511DF02D118E7400E26F10 /* Sources */,
 				05511DF12D118E7400E26F10 /* Frameworks */,
 				05511DF22D118E7400E26F10 /* Resources */,
@@ -156,8 +170,6 @@
 				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
 			);
 			name = SpeechMasterTests;
-			packageProductDependencies = (
-			);
 			productName = SpeechMasterTests;
 			productReference = 05511DF42D118E7400E26F10 /* SpeechMasterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -166,6 +178,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 05511E0F2D118E7400E26F10 /* Build configuration list for PBXNativeTarget "SpeechMasterUITests" */;
 			buildPhases = (
+				7B2EC1E965FEFD3FC4C100CB /* [CP] Check Pods Manifest.lock */,
 				05511DFA2D118E7400E26F10 /* Sources */,
 				05511DFB2D118E7400E26F10 /* Frameworks */,
 				05511DFC2D118E7400E26F10 /* Resources */,
@@ -179,8 +192,6 @@
 				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 			);
 			name = SpeechMasterUITests;
-			packageProductDependencies = (
-			);
 			productName = SpeechMasterUITests;
 			productReference = 05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -218,7 +229,6 @@
 			mainGroup = 05511DD52D118E7300E26F10;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 05511DDF2D118E7300E26F10 /* Products */;
@@ -255,6 +265,75 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		37AE03F41A80CFF327029AA0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SpeechMasterTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7B2EC1E965FEFD3FC4C100CB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SpeechMaster-SpeechMasterUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B5D00F4DD1C6898A034A6C43 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SpeechMaster-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		05511DDA2D118E7300E26F10 /* Sources */ = {
@@ -304,7 +383,6 @@
 				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -334,7 +412,6 @@
 				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -585,30 +662,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		009F2A992D649E220052FF25 /* GoogleSignIn */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
-		};
-		009F2A9B2D649E220052FF25 /* GoogleSignInSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 009F2A982D649E220052FF25 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignInSwift;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 05511DD62D118E7300E26F10 /* Project object */;
 }
