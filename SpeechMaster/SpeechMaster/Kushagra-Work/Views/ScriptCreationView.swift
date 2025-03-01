@@ -549,7 +549,7 @@ struct GlowingTextField: View {
                             .textInputAutocapitalization(.sentences)
                         
                         Button(action: onSubmit) {
-                            Image(systemName: "arrow.up")
+                            Image(systemName: "paperplane.fill")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.white)
                                 .frame(width: 32, height: 32)
