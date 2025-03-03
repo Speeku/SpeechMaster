@@ -251,6 +251,59 @@ struct Session {
     }
 }
 
+// MARK: - Memorization Models
+//struct MemorizationSession: Identifiable, Codable {
+//    let id: UUID
+//    let scriptId: UUID
+//    let createdAt: Date
+//    var lastUpdatedAt: Date
+//    var progress: Double // 0.0 to 1.0 representing percentage memorized
+//    var technique: MemorizationTechnique
+//    var sections: [MemorizationSection]
+//    
+//    init(scriptId: UUID, technique: MemorizationTechnique) {
+//        self.id = UUID()
+//        self.scriptId = scriptId
+//        self.createdAt = Date()
+//        self.lastUpdatedAt = Date()
+//        self.progress = 0.0
+//        self.technique = technique
+//        self.sections = []
+//    }
+//}
+//
+//enum MemorizationTechnique: String, Codable, CaseIterable {
+//    case chunking = "Chunking"
+//    case recordAndListen = "Record & Listen"
+//    
+//    var description: String {
+//        switch self {
+//        case .chunking:
+//            return "Break your script into smaller, manageable sections and memorize each chunk separately."
+//        case .recordAndListen:
+//            return "Record yourself reading the script and listen to it repeatedly."
+//        }
+//    }
+//}
+//
+//struct MemorizationSection: Identifiable, Codable {
+//    let id: UUID
+//    let startIndex: Int
+//    let endIndex: Int
+//    let text: String
+//    var mastered: Bool
+//    var lastPracticed: Date?
+//    
+//    init(startIndex: Int, endIndex: Int, text: String) {
+//        self.id = UUID()
+//        self.startIndex = startIndex
+//        self.endIndex = endIndex
+//        self.text = text
+//        self.mastered = false
+//        self.lastPracticed = nil
+//    }
+//}
+
 ////
 ////  DataModel.swift
 ////  SpeechMaster

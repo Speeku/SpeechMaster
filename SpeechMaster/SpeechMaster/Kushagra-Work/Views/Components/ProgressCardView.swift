@@ -2,7 +2,6 @@ import SwiftUI
 import Charts
 
 struct ProgressCardView: View {
-    @State private var showingInsights = false
     let viewModel: HomeViewModel
     let title: String
     let progress: Double
@@ -17,6 +16,11 @@ struct ProgressCardView: View {
     
     private var progressPercentage: Int {
         Int(viewModel.calculateOverallImprovement(for: currentScriptId))
+    }
+    
+    private var sessionCount: Int {
+        guard let scriptId = currentScriptId else { return 0 }
+        return viewModel.sessionsArray.filter { $0.scriptId == scriptId }.count
     }
     
     private var improvementStatus: String {
@@ -60,91 +64,15 @@ struct ProgressCardView: View {
                 
                 Spacer(minLength: 24)
                 
-                // Updated Insights Button
-                Button(action: { showingInsights = true }) {
-                    Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
-                        .font(.system(size: 30))
+                // Simplified session count display
+                VStack(alignment: .center, spacing: 2) {
+                    Text("\(sessionCount)")
+                        .font(.system(size: 24, weight: .semibold))
                         .foregroundColor(.blue)
-                        .padding(8)
-                        .background(Color.blue.opacity(0.2))
-                        .clipShape(Circle())
-                }
-                .sheet(isPresented: $showingInsights) {
-                    NavigationView {
-                        ScrollView {
-                            VStack(spacing: 20) {
-                                // Header Stats
-                                HStack(spacing: 20) {
-                                    StatBox(
-                                        title: "Overall Score",
-                                        value: "\(progressPercentage)%",
-                                        icon: "chart.bar.fill",
-                                        color: .blue
-                                    )
-                                    
-                                    StatBox(
-                                        title: "Recent Growth",
-                                        value: "+\(Int(recentImprovement))%",
-                                        icon: "arrow.up.right",
-                                        color: .green
-                                    )
-                                }
-                                
-                                // Divider with label
-                                LabeledDivider(text: "Performance Metrics")
-                                
-                                // Detailed Stats Grid
-                                LazyVGrid(columns: [
-                                    GridItem(.flexible()),
-                                    GridItem(.flexible())
-                                ], spacing: 16) {
-                                    DetailStatItem(
-                                        icon: "doc.fill",
-                                        value: "\(viewModel.scripts.count)",
-                                        label: "Total Scripts",
-                                        color: .purple
-                                    )
-                                    
-                                    DetailStatItem(
-                                        icon: "clock.fill",
-                                        value: averageSessionDuration,
-                                        label: "Avg. Duration",
-                                        color: .orange
-                                    )
-                                    
-                                    DetailStatItem(
-                                        icon: "calendar",
-                                        value: "Last 7 Days",
-                                        label: "Active Streak",
-                                        color: .blue
-                                    )
-                                    
-                                    DetailStatItem(
-                                        icon: "star.fill",
-                                        value: improvementStatus,
-                                        label: "Current Level",
-                                        color: .yellow
-                                    )
-                                }
-                                
-                                // Tips Section
-                                LabeledDivider(text: "Improvement Tips")
-                                
-                                ImprovementTipView(progress: progress)
-                            }
-                            .padding()
-                        }
-                        .background(Color(hex: "F2F2F7"))
-                        .navigationTitle("Progress Details")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button("Done") {
-                                    showingInsights = false
-                                }
-                            }
-                        }
-                    }
+                    
+                    Text("Sessions")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black.opacity(0.6))
                 }
             }
             

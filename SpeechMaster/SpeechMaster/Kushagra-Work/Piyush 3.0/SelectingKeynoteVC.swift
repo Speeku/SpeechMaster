@@ -119,7 +119,7 @@ class SelectingKeynoteVC: UIViewController,UIDocumentPickerDelegate {
     }
     
     private func navigateToPerformance(withKeynote: Bool) {
-        let performanceVC = PerformanceViewController()
+        let performanceVC = PerformanceViewController(withKeynote: withKeynote)
         if withKeynote, let currentDocument = currentDocument {
             do {
                 // Create bookmark data for persistent access

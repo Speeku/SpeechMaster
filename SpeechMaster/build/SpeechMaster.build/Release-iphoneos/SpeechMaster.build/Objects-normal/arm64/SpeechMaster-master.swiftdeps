@@ -1,0 +1,130 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "2ba8649da4ef8528a5ef04126db4c41860a622409440a72ecc1092254279b736"
+build_start_time: [1740850914, 831663000]
+build_end_time: [1740850945, 822821000]
+inputs:
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/AppDelegate.swift": !dirty [1740837643, 889668074]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/RoundedEndProgress.swift"
+  : !dirty [1740837643, 891692015]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/circularProgressBar.swift"
+  : !dirty [1740837643, 891188733]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/CompareCollectionViewCell.swift"
+  : !dirty [1740837643, 892814997]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCellCollectionViewCell.swift"
+  : !dirty [1740837643, 894179117]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCollectionViewCell.swift"
+  : !dirty [1740837643, 896021650]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/GifsPresenter/gifLoader.swift"
+  : !dirty [1740837643, 897252915]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/MemorizationViewController.swift"
+  : !dirty [1740850811, 132705270]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/ProgressViewController.swift"
+  : !dirty [1740850493, 998748962]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/ScriptEditViewController.swift"
+  : !dirty [1740837643, 910825891]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/SessionDetailsViewController.swift"
+  : !dirty [1740837643, 911974439]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/cellTableViewCell.swift"
+  : !dirty [1740837643, 909608965]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ProgressData Model/SessionsDataModel.swift"
+  : !dirty [1740837643, 914509258]
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/DataModel.swift": !dirty [1740850432, 450897261]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/LandingPageView.swift"
+  : !dirty [1740837643, 988898727]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Models/TopSpeech.swift"
+  : !dirty [1740837643, 989718380]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/CoachView.swift"
+  : !dirty [1740837643, 990480361]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/FillerWordsDetailViewController.swift"
+  : !dirty [1740837643, 991393206]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/KeynoteService/KeynoteManager.swift"
+  : !dirty [1740837643, 992696332]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/MissingWordsDetailViewController.swift"
+  : !dirty [1740837643, 993604900]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PaceMeterView.swift"
+  : !dirty [1740837643, 994818604]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceResultsViewController.swift"
+  : !dirty [1740837643, 996200174]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceSettingsViewController.swift"
+  : !dirty [1740837643, 998496299]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceViewController.swift"
+  : !dirty [1740837643, 999874384]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PitchGraphView.swift"
+  : !dirty [1740837644, 1039498]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PronunciationDetailViewController.swift"
+  : !dirty [1740837644, 1907674]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/SelectingKeynoteVC.swift"
+  : !dirty [1740848432, 746715900]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/SpeechAnalysis/SpeechAnalyzer.swift"
+  : !dirty [1740837644, 4273493]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/FileUploadViewModel.swift"
+  : !dirty [1740837644, 5502292]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/HomeViewModel.swift"
+  : !dirty [1740850475, 253789620]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/VideoPlayerViewModel.swift"
+  : !dirty [1740837644, 7855655]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ProgressCardView.swift"
+  : !dirty [1740837644, 9433116]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptRow.swift"
+  : !dirty [1740844557, 292212540]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptsList.swift"
+  : !dirty [1740837644, 11715982]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/SearchBarView.swift"
+  : !dirty [1740837644, 12757493]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/TopSpeechCard.swift"
+  : !dirty [1740837644, 14114224]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/OnboardingView.swift"
+  : !dirty [1740837644, 15286494]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAModels.swift"
+  : !dirty [1740837644, 16495507]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAPracticeView.swift"
+  : !dirty [1740837644, 17564242]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAViewModel.swift"
+  : !dirty [1740837644, 18402288]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnACard.swift"
+  : !dirty [1740837644, 19158815]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAModels.swift"
+  : !dirty [1740837644, 19868015]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAView.swift"
+  : !dirty [1740837644, 20710260]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAViewModel.swift"
+  : !dirty [1740837644, 21333268]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptCreationView.swift"
+  : !dirty [1740848111, 127470210]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptInfoView.swift"
+  : !dirty [1740837644, 23062153]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptsListView.swift"
+  : !dirty [1740837644, 23886214]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/SpeechDetailView.swift"
+  : !dirty [1740837644, 24646529]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/UserProfileView.swift"
+  : !dirty [1740837644, 25239331]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/LandingPageHostingController.swift"
+  : !dirty [1740837644, 25884011]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/AnswerCollectionViewCell.swift"
+  : !dirty [1740837644, 26720737]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/QnaDataController.swift"
+  : !dirty [1740837644, 27149043]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/QuestionCollectionViewCell.swift"
+  : !dirty [1740837644, 27567189]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/ReportViewController.swift"
+  : !dirty [1740837644, 28035934]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/SuggestedCollectionViewCell.swift"
+  : !dirty [1740837644, 28465264]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/CustomQuestionCell.swift"
+  : !dirty [1740837644, 29045477]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/Data-QuestionAndAnswer.swift"
+  : !dirty [1740837644, 29466546]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/QuestionAnswerList.swift"
+  : !dirty [1740837644, 32170451]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/QuestionDetailViewController.swift"
+  : !dirty [1740837644, 32847277]
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/SiriWaveView.swift": !dirty [1740837644, 33590995]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/ViewController.swift"
+  : !dirty [1740837644, 34271277]
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/api_Key.swift": !dirty [1740837644, 28752410]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/questionAndAnsVC.swift"
+  : !dirty [1740837644, 30389041]
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/SceneDelegate.swift": !dirty [1740837644, 35108661]
+  ? "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/DerivedSources/GeneratedAssetSymbols.swift"
+  : !dirty [1740850912, 800885250]

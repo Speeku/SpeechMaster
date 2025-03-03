@@ -70,6 +70,7 @@ struct LandingPageView: View {
                                         .frame(height:120)
                                         .clipShape(.rect(cornerRadius: 10))
                                         .padding(.horizontal)
+                                        .padding(.top,-15)
                                     
 
                                 }
@@ -81,6 +82,7 @@ struct LandingPageView: View {
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .padding(.horizontal, 17)
+                                    .padding(.bottom,-1)
 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 10) {
@@ -90,7 +92,8 @@ struct LandingPageView: View {
                                             }
                                         }
                                     }
-                                    .padding(.horizontal, 22)
+                                    .padding(.horizontal, 18)
+                                
                                 }
                             }
 
@@ -111,6 +114,7 @@ struct LandingPageView: View {
                                     lastCreatedScriptName: viewModel.scripts.first?.title ?? "No recent scripts"
                                 )
                                 .padding(.horizontal, 17)
+                                .padding(.top,-10)
                             }
                             .padding(.vertical, 8)
 

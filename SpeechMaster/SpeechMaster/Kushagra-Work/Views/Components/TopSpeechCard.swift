@@ -45,12 +45,12 @@ struct TopSpeechCard: View {
                         .font(.headline)
                         .foregroundStyle(.white)
                         .lineLimit(1)
-                    
+//                    
                     Text(speech.description)
                         .font(.subheadline)
                         .foregroundStyle(.white.opacity(0.9))
                         .lineLimit(1)
-                    
+//                    
                     // Duration and Featured Badge
                     HStack {
                         Label(formatDuration(speech.duration), systemImage: "clock")

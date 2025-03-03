@@ -1,0 +1,100 @@
+{
+  "" : {
+    "const-values" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master.swiftconstvalues",
+    "dependencies" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master.d",
+    "diagnostics" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master.dia",
+    "emit-module-dependencies" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master-emit-module.dia",
+    "swift-dependencies" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GoogleGenerativeAI-master.swiftdeps"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/Chat.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Chat.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Chat.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Chat.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/CountTokensRequest.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/CountTokensRequest.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/CountTokensRequest.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/CountTokensRequest.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/Errors.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Errors.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Errors.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Errors.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/FunctionCalling.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/FunctionCalling.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/FunctionCalling.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/FunctionCalling.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerateContentError.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentError.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentError.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentError.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerateContentRequest.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentRequest.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentRequest.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentRequest.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerateContentResponse.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentResponse.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentResponse.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerateContentResponse.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerationConfig.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerationConfig.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerationConfig.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerationConfig.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerativeAIRequest.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIRequest.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIRequest.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIRequest.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerativeAIService.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIService.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIService.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAIService.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerativeAISwift.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAISwift.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAISwift.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeAISwift.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/GenerativeModel.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeModel.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeModel.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/GenerativeModel.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/JSONValue.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/JSONValue.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/JSONValue.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/JSONValue.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/Logging.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Logging.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Logging.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Logging.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/ModelContent.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/ModelContent.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/ModelContent.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/ModelContent.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/PartsRepresentable+Image.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable+Image.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable+Image.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable+Image.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/PartsRepresentable.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/PartsRepresentable.o"
+  },
+  "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/Sources/GoogleAI/Safety.swift" : {
+    "index-unit-output-path" : "/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Safety.o",
+    "llvm-bc" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Safety.bc",
+    "object" : "/Users/apple/Library/Developer/Xcode/DerivedData/SpeechMaster-ccuiaxezkrxgzfezinliyziwpzai/SourcePackages/checkouts/generative-ai-swift/build/generative-ai-swift.build/Release-iphoneos/GoogleGenerativeAI.build/Objects-normal/arm64/Safety.o"
+  }
+}

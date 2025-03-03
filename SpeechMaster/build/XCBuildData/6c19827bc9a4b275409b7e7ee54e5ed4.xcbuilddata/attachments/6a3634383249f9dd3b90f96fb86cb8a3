@@ -1,0 +1,65 @@
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/circularProgressBar.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/RoundedEndProgress.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/CompareCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCellCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/GifsPresenter/gifLoader.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress\ Session/cellTableViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress\ Session/MemorizationViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress\ Session/ProgressViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress\ Session/ScriptEditViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress\ Session/SessionDetailsViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ProgressData\ Model/SessionsDataModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Models/TopSpeech.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/KeynoteService/KeynoteManager.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/SpeechAnalysis/SpeechAnalyzer.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/CoachView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/FillerWordsDetailViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/MissingWordsDetailViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PaceMeterView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PerformanceResultsViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PerformanceSettingsViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PerformanceViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PitchGraphView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/PronunciationDetailViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush\ 3.0/SelectingKeynoteVC.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/FileUploadViewModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/HomeViewModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/VideoPlayerViewModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ProgressCardView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptRow.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptsList.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/SearchBarView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/TopSpeechCard.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAModels.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAPracticeView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAViewModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnACard.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAModels.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAViewModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/OnboardingView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptCreationView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptInfoView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptsListView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/SpeechDetailView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/UserProfileView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/LandingPageView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/API/AnswerCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/API/QnaDataController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/API/QuestionCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/API/ReportViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/API/SuggestedCollectionViewCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/api_Key.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/CustomQuestionCell.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/Data-QuestionAndAnswer.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/questionAndAnsVC.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/QuestionAnswerList.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/QuestionDetailViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/SiriWaveView.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA\ Section/ViewController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/AppDelegate.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/DataModel.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/LandingPageHostingController.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/SceneDelegate.swift
+/Users/apple/Library/Mobile\ Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/DerivedSources/GeneratedAssetSymbols.swift

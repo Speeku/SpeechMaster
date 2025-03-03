@@ -171,6 +171,8 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var reheraseB: UIButton!
     @IBOutlet weak var pageControll: UIPageControl!
+    @IBOutlet weak var memorizeButton: UIButton! // New button for memorization
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -204,7 +206,8 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         // Add empty state message
         tableView.backgroundView = createEmptyStateView()
         
-        
+        // Setup memorize button
+      //  setupMemorizeButton()
     }
     
     private func configureTableView() {
@@ -269,6 +272,20 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             width: tableView.frame.width,
             height: tableViewHeight
         )
+        
+        // Update rehearse button width to make room for memorize button
+        if memorizeButton != nil {
+            // Adjust rehearse button width to be about 60% of available width
+            let availableWidth = view.bounds.width - 40 // 20 points padding on each side
+            let rehearseButtonWidth = availableWidth * 0.6
+            
+            reheraseB.frame = CGRect(
+                x: 20,
+                y: reheraseB.frame.origin.y,
+                width: rehearseButtonWidth,
+                height: reheraseB.frame.height
+            )
+        }
     }
     
     func updateLongPress(){
@@ -433,6 +450,40 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             tableView.backgroundView?.isHidden = !sessions.isEmpty
         }
     }
+    
+//    private func setupMemorizeButton() {
+//        // Create memorize button if it doesn't exist in storyboard
+//        if memorizeButton == nil {
+//            let button = UIButton(type: .system)
+//            button.translatesAutoresizingMaskIntoConstraints = false
+//            button.setTitle("Memorize", for: .normal)
+//            button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+//            button.backgroundColor = .systemIndigo
+//            button.setTitleColor(.white, for: .normal)
+//            button.layer.cornerRadius = 10
+//            button.clipsToBounds = true
+//            
+//            view.addSubview(button)
+//            
+//            // Position beside rehearse button
+//            NSLayoutConstraint.activate([
+//                button.centerYAnchor.constraint(equalTo: reheraseB.centerYAnchor),
+//                button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+//                button.leadingAnchor.constraint(equalTo: reheraseB.trailingAnchor, constant: 16),
+//                button.heightAnchor.constraint(equalTo: reheraseB.heightAnchor)
+//            ])
+//            
+//            button.addTarget(self, action: #selector(memorizeButtonTapped), for: .touchUpInside)
+//            memorizeButton = button
+//        }
+//    }
+    
+//    @objc public func memorizeButtonTapped() {
+//        let memorizationVC = MemorizationViewController()
+//        memorizationVC.scriptId = scriptId
+//        memorizationVC.scriptTitle = scriptTitle
+//        navigationController?.pushViewController(memorizationVC, animated: true)
+//    }
     
     }
 

@@ -8,6 +8,9 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     
+    // Add property to track if keynote is being used
+    private var isUsingKeynote: Bool = false
+    
     private let timerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -230,7 +233,8 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         return documentsPath.appendingPathComponent("performance_recording.mp4")
     }
     
-    init() {
+    init(withKeynote: Bool = false) {
+        self.isUsingKeynote = withKeynote
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -249,7 +253,14 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         navigationItem.titleView = timerLabel
         setupUI()
         setupCamera()
-        loadKeynote()
+        
+        // Only load keynote if we're using it
+        if isUsingKeynote {
+            loadKeynote()
+        } else {
+            // Hide keynote container if not using keynote
+            keynoteContainerView.isHidden = true
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -293,18 +304,20 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             multiplier: 0.3
         )
         
-        NSLayoutConstraint.activate([
-            // Keynote container - edge to edge, just below navigation bar
-            keynoteContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            keynoteContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            keynoteContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            keynoteHeightConstraint!,  // Use the stored constraint
+        // Create constraints
+        var constraints = [NSLayoutConstraint]()
+        
+        // Common constraints for both with and without keynote
+        constraints += [
+            // Controls stack view - moved to absolute bottom
+            controlsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            controlsStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
             
-            // Camera view - edge to edge and fills remaining space
-            cameraView.topAnchor.constraint(equalTo: keynoteContainerView.bottomAnchor),
-            cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cameraView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            cameraView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            // Bottom black background for buttons - adjusted to match new button position
+            bottomBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomBackgroundView.heightAnchor.constraint(equalToConstant: 100),
             
             // Gradient view constraints - same frame as scriptPreviewTextView
             scriptPreviewGradientView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -317,17 +330,10 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             scriptPreviewTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scriptPreviewTextView.bottomAnchor.constraint(equalTo: controlsStackView.topAnchor, constant: -6),
             scriptPreviewTextView.heightAnchor.constraint(equalToConstant: 80), // Height for approximately 2 lines
-            
-            // Controls stack view - moved to absolute bottom
-            controlsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            controlsStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
-            
-            // Bottom black background for buttons - adjusted to match new button position
-            bottomBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            bottomBackgroundView.heightAnchor.constraint(equalToConstant: 100),
-            
+        ]
+        
+        // Add settings popup constraints
+        constraints += [
             // Settings popup constraints
             settingsPopupView.leadingAnchor.constraint(equalTo: settingsButton.leadingAnchor, constant: -16),
             settingsPopupView.bottomAnchor.constraint(equalTo: settingsButton.topAnchor, constant: -8),
@@ -353,7 +359,35 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             
             autoScrollSwitch.centerYAnchor.constraint(equalTo: autoScrollLabel.centerYAnchor),
             autoScrollSwitch.trailingAnchor.constraint(equalTo: settingsPopupView.trailingAnchor, constant: -16),
-        ])
+        ]
+        
+        if isUsingKeynote {
+            // With keynote constraints
+            constraints += [
+                // Keynote container - edge to edge, just below navigation bar
+                keynoteContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                keynoteContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                keynoteContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                keynoteHeightConstraint!,  // Use the stored constraint
+                
+                // Camera view - edge to edge and fills remaining space
+                cameraView.topAnchor.constraint(equalTo: keynoteContainerView.bottomAnchor),
+                cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                cameraView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                cameraView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            ]
+        } else {
+            // Without keynote constraints - camera view covers the entire screen
+            constraints += [
+                // Camera view - edge to edge and fills entire screen
+                cameraView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                cameraView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                cameraView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                cameraView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            ]
+        }
+        
+        NSLayoutConstraint.activate(constraints)
         
         // Update regular control buttons with smaller size
         let buttonConfigs = [

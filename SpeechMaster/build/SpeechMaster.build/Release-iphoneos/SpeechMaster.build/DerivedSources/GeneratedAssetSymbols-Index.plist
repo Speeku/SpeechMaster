@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colors</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameAppBackground</string>
+			<key>relativePath</key>
+			<string>./AppBackground.colorset</string>
+			<key>swiftSymbol</key>
+			<string>appBackground</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameProgressCardColorAudienceEngagement</string>
+			<key>relativePath</key>
+			<string>./ProgressCardColorAudienceEngagement.colorset</string>
+			<key>swiftSymbol</key>
+			<string>progressCardColorAudienceEngagement</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameProgressCardColorOverallImprovement</string>
+			<key>relativePath</key>
+			<string>./ProgressCardColorOverallImprovement.colorset</string>
+			<key>swiftSymbol</key>
+			<string>progressCardColorOverallImprovement</string>
+		</dict>
+	</array>
+	<key>images</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameAE</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/AE.imageset</string>
+			<key>swiftSymbol</key>
+			<string>AE</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameBMP</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/BMP.imageset</string>
+			<key>swiftSymbol</key>
+			<string>BMP</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameCDGKNSTXYZ</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/CDGKNSTXYZ.imageset</string>
+			<key>swiftSymbol</key>
+			<string>CDGKNSTXYZ</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameFW</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/FW.imageset</string>
+			<key>swiftSymbol</key>
+			<string>FW</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameHighlights</string>
+			<key>relativePath</key>
+			<string>./Highlights.imageset</string>
+			<key>swiftSymbol</key>
+			<string>highlights</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameL</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/L.imageset</string>
+			<key>swiftSymbol</key>
+			<string>L</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameO</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/O.imageset</string>
+			<key>swiftSymbol</key>
+			<string>O</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameQW</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/QW.imageset</string>
+			<key>swiftSymbol</key>
+			<string>QW</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameR</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/R.imageset</string>
+			<key>swiftSymbol</key>
+			<string>R</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTH</string>
+			<key>relativePath</key>
+			<string>./Pronunciation Faces/TH.imageset</string>
+			<key>swiftSymbol</key>
+			<string>TH</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameAppLogo</string>
+			<key>relativePath</key>
+			<string>./app_logo.imageset</string>
+			<key>swiftSymbol</key>
+			<string>appLogo</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameBarackObama</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/barack_obama.imageset</string>
+			<key>swiftSymbol</key>
+			<string>barackObama</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameBreneBrown</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/brene_brown.imageset</string>
+			<key>swiftSymbol</key>
+			<string>breneBrown</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameElonMusk</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/elon_musk.imageset</string>
+			<key>swiftSymbol</key>
+			<string>elonMusk</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameGraph</string>
+			<key>relativePath</key>
+			<string>./graph.imageset</string>
+			<key>swiftSymbol</key>
+			<string>graph</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameJkRowling</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/jk_rowling.imageset</string>
+			<key>swiftSymbol</key>
+			<string>jkRowling</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameLaunchScreen</string>
+			<key>relativePath</key>
+			<string>./launch_screen.imageset</string>
+			<key>swiftSymbol</key>
+			<string>launchScreen</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMalalaYousafzai</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/malala_yousafzai.imageset</string>
+			<key>swiftSymbol</key>
+			<string>malalaYousafzai</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameMartinLutherKing</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/martin_luther_king.imageset</string>
+			<key>swiftSymbol</key>
+			<string>martinLutherKing</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNamePitchGraph</string>
+			<key>relativePath</key>
+			<string>./pitchGraph.imageset</string>
+			<key>swiftSymbol</key>
+			<string>pitchGraph</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameRogerFederer</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/roger_federer.imageset</string>
+			<key>swiftSymbol</key>
+			<string>rogerFederer</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSimonSinek</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/simon_sinek.imageset</string>
+			<key>swiftSymbol</key>
+			<string>simonSinek</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameSteveJobs</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/steve_jobs.imageset</string>
+			<key>swiftSymbol</key>
+			<string>steveJobs</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameWinstonChurchill</string>
+			<key>relativePath</key>
+			<string>./TopSpeechSectionImages/winston_churchill.imageset</string>
+			<key>swiftSymbol</key>
+			<string>winstonChurchill</string>
+		</dict>
+	</array>
+	<key>symbols</key>
+	<array/>
+</dict>
+</plist>

@@ -1,4 +1,8 @@
 import SwiftUI
+import UIKit
+
+// Import the actual MemorizationViewController class
+// This assumes it's in the same module, so no special import is needed
 
 struct StoryboardView: UIViewControllerRepresentable {
     let script: Script
@@ -38,7 +42,7 @@ struct ScriptRow: View {
     let script: Script
     @ObservedObject var viewModel: HomeViewModel
     @State private var showingInfoSheet = false
-    //private let dataSource = DataController.shared
+    
     var body: some View {
         HStack(spacing: 16) {
             NavigationLink(destination: StoryboardView(script: script)) {
@@ -46,6 +50,7 @@ struct ScriptRow: View {
                     HStack {
                         Text(script.title)
                             .font(.headline)
+                            .foregroundColor(.black)
                         if script.isPinned {
                             Image(systemName: "pin.fill")
                                 .foregroundColor(.blue)
@@ -58,14 +63,16 @@ struct ScriptRow: View {
                 }
             }
             Spacer()
+            
+            // Practice Button
             Button {
                 viewModel.currentScriptID = script.id
                 viewModel.uploadedScriptText = script.scriptText
                 viewModel.navigateToPiyushScreen = true
             } label: {
-                Image(systemName: "arrow.clockwise.circle")
-                    .foregroundColor(.gray)
-                    .font(.system(size: 18, weight: .semibold))
+                Image(systemName: "play.circle.fill")
+                    .foregroundColor(.blue)
+                    .font(.system(size: 22, weight: .semibold))
             }
         }
         .padding()
@@ -84,6 +91,12 @@ struct ScriptRow: View {
             }) {
                 Label(script.isPinned ? "Unpin" : "Pin to Top", 
                       systemImage: script.isPinned ? "pin.slash" : "pin")
+            }
+            
+            Button(action: {
+                ShareUtility.shareScriptAsPDF(script)
+            }) {
+                Label("Share as PDF", systemImage: "square.and.arrow.up")
             }
             
             Button(role: .destructive, action: {
