@@ -70,7 +70,7 @@ struct LandingPageView: View {
                                         .frame(height:120)
                                         .clipShape(.rect(cornerRadius: 10))
                                         .padding(.horizontal)
-                                        .padding(.top,-15)
+                                        .padding(.top,-8)
                                     
 
                                 }
