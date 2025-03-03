@@ -69,7 +69,6 @@ struct TopSpeechCard: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .frame(width: 170, height: 200)
-        .shadow(radius: 5)
     }
     
     private func formatDuration(_ duration: TimeInterval) -> String {
