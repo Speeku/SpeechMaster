@@ -46,10 +46,10 @@ struct TopSpeechCard: View {
                         .foregroundStyle(.white)
                         .lineLimit(1)
 //                    
-                    Text(speech.description)
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.9))
-                        .lineLimit(1)
+                    //Text(speech.description)
+                     //   .font(.subheadline)
+                    //    .foregroundStyle(.white.opacity(0.9))
+                    //    .lineLimit(1)
 //                    
                     // Duration and Featured Badge
                     HStack {

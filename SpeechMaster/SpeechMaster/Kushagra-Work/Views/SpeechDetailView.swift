@@ -78,14 +78,12 @@ struct SpeechDetailView: View {
     
     // MARK: - Header Section
     private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(speech.title)
                         .font(.title2)
                         .fontWeight(.bold)
-            
+            Text(speech.description)
             HStack(spacing: 16) {
-                statsView(icon: "eye.fill", value: formatViewCount(viewModel.videoDetails[speech.imageName]?.viewCount ?? 0))
-                statsView(icon: "star.fill", value: String(format: "%.1f", viewModel.videoDetails[speech.imageName]?.rating ?? 0))
                 statsView(icon: "calendar", value: "\(speech.year)")
                 statsView(icon: "clock", value: formatDuration(speech.duration))
             }
