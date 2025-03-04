@@ -318,21 +318,29 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
             reheraseB.setTitle("Rehearse Again", for: .normal)
             reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-            display = "No Practice Sessions"  // Set message for practice sessions
+            let sessions = dataSource.getSessions(for: scriptId)
+            if sessions.isEmpty{
+                display = "No Practice Sessions"
+            }else{
+                tableView.backgroundView?.isHidden = !sessions.isEmpty
+            }
+              // Set message for practice sessions
         } else {
             reheraseB.setTitle("Practice Q&A", for: .normal)
             reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-            display = "No Q&A Sessions Available"  // Set message for Q&A sessions
+            let qnaSessions = dataSource.getQnASessions(for: scriptId)
+            if qnaSessions.isEmpty{
+                display = "No Q&A Sessions Available"
+            }else{
+                tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
+            
+            }
+              // Set message for Q&A sessions
         }
         
         // Update visibility based on whether there are sessions
-        if segemtedControlOutlet.selectedSegmentIndex == 0 {
-            let sessions = dataSource.getSessions(for: scriptId)
-            tableView.backgroundView?.isHidden = !sessions.isEmpty
-        } else {
-            let qnaSessions = dataSource.getQnASessions(for: scriptId)
-            tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
-        }
+           
+            
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
