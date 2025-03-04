@@ -84,7 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
-				96B930252D77446900E693EA /* Frameworks */,
 				05511DDF2D118E7300E26F10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,13 +96,6 @@
 				05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		96B930252D77446900E693EA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
