@@ -23,29 +23,29 @@ struct ProgressCardView: View {
         return viewModel.sessionsArray.filter { $0.scriptId == scriptId }.count
     }
     
-    private var improvementStatus: String {
-        let progress = Double(progressPercentage)
-        switch progress {
-        case 0..<30: return "Getting Started 🌱"
-        case 30..<60: return "Making Progress ⭐️"
-        case 60..<80: return "Doing Great 🌟"
-        default: return "Outstanding 👑"
-        }
-    }
+//    private var improvementStatus: String {
+//        let progress = Double(progressPercentage)
+//        switch progress {
+//        case 0..<30: return "Getting Started 🌱"
+//        case 30..<60: return "Making Progress ⭐️"
+//        case 60..<80: return "Doing Great 🌟"
+//        default: return "Outstanding 👑"
+//        }
+//    }
     
-    private var averageSessionDuration: String {
-        guard let scriptId = currentScriptId else { return "0 min" }
-        
-        let scriptSessions = viewModel.sessionsArray.filter { $0.scriptId == scriptId }
-        let scriptSessionIds = Set(scriptSessions.map { $0.id })
-        let scriptReports = viewModel.userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-        
-        guard !scriptReports.isEmpty else { return "0 min" }
-        
-        let totalDuration = scriptReports.reduce(0.0) { $0 + $1.duration }
-        let averageMinutes = Int(totalDuration / Double(scriptReports.count) / 60.0)
-        return "\(averageMinutes) min"
-    }
+//    private var averageSessionDuration: String {
+//        guard let scriptId = currentScriptId else { return "0 min" }
+//        
+//        let scriptSessions = viewModel.sessionsArray.filter { $0.scriptId == scriptId }
+//        let scriptSessionIds = Set(scriptSessions.map { $0.id })
+//        let scriptReports = viewModel.userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+//        
+//        guard !scriptReports.isEmpty else { return "0 min" }
+//        
+//        let totalDuration = scriptReports.reduce(0.0) { $0 + $1.duration }
+//        let averageMinutes = Int(totalDuration / Double(scriptReports.count) / 60.0)
+//        return "\(averageMinutes) min"
+//    }
     
     private var recentImprovement: Double {
         viewModel.calculateRecentImprovement(for: currentScriptId)
@@ -53,6 +53,7 @@ struct ProgressCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
+            BottomContentView(lastCreatedScriptName: lastCreatedScriptName)
             // Top row
             HStack(alignment: .center, spacing: 16) {
                 // Progress percentage
@@ -62,7 +63,7 @@ struct ProgressCardView: View {
                 
                 ProgressBarsView(progress: progress)
                 
-                Spacer(minLength: 24)
+                Spacer(minLength: 18)
                 
                 // Simplified session count display
                 VStack(alignment: .center, spacing: 2) {
@@ -77,12 +78,12 @@ struct ProgressCardView: View {
             }
             
             // Bottom content
-            BottomContentView(lastCreatedScriptName: lastCreatedScriptName)
+            
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
-        .background(Color.green.opacity(0.1))
+        .background(Color.blue.opacity(0.1))
         .cornerRadius(16)
     }
 }
@@ -120,141 +121,143 @@ private struct BottomContentView: View {
     let lastCreatedScriptName: String?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Overall Improvement")
+                .font(.system(size: 26, weight: .bold))
+                .foregroundColor(.black.opacity(0.5))
+            
             Text("Script: \(lastCreatedScriptName ?? "No recent scripts")")
                 .font(.system(size: 14, weight: .semibold))
                 .foregroundColor(.black.opacity(0.6))
             
-            Text("Overall Improvement")
-                .font(.system(size: 26, weight: .bold))
-                .foregroundColor(.black.opacity(0.5))
+          
         }
     }
 }
 
-struct StatItem: View {
-    let icon: String
-    let value: String
-    let label: String
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.caption)
-                Text(value)
-                    .font(.subheadline.weight(.semibold))
-                    .monospacedDigit()
-            }
-            .foregroundStyle(color)
-            
-            Text(label)
-                .font(.caption)
-                .foregroundStyle(color.opacity(0.7))
-        }
-    }
-}
-
-struct StatBox: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(color)
-                Text(title)
-                    .foregroundColor(.secondary)
-                    .font(.subheadline)
-            }
-            
-            Text(value)
-                .font(.title2.bold())
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-    }
-}
-
-struct DetailStatItem: View {
-    let icon: String
-    let value: String
-    let label: String
-    let color: Color
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image(systemName: icon)
-                .foregroundColor(color)
-                .font(.title2)
-            
-            Text(value)
-                .font(.system(size: 16, weight: .semibold))
-            
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-    }
-}
-
-struct LabeledDivider: View {
-    let text: String
-    
-    var body: some View {
-    HStack {
-            Text(text)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-            
-            Rectangle()
-                .fill(Color(.separator))
-                .frame(height: 1)
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-struct ImprovementTipView: View {
-    let progress: Double
-    
-    private var tip: (title: String, description: String) {
-        if progress < 30 {
-            return ("Focus on Basics", "Start with short scripts and practice regularly to build confidence.")
-        } else if progress < 60 {
-            return ("Keep Growing", "Try varying your pace and incorporating gestures into your delivery.")
-        } else if progress < 80 {
-            return ("Polish Your Skills", "Work on advanced techniques like vocal variety and audience engagement.")
-        } else {
-            return ("Master Level", "Share your expertise and try mentoring others in public speaking.")
-        }
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(tip.title)
-                .font(.headline)
-            
-            Text(tip.description)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-    }
-}
+//struct StatItem: View {
+//    let icon: String
+//    let value: String
+//    let label: String
+//    let color: Color
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 4) {
+//            HStack(spacing: 4) {
+//                Image(systemName: icon)
+//                    .font(.caption)
+//                Text(value)
+//                    .font(.subheadline.weight(.semibold))
+//                    .monospacedDigit()
+//            }
+//            .foregroundStyle(color)
+//            
+//            Text(label)
+//                .font(.caption)
+//                .foregroundStyle(color.opacity(0.7))
+//        }
+//    }
+//}
+//
+//struct StatBox: View {
+//    let title: String
+//    let value: String
+//    let icon: String
+//    let color: Color
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            HStack {
+//                Image(systemName: icon)
+//                    .foregroundColor(color)
+//                Text(title)
+//                    .foregroundColor(.secondary)
+//                    .font(.subheadline)
+//            }
+//            
+//            Text(value)
+//                .font(.title2.bold())
+//        }
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(12)
+//    }
+//}
+//
+//struct DetailStatItem: View {
+//    let icon: String
+//    let value: String
+//    let label: String
+//    let color: Color
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 8) {
+//            Image(systemName: icon)
+//                .foregroundColor(color)
+//                .font(.title2)
+//            
+//            Text(value)
+//                .font(.system(size: 16, weight: .semibold))
+//            
+//            Text(label)
+//                .font(.caption)
+//                .foregroundColor(.secondary)
+//        }
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(12)
+//    }
+//}
+//
+//struct LabeledDivider: View {
+//    let text: String
+//    
+//    var body: some View {
+//    HStack {
+//            Text(text)
+//                .font(.subheadline)
+//                .foregroundColor(.secondary)
+//            
+//            Rectangle()
+//                .fill(Color(.separator))
+//                .frame(height: 1)
+//        }
+//        .padding(.vertical, 8)
+//    }
+//}
+//
+//struct ImprovementTipView: View {
+//    let progress: Double
+//    
+//    private var tip: (title: String, description: String) {
+//        if progress < 30 {
+//            return ("Focus on Basics", "Start with short scripts and practice regularly to build confidence.")
+//        } else if progress < 60 {
+//            return ("Keep Growing", "Try varying your pace and incorporating gestures into your delivery.")
+//        } else if progress < 80 {
+//            return ("Polish Your Skills", "Work on advanced techniques like vocal variety and audience engagement.")
+//        } else {
+//            return ("Master Level", "Share your expertise and try mentoring others in public speaking.")
+//        }
+//    }
+//    
+//    var body: some View {
+//        VStack(alignment: .leading, spacing: 12) {
+//            Text(tip.title)
+//                .font(.headline)
+//            
+//            Text(tip.description)
+//                .font(.subheadline)
+//                .foregroundColor(.secondary)
+//        }
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .padding()
+//        .background(Color.white)
+//        .cornerRadius(12)
+//    }
+//}
 
 extension Color {
     init(hex: String) {
@@ -282,18 +285,3 @@ extension Color {
     }
 }
 
-//#Preview {
-//    VStack {
-//        ProgressCardView(
-//            viewModel: HomeViewModel.shared, 
-//            title: "Overall Improvement",
-//          //  progress: 65,
-//            fgColor: .black,
-//            bgColor: .green.opacity(0.1),
-//            circleColor: .green,
-//            lastCreatedScriptName: "Presentation Script"
-//        )
-//        .padding()
-//    }
-//    .background(Color(.systemBackground))
-//}
