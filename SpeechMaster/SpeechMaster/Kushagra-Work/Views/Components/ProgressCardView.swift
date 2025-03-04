@@ -281,19 +281,3 @@ extension Color {
         )
     }
 }
-
-//#Preview {
-//    VStack {
-//        ProgressCardView(
-//            viewModel: HomeViewModel.shared, 
-//            title: "Overall Improvement",
-//          //  progress: 65,
-//            fgColor: .black,
-//            bgColor: .green.opacity(0.1),
-//            circleColor: .green,
-//            lastCreatedScriptName: "Presentation Script"
-//        )
-//        .padding()
-//    }
-//    .background(Color(.systemBackground))
-//}

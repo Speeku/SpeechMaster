@@ -1,9 +1,6 @@
 import SwiftUI
 import UIKit
 
-// Import the actual MemorizationViewController class
-// This assumes it's in the same module, so no special import is needed
-
 struct StoryboardView: UIViewControllerRepresentable {
     let script: Script
     

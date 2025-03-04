@@ -314,7 +314,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             }else{
                 tableView.backgroundView?.isHidden = !sessions.isEmpty
             }
-              // Set message for practice sessions
+            // Set message for practice sessions
         } else {
             reheraseB.setTitle("Practice Q&A", for: .normal)
             reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
@@ -323,14 +323,14 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                 display = "No Q&A Sessions Available"
             }else{
                 tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
-            
+                
             }
-              // Set message for Q&A sessions
+            // Set message for Q&A sessions
         }
         
         // Update visibility based on whether there are sessions
-           
-            
+        
+        
     }
     
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
@@ -437,48 +437,4 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             tableView.backgroundView?.isHidden = !sessions.isEmpty
         }
     }
-    
-    //    private func setupMemorizeButton() {
-    //        // Create memorize button if it doesn't exist in storyboard
-    //        if memorizeButton == nil {
-    //            let button = UIButton(type: .system)
-    //            button.translatesAutoresizingMaskIntoConstraints = false
-    //            button.setTitle("Memorize", for: .normal)
-    //            button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-    //            button.backgroundColor = .systemIndigo
-    //            button.setTitleColor(.white, for: .normal)
-    //            button.layer.cornerRadius = 10
-    //            button.clipsToBounds = true
-    //            
-    //            view.addSubview(button)
-    //            
-    //            // Position beside rehearse button
-    //            NSLayoutConstraint.activate([
-    //                button.centerYAnchor.constraint(equalTo: reheraseB.centerYAnchor),
-    //                button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-    //                button.leadingAnchor.constraint(equalTo: reheraseB.trailingAnchor, constant: 16),
-    //                button.heightAnchor.constraint(equalTo: reheraseB.heightAnchor)
-    //            ])
-    //            
-    //            button.addTarget(self, action: #selector(memorizeButtonTapped), for: .touchUpInside)
-    //            memorizeButton = button
-    //        }
-    //    }
-    
-    //    @objc public func memorizeButtonTapped() {
-    //        let memorizationVC = MemorizationViewController()
-    //        memorizationVC.scriptId = scriptId
-    //        memorizationVC.scriptTitle = scriptTitle
-    //        navigationController?.pushViewController(memorizationVC, animated: true)
-    //    }
-    
-    //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    //        if indexPath.row == 0 {
-    //            return CGSize(width: 353, height: 218)
-    //        }
-    //        return CGSize(width: collectionView.bounds.width - 20, height: 100)
-    //    }
-    //    }
-    
 }
-
