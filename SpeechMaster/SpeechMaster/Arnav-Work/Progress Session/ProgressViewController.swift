@@ -18,16 +18,6 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     private let dataSource = HomeViewModel.shared
     var scriptId: UUID = HomeViewModel.shared.currentScriptID// Add scriptId property
     
-    let gifImage = UIImage.gifImageWithName("man")
-    
-    
-    //    var sessions : [Sessions] = [
-    //        Sessions(name: "Session 1", date: "10.01.2025"),
-    //        Sessions(name: "Session 2", date: "12.01.2025"),
-    //        Sessions(name: "Session 3", date: "14.01.2025"),
-    //        Sessions(name: "Session 4", date: "15.01.2025")
-    //        
-    //    ]
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

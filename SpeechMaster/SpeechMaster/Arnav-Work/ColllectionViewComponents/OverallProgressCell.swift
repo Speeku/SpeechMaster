@@ -1,6 +1,8 @@
 import UIKit
 
 class OverallProgressCell: UICollectionViewCell {
+    
+    var dataSource = HomeViewModel.shared
     // MARK: - UI Elements
     private let circularProgressView: MultiColorCircularProgressView = {
         let view = MultiColorCircularProgressView(frame: .zero)
@@ -256,7 +258,7 @@ class OverallProgressCell: UICollectionViewCell {
         updateValueLabel(pronunciationValueLabel, improvement: 0.7) // +10%
         
         // Calculate overall improvement (average)
-        let overallImprovement = (70 + 10 + 10) / 3.0  // = 30%
+        let overallImprovement = dataSource.calculateOverallImprovement(for: dataSource.currentScriptID)
         overallPercentLabel.text = String(format: "%.0f%%", overallImprovement)
         
         // Update the circle with actual proportional values
