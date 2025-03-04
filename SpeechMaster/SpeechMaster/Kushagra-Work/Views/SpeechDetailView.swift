@@ -6,11 +6,8 @@ struct SpeechDetailView: View {
     @ObservedObject var viewModel: VideoPlayerViewModel
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
-    @State private var selectedTab = 0
     @State private var showingShareSheet = false
     @State private var isBookmarked = false
-    
-    private let tabs = ["Analysis", "Transcript"]
     
     var body: some View {
         ScrollView {
@@ -23,14 +20,15 @@ struct SpeechDetailView: View {
                     // Header Section
                     headerSection
                     
-                    // Tab Selection
-                    CustomSegmentedControl(selection: $selectedTab, items: tabs)
-                        .padding(.horizontal)
-                    
-                    // Tab Content
-                    tabContent
+                    // Analysis Content
+                    if let details = viewModel.videoDetails[speech.imageName] {
+                        ForEach(details.summary) { section in
+                            AnalysisSectionCard(section: section)
+                        }
+                    }
                 }
                 .padding(.top, 20)
+                .padding(.horizontal)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -54,14 +52,14 @@ struct SpeechDetailView: View {
     
     // MARK: - Video Player Section
     private var videoPlayerSection: some View {
-                GeometryReader { geometry in
-                                    VideoPlayerView(urlString: viewModel.videoDetails[speech.imageName]?.videoURL ?? "")
+        GeometryReader { geometry in
+            VideoPlayerView(urlString: viewModel.videoDetails[speech.imageName]?.videoURL ?? "")
                 .frame(width: geometry.size.width, height: geometry.size.width * 9 / 16)
                 .overlay(alignment: .bottomTrailing) {
                     qualityBadge
                 }
-                                }
-                                .frame(height: UIScreen.main.bounds.width * 9 / 16)
+        }
+        .frame(height: UIScreen.main.bounds.width * 9 / 16)
     }
     
     private var qualityBadge: some View {
@@ -80,8 +78,8 @@ struct SpeechDetailView: View {
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 5) {
             Text(speech.title)
-                        .font(.title2)
-                        .fontWeight(.bold)
+                .font(.title2)
+                .fontWeight(.bold)
             Text(speech.description)
             HStack(spacing: 16) {
                 statsView(icon: "calendar", value: "\(speech.year)")
@@ -98,44 +96,6 @@ struct SpeechDetailView: View {
             }
             .padding(.top, 4)
         }
-        .padding(.horizontal)
-    }
-    
-    // MARK: - Tab Content
-    @ViewBuilder
-    private var tabContent: some View {
-        switch selectedTab {
-        case 0:
-            analysisTab
-        case 1:
-            transcriptTab
-        default:
-            EmptyView()
-        }
-    }
-    
-    private var analysisTab: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            if let details = viewModel.videoDetails[speech.imageName] {
-                ForEach(details.summary) { section in
-                    AnalysisSectionCard(section: section)
-                }
-            }
-        }
-        .padding(.horizontal)
-    }
-    
-    private var transcriptTab: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if let transcript = viewModel.videoDetails[speech.imageName]?.transcript {
-                Text(transcript)
-                    .font(.body)
-            } else {
-                Text("Transcript not available")
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(.horizontal)
     }
     
     // MARK: - Helper Views

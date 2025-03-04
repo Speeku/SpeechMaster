@@ -247,15 +247,20 @@ class OverallProgressCell: UICollectionViewCell {
     }
     
     func testWithSimpleValues() {
-        // Update progress bars with actual values
-        fillersProgressView.progress = 0.7     // 70% for fillers (green)
-        missingWordsProgressView.progress = 0.1 // 10% for missing words (yellow)
-        pronunciationProgressView.progress = 0.1 // 10% for pronunciation (blue)
+        // Get actual improvement values from HomeViewModel
+        let fillerImprovement = dataSource.calculateFillerWordsImprovement(for: dataSource.currentScriptID)
+        let missingImprovement = dataSource.calculateMissingWordsImprovement(for: dataSource.currentScriptID)
+        let pronunciationImprovement = dataSource.calculatePronunciationImprovement(for: dataSource.currentScriptID)
         
-        // Update percentage labels with same values
-        updateValueLabel(fillersValueLabel, improvement: 0.7)     // +70%
-        updateValueLabel(missingWordsValueLabel, improvement: 0.7) // +10%
-        updateValueLabel(pronunciationValueLabel, improvement: 0.7) // +10%
+        // Update progress bars with actual values (convert to Float and normalize to 0-1 range)
+        fillersProgressView.progress = Float(abs(fillerImprovement) / 100)
+        missingWordsProgressView.progress = Float(abs(missingImprovement) / 100)
+        pronunciationProgressView.progress = Float(abs(pronunciationImprovement) / 100)
+        
+        // Update percentage labels with actual improvement values
+        updateValueLabel(fillersValueLabel, improvement: fillerImprovement / 100)
+        updateValueLabel(missingWordsValueLabel, improvement: missingImprovement / 100)
+        updateValueLabel(pronunciationValueLabel, improvement: pronunciationImprovement / 100)
         
         // Calculate overall improvement (average)
         let overallImprovement = dataSource.calculateOverallImprovement(for: dataSource.currentScriptID)
@@ -263,9 +268,9 @@ class OverallProgressCell: UICollectionViewCell {
         
         // Update the circle with actual proportional values
         circularProgressView.setSegmentValues(
-            fillers: 70,    // This will take up most of the circle since it's 70%
-            missing: 70,    // Small segment for 10%
-            pronunciation: 70 // Small segment for 10%
+            fillers: Int(abs(fillerImprovement)),
+            missing: Int(abs(missingImprovement)),
+            pronunciation: Int(abs(pronunciationImprovement))
         )
     }
 } 

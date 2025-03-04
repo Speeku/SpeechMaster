@@ -37,7 +37,7 @@ struct LandingPageView: View {
                         
                         // Header
                         HStack {
-                            Text("Eloquent")
+                            Text("Eloquence")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             Spacer()
@@ -140,7 +140,7 @@ struct LandingPageView: View {
                                 } else {
                                     ScriptsList(scripts: viewModel.scripts, viewModel: viewModel)
                                         .padding(.horizontal)
-                                    Spacer()
+                                    
                                 }
                             }
                         }

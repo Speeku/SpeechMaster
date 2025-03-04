@@ -560,7 +560,7 @@ class HomeViewModel: ObservableObject {
             
             return averageScore
         }
-        
+
         func calculateRecentImprovement(for scriptId: UUID? = nil) -> Double {
             guard let scriptId = scriptId else { return 0 }
             
@@ -585,6 +585,72 @@ class HomeViewModel: ObservableObject {
             
             let latestScore = calculateScore(for: latest)
             let previousScore = calculateScore(for: previous)
+            let improvement = ((latestScore - previousScore) / previousScore) * 100
+            return max(-100, min(100, improvement))
+        }
+
+        func calculateFillerWordsImprovement(for scriptId: UUID? = nil) -> Double {
+            let targetScriptId = scriptId ?? scripts.first?.id
+            
+            guard let scriptId = targetScriptId else { return 0 }
+            
+            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
+            let scriptSessionIds = Set(scriptSessions.map { $0.id })
+            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+                .sorted { $0.sessionID > $1.sessionID }
+            
+            guard scriptReports.count >= 2 else { return 0 }
+            
+            let latest = scriptReports[0]
+            let previous = scriptReports[1]
+            
+            let latestScore = max(0, 100 - (Double(latest.fillerWords.count) * 5))
+            let previousScore = max(0, 100 - (Double(previous.fillerWords.count) * 5))
+            
+            let improvement = ((latestScore - previousScore) / previousScore) * 100
+            return max(-100, min(100, improvement))
+        }
+        
+        func calculateMissingWordsImprovement(for scriptId: UUID? = nil) -> Double {
+            let targetScriptId = scriptId ?? scripts.first?.id
+            
+            guard let scriptId = targetScriptId else { return 0 }
+            
+            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
+            let scriptSessionIds = Set(scriptSessions.map { $0.id })
+            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+                .sorted { $0.sessionID > $1.sessionID }
+            
+            guard scriptReports.count >= 2 else { return 0 }
+            
+            let latest = scriptReports[0]
+            let previous = scriptReports[1]
+            
+            let latestScore = max(0, 100 - (Double(latest.missingWords.count) * 5))
+            let previousScore = max(0, 100 - (Double(previous.missingWords.count) * 5))
+            
+            let improvement = ((latestScore - previousScore) / previousScore) * 100
+            return max(-100, min(100, improvement))
+        }
+        
+        func calculatePronunciationImprovement(for scriptId: UUID? = nil) -> Double {
+            let targetScriptId = scriptId ?? scripts.first?.id
+            
+            guard let scriptId = targetScriptId else { return 0 }
+            
+            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
+            let scriptSessionIds = Set(scriptSessions.map { $0.id })
+            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
+                .sorted { $0.sessionID > $1.sessionID }
+            
+            guard scriptReports.count >= 2 else { return 0 }
+            
+            let latest = scriptReports[0]
+            let previous = scriptReports[1]
+            
+            // Assuming pronunciation score is based on words per minute as a proxy
+            let latestScore = min(100, Double(latest.wordsPerMinute))
+            let previousScore = min(100, Double(previous.wordsPerMinute))
             
             let improvement = ((latestScore - previousScore) / previousScore) * 100
             return max(-100, min(100, improvement))
