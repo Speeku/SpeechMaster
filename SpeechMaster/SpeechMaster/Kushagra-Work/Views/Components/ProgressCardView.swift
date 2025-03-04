@@ -126,8 +126,8 @@ private struct BottomContentView: View {
                 .foregroundColor(.black.opacity(0.6))
             
             Text("Overall Improvement")
-                .font(.system(size: 26, weight: .bold))
-                .foregroundColor(.black.opacity(0.5))
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.black.opacity(0.9))
         }
     }
 }

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 961768A22D610C26006C6DAF /* GoogleGenerativeAI */; };
+		96B930282D7744B100E693EA /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 96B930272D7744B100E693EA /* GoogleGenerativeAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,7 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */,
+				96B930282D7744B100E693EA /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
+				96B930252D77446900E693EA /* Frameworks */,
 				05511DDF2D118E7300E26F10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +97,13 @@
 				05511DFE2D118E7400E26F10 /* SpeechMasterUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		96B930252D77446900E693EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,7 +126,7 @@
 			);
 			name = SpeechMaster;
 			packageProductDependencies = (
-				961768A22D610C26006C6DAF /* GoogleGenerativeAI */,
+				96B930272D7744B100E693EA /* GoogleGenerativeAI */,
 			);
 			productName = SpeechMaster;
 			productReference = 05511DDE2D118E7300E26F10 /* SpeechMaster.app */;
@@ -198,7 +206,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				18BD192C2D3A69AA004A1471 /* XCRemoteSwiftPackageReference "Charts" */,
-				961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				96B930262D7744B100E693EA /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 05511DDF2D118E7300E26F10 /* Products */;
@@ -282,9 +290,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KG2H5D767;
+				DEVELOPMENT_TEAM = MM968H474S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eloquence;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "for keynotes";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
@@ -302,7 +312,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery23hjh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMasteryi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -319,9 +329,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KG2H5D767;
+				DEVELOPMENT_TEAM = MM968H474S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eloquence;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "for keynotes";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
@@ -339,7 +351,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery23hjh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMasteryi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -589,7 +601,7 @@
 				minimumVersion = 5.1.0;
 			};
 		};
-		961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+		96B930262D7744B100E693EA /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google-gemini/generative-ai-swift";
 			requirement = {
@@ -600,9 +612,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		961768A22D610C26006C6DAF /* GoogleGenerativeAI */ = {
+		96B930272D7744B100E693EA /* GoogleGenerativeAI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			package = 96B930262D7744B100E693EA /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
 		};
 /* End XCSwiftPackageProductDependency section */
