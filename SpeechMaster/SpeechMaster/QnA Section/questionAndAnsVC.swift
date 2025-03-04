@@ -136,7 +136,7 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         return script.split(separator: " ").count
     }
     
-    let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
+    let model = HomeViewModel.shared.model
     
     func setQuestionNumber()->Int{
         switch words{
@@ -747,8 +747,4 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         navigationController?.popViewController(animated: true)
     }
 }
-#Preview{
-    let storyboard = UIStoryboard(name: "QuestionAndAnswers", bundle: nil)
-    let vc = storyboard.instantiateViewController(withIdentifier: "QuestionAnswer")
-    return vc
-}
+

@@ -699,7 +699,7 @@ struct ScriptCreationView: View {
     @State private var currentStage = 0
     @State private var showingGenerationError = false
     @State private var generationError = ""
-    private let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
+    private let model = HomeViewModel.shared.model
     
     // UI State
     @FocusState private var isEditorFocused: Bool
