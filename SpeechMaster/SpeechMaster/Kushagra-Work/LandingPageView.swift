@@ -37,7 +37,7 @@ struct LandingPageView: View {
                         
                         // Header
                         HStack {
-                            Text("Eloquence")
+                            Text("Eloquent")
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                             Spacer()
