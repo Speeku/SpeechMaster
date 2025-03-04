@@ -12,7 +12,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UITableViewDelegate,
                           UITableViewDataSource,
                           UICollectionViewDelegateFlowLayout,
-                          UIContextMenuInteractionDelegate {
+                              UIContextMenuInteractionDelegate {
     
     // Add property to use singleton
     private let dataSource = HomeViewModel.shared
@@ -21,14 +21,14 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     let gifImage = UIImage.gifImageWithName("man")
     
     
-//    var sessions : [Sessions] = [
-//        Sessions(name: "Session 1", date: "10.01.2025"),
-//        Sessions(name: "Session 2", date: "12.01.2025"),
-//        Sessions(name: "Session 3", date: "14.01.2025"),
-//        Sessions(name: "Session 4", date: "15.01.2025")
-//        
-//    ]
-                            
+    //    var sessions : [Sessions] = [
+    //        Sessions(name: "Session 1", date: "10.01.2025"),
+    //        Sessions(name: "Session 2", date: "12.01.2025"),
+    //        Sessions(name: "Session 3", date: "14.01.2025"),
+    //        Sessions(name: "Session 4", date: "15.01.2025")
+    //        
+    //    ]
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
@@ -42,10 +42,10 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
             if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
-                    let sessions = dataSource.getSessions(for: scriptId)
-                    cell.topicName = sessions[indexPath.row].title
-                    cell.dateName = sessions[indexPath.row].createdAt.description
-                    cell.setup()
+                let sessions = dataSource.getSessions(for: scriptId)
+                cell.topicName = sessions[indexPath.row].title
+                cell.dateName = sessions[indexPath.row].createdAt.description
+                cell.setup()
                 return cell
             }
         } else {
@@ -81,37 +81,16 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.row == 0{
-//            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCollectionViewCell", for: indexPath) as? ProgressCollectionViewCell{
-//                print("Sucesss")
-//                cell.title1.text = "Audience\nEngagement"
-//                cell.topicName1.text = self.scriptTitle
-//                cell.title1Percent.text = "50%"
-//                cell.updateCircle1(percentage: 0.5, progresscolor: .orange)
-//                
-//                // step2
-//                cell.title2.text = "Overall\nImprovement"
-//                cell.topicName2.text = self.scriptTitle
-//                cell.title2percent.text = "40%"
-//                cell.updateCircle2(percentage: 0.4, progresscolor: .systemGreen)
-//                cell.image.image = gifImage
-//                
-//                
-//                pageControll.currentPage = indexPath.row
-//                return cell
-           
-              if let cell =   collectionView.dequeueReusableCell(withReuseIdentifier: "ProgressCellCollectionViewCell", for: indexPath)
-                as? ProgressCellCollectionViewCell{
-                  cell.title.text = "Overall\nEngagement"
-                 // cell.fileName.text = self.scriptTitle
-                  cell.percent1.text = "40%"
-                  cell.image.image = gifImage
-                  cell.updateCircle1(percentage: 0.4, progresscolor: .systemGreen)
-                  return cell
-                }
-           
+        if indexPath.row == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OverallProgressCell", for: indexPath) as? OverallProgressCell else {
+                return UICollectionViewCell()
             }
             
+            // Use this for testing
+            cell.testWithSimpleValues() // or cell.testWithDummyData() if you want to use the full version
+            
+            return cell
+        }
         
         if indexPath.row == 1{
             if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell{
@@ -123,7 +102,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             print("Failed")
             return UICollectionViewCell()
         }
-       
+        
         return UICollectionViewCell()
     }
     
@@ -139,7 +118,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     }
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-        // actions defined
+            // actions defined
             let edit = UIAction(title: "Edit", image: UIImage(systemName: "pencil")) { _ in
                 print("Edit Tapped")
                 self.performSegue(withIdentifier: "TextViewController", sender :self)
@@ -159,10 +138,10 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                                 if segue.identifier == "TextViewController",
-                                    let destinationVC = segue.destination as? ScriptEditViewController {
-                                     destinationVC.editScriptText = scriptText
-                                 }}
+        if segue.identifier == "TextViewController",
+           let destinationVC = segue.destination as? ScriptEditViewController {
+            destinationVC.editScriptText = scriptText
+        }}
     var scriptTitle : String = ""
     var scriptText : String = ""
     @IBOutlet weak var textView: UITextView!
@@ -207,7 +186,17 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         tableView.backgroundView = createEmptyStateView()
         
         // Setup memorize button
-      //  setupMemorizeButton()
+        //  setupMemorizeButton()
+        
+        // Register the cell class programmatically
+        collectionView.register(OverallProgressCell.self, forCellWithReuseIdentifier: "OverallProgressCell")
+        
+        // Setup collection view layout
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumInteritemSpacing = 10
+            layout.minimumLineSpacing = 10
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        }
     }
     
     private func configureTableView() {
@@ -293,14 +282,14 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         textView.addInteraction(contextMenuInteraction)
     }
     func updateCollectionView(){
-       
+        
         
         
         let progressNib = UINib(nibName: "ProgressCellCollectionViewCell", bundle: nil)
         let compareNib = UINib(nibName: "CompareCollectionViewCell", bundle: nil)
         collectionView.register(compareNib, forCellWithReuseIdentifier: "CompareCollectionViewCell")
         collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCellCollectionViewCell")
-//        collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCollectionViewCell")
+        //        collectionView.register(progressNib, forCellWithReuseIdentifier: "ProgressCollectionViewCell")
         
     }
     
@@ -317,7 +306,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         collectionView.clipsToBounds = true
     }
     
-      
+    
     
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -351,7 +340,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         updateButtonName()
         updateEmptyStateVisibility()
     }
-
+    
     
     @IBAction func rehearseButtonTap(_ sender: Any) {
         if segemtedControlOutlet.selectedSegmentIndex == 0{
@@ -362,23 +351,23 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     }
     @IBAction func pageControlTapped(_ sender: UIPageControl) {
         
-       /* tell the exact position of the page
-       1) like sender.currentPage tell the position of the dot
-       2) collection.frame.width tell the width of the cell
-        
-   ***    So,  if we are on page 0
-          sender.currentPage = 0
-          and width let say is 300
-        so newXposition = 0*300 = 0 -> we are on page 0
-        
-   ***    if we are on page 1 and want to move 0
-        so newXposition = 0*300 = 0
-        
-        .setContentOffset -> shift the collectionView to that position
-        and since we are doing horizontal scrolling we wouldn't
-        be changing y axis that's why y = 0
-        
-        */
+        /* tell the exact position of the page
+         1) like sender.currentPage tell the position of the dot
+         2) collection.frame.width tell the width of the cell
+         
+         ***    So,  if we are on page 0
+         sender.currentPage = 0
+         and width let say is 300
+         so newXposition = 0*300 = 0 -> we are on page 0
+         
+         ***    if we are on page 1 and want to move 0
+         so newXposition = 0*300 = 0
+         
+         .setContentOffset -> shift the collectionView to that position
+         and since we are doing horizontal scrolling we wouldn't
+         be changing y axis that's why y = 0
+         
+         */
         let newXposition = CGFloat(sender.currentPage) * collectionView.frame.width
         collectionView.setContentOffset(CGPoint(x: newXposition, y: 0), animated: true)
         
@@ -451,41 +440,47 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         }
     }
     
-//    private func setupMemorizeButton() {
-//        // Create memorize button if it doesn't exist in storyboard
-//        if memorizeButton == nil {
-//            let button = UIButton(type: .system)
-//            button.translatesAutoresizingMaskIntoConstraints = false
-//            button.setTitle("Memorize", for: .normal)
-//            button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
-//            button.backgroundColor = .systemIndigo
-//            button.setTitleColor(.white, for: .normal)
-//            button.layer.cornerRadius = 10
-//            button.clipsToBounds = true
-//            
-//            view.addSubview(button)
-//            
-//            // Position beside rehearse button
-//            NSLayoutConstraint.activate([
-//                button.centerYAnchor.constraint(equalTo: reheraseB.centerYAnchor),
-//                button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-//                button.leadingAnchor.constraint(equalTo: reheraseB.trailingAnchor, constant: 16),
-//                button.heightAnchor.constraint(equalTo: reheraseB.heightAnchor)
-//            ])
-//            
-//            button.addTarget(self, action: #selector(memorizeButtonTapped), for: .touchUpInside)
-//            memorizeButton = button
-//        }
-//    }
+    //    private func setupMemorizeButton() {
+    //        // Create memorize button if it doesn't exist in storyboard
+    //        if memorizeButton == nil {
+    //            let button = UIButton(type: .system)
+    //            button.translatesAutoresizingMaskIntoConstraints = false
+    //            button.setTitle("Memorize", for: .normal)
+    //            button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+    //            button.backgroundColor = .systemIndigo
+    //            button.setTitleColor(.white, for: .normal)
+    //            button.layer.cornerRadius = 10
+    //            button.clipsToBounds = true
+    //            
+    //            view.addSubview(button)
+    //            
+    //            // Position beside rehearse button
+    //            NSLayoutConstraint.activate([
+    //                button.centerYAnchor.constraint(equalTo: reheraseB.centerYAnchor),
+    //                button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+    //                button.leadingAnchor.constraint(equalTo: reheraseB.trailingAnchor, constant: 16),
+    //                button.heightAnchor.constraint(equalTo: reheraseB.heightAnchor)
+    //            ])
+    //            
+    //            button.addTarget(self, action: #selector(memorizeButtonTapped), for: .touchUpInside)
+    //            memorizeButton = button
+    //        }
+    //    }
     
-//    @objc public func memorizeButtonTapped() {
-//        let memorizationVC = MemorizationViewController()
-//        memorizationVC.scriptId = scriptId
-//        memorizationVC.scriptTitle = scriptTitle
-//        navigationController?.pushViewController(memorizationVC, animated: true)
-//    }
+    //    @objc public func memorizeButtonTapped() {
+    //        let memorizationVC = MemorizationViewController()
+    //        memorizationVC.scriptId = scriptId
+    //        memorizationVC.scriptTitle = scriptTitle
+    //        navigationController?.pushViewController(memorizationVC, animated: true)
+    //    }
     
-    }
-
-
+    //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    //        if indexPath.row == 0 {
+    //            return CGSize(width: 353, height: 218)
+    //        }
+    //        return CGSize(width: collectionView.bounds.width - 20, height: 100)
+    //    }
+    //    }
+    
+}
 
