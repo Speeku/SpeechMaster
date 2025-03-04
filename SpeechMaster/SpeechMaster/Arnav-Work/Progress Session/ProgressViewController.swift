@@ -34,7 +34,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             if let cell  = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? cellTableViewCell{
                 let sessions = dataSource.getSessions(for: scriptId)
                 cell.topicName = sessions[indexPath.row].title
-                cell.dateName = sessions[indexPath.row].createdAt.description
+                cell.dateName = sessions[indexPath.row].createdAt.formatted(date : .long ,time : .shortened)
                 cell.setup()
                 return cell
             }

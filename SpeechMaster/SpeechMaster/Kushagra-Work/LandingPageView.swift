@@ -140,7 +140,7 @@ struct LandingPageView: View {
                                 } else {
                                     ScriptsList(scripts: viewModel.scripts, viewModel: viewModel)
                                         .padding(.horizontal)
-                                    Spacer()
+                                    
                                 }
                             }
                         }
