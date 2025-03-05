@@ -15,8 +15,8 @@ enum PreviewRatio: String {
     
     var keynoteMultiplier: CGFloat {
         switch self {
-        case .thirty70: return 0.3
-        case .fifty50: return 0.5
+        case .thirty70: return 0.25
+        case .fifty50: return 0.4
         case .twenty80: return 0.2
         case .zero100: return 0.0
         }
