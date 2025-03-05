@@ -338,7 +338,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             // Set message for practice sessions
         } else {
             reheraseB.setTitle("Practice Q&A", for: .normal)
-            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
             let qnaSessions = dataSource.getQnASessions(for: scriptId)
             if qnaSessions.isEmpty{
                 display = "No Q&A Sessions Available"
