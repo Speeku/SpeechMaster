@@ -241,67 +241,7 @@ class HomeViewModel: ObservableObject {
         
         // MARK: - Memorization Methods
         
-//        func createMemorizationSession(for scriptId: UUID, technique: MemorizationTechnique) -> MemorizationSession {
-//            let scriptText = getScriptText(for: scriptId)
-//            let session = MemorizationSession(scriptId: scriptId, technique: technique)
-//            
-//            // Create sections based on the technique
-//            var newSession = session
-//            
-//            switch technique {
-//            case .chunking:
-//                // Split into paragraphs or sentences
-//                let paragraphs = scriptText.components(separatedBy: "\n\n").filter { !$0.isEmpty }
-//                var startIndex = 0
-//                
-//                for paragraph in paragraphs {
-//                    let endIndex = startIndex + paragraph.count
-//                    let section = MemorizationSection(startIndex: startIndex, endIndex: endIndex, text: paragraph)
-//                    newSession.sections.append(section)
-//                    startIndex = endIndex + 2 // +2 for the newline characters
-//                }
-//                
-//            case .recordAndListen:
-//                // For record and listen, we typically use the entire script as one section
-//                let section = MemorizationSection(startIndex: 0, endIndex: scriptText.count, text: scriptText)
-//                newSession.sections.append(section)
-//            }
-//            
-//            DispatchQueue.main.async {
-//                self.memorizationSessions.append(newSession)
-//                self.saveData()
-//            }
-//            
-//            return newSession
-//        }
-//        
-//        func getMemorizationSessions(for scriptId: UUID) -> [MemorizationSession] {
-//            return memorizationSessions.filter { $0.scriptId == scriptId }
-//                .sorted { $0.createdAt > $1.createdAt }
-//        }
-//        
-//        func updateMemorizationSession(_ session: MemorizationSession) {
-//            if let index = memorizationSessions.firstIndex(where: { $0.id == session.id }) {
-//                DispatchQueue.main.async {
-//                    self.memorizationSessions[index] = session
-//                    self.saveData()
-//                }
-//            }
-//        }
-//        
-//        func deleteMemorizationSession(_ session: MemorizationSession) {
-//            DispatchQueue.main.async {
-//                self.memorizationSessions.removeAll { $0.id == session.id }
-//                self.saveData()
-//            }
-//        }
-//        
-//        func calculateMemorizationProgress(for session: MemorizationSession) -> Double {
-//            guard !session.sections.isEmpty else { return 0.0 }
-//            
-//            let masteredCount = session.sections.filter { $0.mastered }.count
-//            return Double(masteredCount) / Double(session.sections.count)
-//        }
+
         
         // MARK: - Data Persistence
         private func saveData() {
@@ -321,9 +261,7 @@ class HomeViewModel: ObservableObject {
             if let reportsData = try? encoder.encode(userPerformanceReports) {
                 UserDefaults.standard.set(reportsData, forKey: StorageKeys.performanceReports)
             }
-//            if let memorizationData = try? encoder.encode(memorizationSessions) {
-//                UserDefaults.standard.set(memorizationData, forKey: StorageKeys.memorizationSessions)
-//            }
+
             
             UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
             UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
@@ -356,11 +294,6 @@ class HomeViewModel: ObservableObject {
                let decodedReports = try? decoder.decode([PerformanceReport].self, from: reportsData) {
                 userPerformanceReports = decodedReports
             }
-//            
-//            if let memorizationData = UserDefaults.standard.data(forKey: StorageKeys.memorizationSessions),
-//               let decodedMemorization = try? decoder.decode([MemorizationSession].self, from: memorizationData) {
-//                memorizationSessions = decodedMemorization
-//            }
             
             userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
             overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
