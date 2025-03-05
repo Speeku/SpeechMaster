@@ -168,6 +168,16 @@ class PronunciationDetailViewController: UIViewController, UITextFieldDelegate {
     init(pronunciationErrors: [SpeechAnalysisResult.PronunciationError]) {
         self.pronunciationErrors = pronunciationErrors
         super.init(nibName: nil, bundle: nil)
+        
+        // Configure audio session for speech synthesis
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, 
+                                                          mode: .default, 
+                                                          options: [.defaultToSpeaker, .allowBluetooth])
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to configure audio session: \(error)")
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -344,11 +354,14 @@ class PronunciationDetailViewController: UIViewController, UITextFieldDelegate {
         practiceTextField.text = "" // Clear text field when word is selected
         updatePracticeContainer(word)
         
-        // Pronounce the selected word
+        // Pronounce the selected word with enhanced settings
         let utterance = AVSpeechUtterance(string: word)
         utterance.voice = indianVoice
         utterance.rate = speedSwitch.isOn ? 0.4 : 0.7
         utterance.pitchMultiplier = 1.0
+        utterance.volume = 1.0  // Maximum volume
+        utterance.preUtteranceDelay = 0.0  // No delay before speaking
+        utterance.postUtteranceDelay = 0.0  // No delay after speaking
         synthesizer.speak(utterance)
         
         // Animate mouth for the selected word
@@ -359,10 +372,14 @@ class PronunciationDetailViewController: UIViewController, UITextFieldDelegate {
         let wordToPractice = selectedWord ?? ""
         guard !wordToPractice.isEmpty else { return }
         
+        // Pronounce the word with enhanced settings
         let utterance = AVSpeechUtterance(string: wordToPractice)
         utterance.voice = indianVoice
         utterance.rate = speedSwitch.isOn ? 0.4 : 0.7
         utterance.pitchMultiplier = 1.0
+        utterance.volume = 1.0  // Maximum volume
+        utterance.preUtteranceDelay = 0.0  // No delay before speaking
+        utterance.postUtteranceDelay = 0.0  // No delay after speaking
         synthesizer.speak(utterance)
         
         // Animate mouth for the word
@@ -507,11 +524,11 @@ class PronunciationDetailViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupNavigationBar() {
-        // Implementation of setupNavigationBar method
+        // baad me karna haa.
     }
     
     private func addPronunciationErrors() {
-        // Implementation of addPronunciationErrors method
+        // TO-DO
     }
     
     // Add text field change handler
