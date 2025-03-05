@@ -160,7 +160,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yqu-w1-lVN">
                                         <rect key="frame" x="8" y="8" width="377" height="30"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <connections>
                                             <action selector="rehearseButtonTap:" destination="PdR-uD-nB0" eventType="touchUpInside" id="Qz5-9S-5SI"/>
@@ -254,7 +254,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Lxh-rb-PyH">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ifp-nx-yx5"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="ifp-nx-yx5">
+                            <connections>
+                                <action selector="saveButton:" destination="Dzg-vE-jKV" id="bDr-ey-s6r"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="ScriptTextView" destination="gf0-44-c0Y" id="XCU-iR-j7I"/>

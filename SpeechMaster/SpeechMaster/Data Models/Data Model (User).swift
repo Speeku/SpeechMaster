@@ -34,7 +34,7 @@ struct Script: Identifiable,Codable,Equatable {
     let id: UUID
     //let userId: UUID
     let title: String
-    let scriptText: String
+    var scriptText: String
     //var progress: Double = 0
     let createdAt: Date
     //var isKeynoteAssociated: Bool

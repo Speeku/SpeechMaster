@@ -162,6 +162,16 @@ class HomeViewModel: ObservableObject {
         }
         return "Untitled Script"
     }
+    func setScriptText(for scriptId: UUID, text: String) {
+        if let index = scripts.firstIndex(where: { $0.id == scriptId }) {
+            print("📝 Updating script with ID: \(scriptId)")
+            scripts[index].scriptText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            saveData() // Make sure this is called to persist changes
+            print("📊 New script word count: \(text.split(separator: " ").count)")
+        } else {
+            print("⚠️ No script found for ID: \(scriptId)")
+        }
+    }
     
     // MARK: -  QNA Session Management
     

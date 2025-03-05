@@ -1,6 +1,7 @@
 import UIKit
 import Charts
 
+// Developed by Piyush 💀
 class SessionDetailsViewController: UIViewController {
     private let session: Session
     private let scrollView: UIScrollView = {

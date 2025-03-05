@@ -12,7 +12,8 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UITableViewDelegate,
                           UITableViewDataSource,
                           UICollectionViewDelegateFlowLayout,
-                              UIContextMenuInteractionDelegate {
+                              UIContextMenuInteractionDelegate,
+                              ScriptEditDelegate {
     
     // Add property to use singleton
     private let dataSource = HomeViewModel.shared
@@ -44,19 +45,14 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                 let session = qnaSessions[indexPath.row]
                 
                 // Format the date
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .medium
-                dateFormatter.timeStyle = .short
-                let formattedDate = dateFormatter.string(from: session.createdAt)
+//                let dateFormatter = DateFormatter()
+//                dateFormatter.dateStyle = .medium
+//                dateFormatter.timeStyle = .short
+//                let formattedDate = dateFormatter.string(from: session.createdAt)
                 
                 cell.topicName = session.title
-                cell.dateName = formattedDate
+                cell.dateName = session.createdAt.formatted(date: .long, time: .shortened)
                 cell.setup()
-                
-                // Debug print
-                print("Displaying QnA session: \(session.title)")
-                print("Created at: \(formattedDate)")
-                print("Session ID: \(session.id)")
                 
                 return cell
             }
@@ -128,10 +124,27 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "TextViewController",
-           let destinationVC = segue.destination as? ScriptEditViewController {
-            destinationVC.editScriptText = scriptText
-        }}
+        if let editVC = segue.destination as? ScriptEditViewController {
+            editVC.editScriptText = scriptText
+            editVC.delegate = self
+        }
+    }
+    
+    // ScriptEditDelegate implementation
+    func scriptDidUpdate(newText: String) {
+        scriptText = newText
+        textView.text = newText
+        
+        // Update the script in data source
+        dataSource.setScriptText(for: scriptId, text: newText)
+        
+        // Refresh the collection view to show updated progress
+        collectionView.reloadData()
+        
+        // Update any other UI elements that depend on the script text
+        updateCollectionView()
+    }
+    
     var scriptTitle : String = ""
     var scriptText : String = ""
     @IBOutlet weak var textView: UITextView!
@@ -144,7 +157,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        textView.text = scriptText
         // Configure navigation bar properly
         navigationItem.largeTitleDisplayMode = .never
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -188,7 +201,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
 //            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 //        }
         print(dataSource.getScriptTitle(for: scriptId))
-        self.title = dataSource.getScriptTitle(for: scriptId)
+        //self.title = dataSource.getScriptTitle(for: scriptId)
     }
     
     private func configureTableView() {
@@ -225,6 +238,12 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Refresh script text from data source
+        if let script = dataSource.scripts.first(where: { $0.id == scriptId }) {
+            scriptText = script.scriptText
+            textView.text = scriptText
+        }
         
         // Ensure navigation bar is visible and configured correctly
         navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -309,7 +328,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     func updateButtonName() {
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
             reheraseB.setTitle("Rehearse Again", for: .normal)
-            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .heavy)
+            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .medium)
             let sessions = dataSource.getSessions(for: scriptId)
             if sessions.isEmpty{
                 display = "No Practice Sessions"

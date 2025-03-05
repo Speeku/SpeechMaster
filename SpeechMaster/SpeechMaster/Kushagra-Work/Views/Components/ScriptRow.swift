@@ -26,7 +26,8 @@ struct StoryboardView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         if let VC = uiViewController as? ProgressViewController {
             VC.scriptTitle = script.title
-            VC.textView.text = script.scriptText
+            VC.scriptText = script.scriptText
+            //VC.textView.text = script.scriptText
             VC.navigationItem.title = script.title
             VC.scriptText = script.scriptText
             VC.scriptId = script.id  // Update script ID if view controller is updated
@@ -110,5 +111,4 @@ struct ScriptRow: View {
         .buttonStyle(.plain)
     }
 }
-#Preview {
-}
+
