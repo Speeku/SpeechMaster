@@ -1,0 +1,24 @@
+{
+  "originHash" : "d9ac89cf618a010bbb192df7a5922d342c69a591c87acf7f13b970e58e9165c5",
+  "pins" : [
+    {
+      "identity" : "charts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielgindi/Charts",
+      "state" : {
+        "revision" : "dd9c72e3d7e751e769971092a6bd72d39198ae63",
+        "version" : "5.1.0"
+      }
+    },
+    {
+      "identity" : "generative-ai-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google-gemini/generative-ai-swift",
+      "state" : {
+        "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd",
+        "version" : "0.5.6"
+      }
+    }
+  ],
+  "version" : 3
+}

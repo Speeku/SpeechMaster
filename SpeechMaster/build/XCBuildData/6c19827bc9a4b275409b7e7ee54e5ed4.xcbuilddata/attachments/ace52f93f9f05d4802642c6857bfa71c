@@ -1,0 +1,335 @@
+{
+  "" : {
+    "const-values" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master.swiftconstvalues",
+    "dependencies" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master.d",
+    "diagnostics" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master.dia",
+    "emit-module-dependencies" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master-emit-module.dia",
+    "swift-dependencies" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechMaster-master.swiftdeps"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/AppDelegate.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AppDelegate.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/RoundedEndProgress.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/RoundedEndProgress.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/RoundedEndProgress.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/RoundedEndProgress.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/CircleProgressView/circularProgressBar.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/circularProgressBar.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/circularProgressBar.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/circularProgressBar.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/CompareCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CompareCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CompareCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CompareCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCellCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCellCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCellCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCellCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ColllectionViewComponents/ProgressCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/GifsPresenter/gifLoader.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/gifLoader.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/gifLoader.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/gifLoader.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/MemorizationViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MemorizationViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MemorizationViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MemorizationViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/ProgressViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/ScriptEditViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptEditViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptEditViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptEditViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/SessionDetailsViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionDetailsViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionDetailsViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionDetailsViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/Progress Session/cellTableViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/cellTableViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/cellTableViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/cellTableViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Arnav-Work/ProgressData Model/SessionsDataModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionsDataModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionsDataModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SessionsDataModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/DataModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/DataModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/DataModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/DataModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/LandingPageView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Models/TopSpeech.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeech.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeech.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeech.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/CoachView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CoachView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CoachView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CoachView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/FillerWordsDetailViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FillerWordsDetailViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FillerWordsDetailViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FillerWordsDetailViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/KeynoteService/KeynoteManager.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/KeynoteManager.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/KeynoteManager.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/KeynoteManager.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/MissingWordsDetailViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MissingWordsDetailViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MissingWordsDetailViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/MissingWordsDetailViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PaceMeterView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PaceMeterView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PaceMeterView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PaceMeterView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceResultsViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceResultsViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceResultsViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceResultsViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceSettingsViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceSettingsViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceSettingsViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceSettingsViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PerformanceViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PerformanceViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PitchGraphView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PitchGraphView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PitchGraphView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PitchGraphView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/PronunciationDetailViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PronunciationDetailViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PronunciationDetailViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/PronunciationDetailViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/SelectingKeynoteVC.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SelectingKeynoteVC.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SelectingKeynoteVC.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SelectingKeynoteVC.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Piyush 3.0/SpeechAnalysis/SpeechAnalyzer.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechAnalyzer.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechAnalyzer.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechAnalyzer.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/FileUploadViewModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FileUploadViewModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FileUploadViewModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/FileUploadViewModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/HomeViewModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/HomeViewModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/HomeViewModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/HomeViewModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/ViewModels/VideoPlayerViewModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/VideoPlayerViewModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/VideoPlayerViewModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/VideoPlayerViewModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ProgressCardView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCardView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCardView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ProgressCardView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptRow.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptRow.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptRow.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptRow.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/ScriptsList.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsList.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsList.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsList.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/SearchBarView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SearchBarView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SearchBarView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SearchBarView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/Components/TopSpeechCard.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeechCard.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeechCard.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/TopSpeechCard.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/OnboardingView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/OnboardingView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/OnboardingView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/OnboardingView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAModels.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAModels.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAModels.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAModels.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAPracticeView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAPracticeView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAPracticeView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAPracticeView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/AIQnAViewModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAViewModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAViewModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AIQnAViewModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnACard.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnACard.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnACard.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnACard.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAModels.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAModels.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAModels.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAModels.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/QnA/QnAViewModel.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAViewModel.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAViewModel.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnAViewModel.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptCreationView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptCreationView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptCreationView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptCreationView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptInfoView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptInfoView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptInfoView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptInfoView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/ScriptsListView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsListView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsListView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ScriptsListView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/SpeechDetailView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechDetailView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechDetailView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SpeechDetailView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/Kushagra-Work/Views/UserProfileView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/UserProfileView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/UserProfileView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/UserProfileView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/LandingPageHostingController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageHostingController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageHostingController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/LandingPageHostingController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/AnswerCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AnswerCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AnswerCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/AnswerCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/QnaDataController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnaDataController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnaDataController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QnaDataController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/QuestionCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/ReportViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ReportViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ReportViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ReportViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/API/SuggestedCollectionViewCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SuggestedCollectionViewCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SuggestedCollectionViewCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SuggestedCollectionViewCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/CustomQuestionCell.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CustomQuestionCell.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CustomQuestionCell.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/CustomQuestionCell.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/Data-QuestionAndAnswer.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/Data-QuestionAndAnswer.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/Data-QuestionAndAnswer.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/Data-QuestionAndAnswer.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/QuestionAnswerList.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionAnswerList.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionAnswerList.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionAnswerList.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/QuestionDetailViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionDetailViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionDetailViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/QuestionDetailViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/SiriWaveView.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SiriWaveView.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SiriWaveView.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SiriWaveView.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/ViewController.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ViewController.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ViewController.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/ViewController.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/api_Key.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/api_Key.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/api_Key.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/api_Key.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/QnA Section/questionAndAnsVC.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/questionAndAnsVC.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/questionAndAnsVC.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/questionAndAnsVC.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/SpeechMaster/SceneDelegate.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SceneDelegate.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SceneDelegate.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/SceneDelegate.o"
+  },
+  "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/apple/Library/Mobile Documents/com~apple~CloudDocs/SpeechMaster/SpeechMaster/build/SpeechMaster.build/Release-iphoneos/SpeechMaster.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  }
+}

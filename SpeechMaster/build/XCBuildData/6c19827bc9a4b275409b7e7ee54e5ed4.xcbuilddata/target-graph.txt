@@ -1,0 +1,6 @@
+Target dependency graph (3 targets)
+Target 'SpeechMaster' in project 'SpeechMaster'
+➜ Explicit dependency on target 'GoogleGenerativeAI' in project 'generative-ai-swift'
+Target 'GoogleGenerativeAI' in project 'generative-ai-swift'
+➜ Explicit dependency on target 'GoogleGenerativeAI' in project 'generative-ai-swift'
+Target 'GoogleGenerativeAI' in project 'generative-ai-swift' (no dependencies)

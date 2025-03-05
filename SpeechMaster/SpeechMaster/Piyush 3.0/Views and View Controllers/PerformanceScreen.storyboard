@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_3" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Selecting KeynoteVC-->
+        <scene sceneID="AAk-SJ-PHo">
+            <objects>
+                <viewController storyboardIdentifier="SelectingKeynoteVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Oka-Gs-pF1" customClass="SelectingKeynoteVC" customModule="SpeechMaster" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aWY-aD-ReE">
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="27" translatesAutoresizingMaskIntoConstraints="NO" id="1np-Gs-aSc">
+                                <rect key="frame" x="20" y="187.33333333333334" width="362" height="482.66666666666663"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speech Practice" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzA-Ww-zVr">
+                                        <rect key="frame" x="59.333333333333329" y="0.0" width="243.33333333333337" height="39.666666666666664"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="33"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="waveform.and.person.filled" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="n2u-N5-jfh">
+                                        <rect key="frame" x="55.333333333333314" y="67.333333333333314" width="254" height="161"/>
+                                        <color key="tintColor" red="0.7883364558" green="0.65269988779999999" blue="0.80001550909999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="251.33000000000001" id="3po-Je-84A"/>
+                                            <constraint firstAttribute="height" constant="160" id="op4-IP-fHE"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6c-uu-9as">
+                                        <rect key="frame" x="27" y="253.66666666666663" width="308.33333333333337" height="61"/>
+                                        <string key="text">We can start rehersal now you just have
+to upload keynote or we can proceed
+without keynote also</string>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hky-2O-AMR">
+                                        <rect key="frame" x="27" y="341.66666666666663" width="308" height="57"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="308" id="GAC-ND-T9T"/>
+                                            <constraint firstAttribute="height" constant="57" id="hXq-Ox-DaD"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Upload Keynote">
+                                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="selectKeynote:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="giC-Q3-KGO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKb-zl-3ho">
+                                        <rect key="frame" x="27.666666666666657" y="425.66666666666663" width="307" height="57"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="307" id="naz-zo-t1b"/>
+                                            <constraint firstAttribute="height" constant="57" id="pdx-w1-GjM"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="filled" title="Without Keynote">
+                                            <fontDescription key="titleFontDescription" type="system" weight="semibold" pointSize="24"/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="withoutKeynoteTapped:" destination="Oka-Gs-pF1" eventType="touchUpInside" id="ke7-uF-QAF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Xgb-fr-Kqd"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="1np-Gs-aSc" firstAttribute="leading" secondItem="Xgb-fr-Kqd" secondAttribute="leading" constant="20" id="Hhl-Z4-he7"/>
+                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="bottom" secondItem="1np-Gs-aSc" secondAttribute="bottom" constant="170" id="fkV-RT-CdC"/>
+                            <constraint firstItem="Xgb-fr-Kqd" firstAttribute="trailing" secondItem="1np-Gs-aSc" secondAttribute="trailing" constant="20" id="m3c-Dj-J5V"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="nv6-2T-2zE"/>
+                    <connections>
+                        <outlet property="uploadKeynote" destination="hky-2O-AMR" id="wzh-18-muc"/>
+                        <outlet property="withoutKeynote" destination="KKb-zl-3ho" id="45p-EC-BNU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5bC-RR-ieP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1010" y="-38"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="waveform.and.person.filled" catalog="system" width="128" height="110"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

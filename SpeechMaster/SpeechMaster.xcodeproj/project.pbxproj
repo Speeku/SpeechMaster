@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 961768A22D610C26006C6DAF /* GoogleGenerativeAI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		05511DF52D118E7400E26F10 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -30,7 +34,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		05511E062D118E7400E26F10 /* Exceptions for "SpeechMaster" folder in "SpeechMaster" target */ = {
+		188402A72D3A45630085E5E3 /* Exceptions for "SpeechMaster" folder in "SpeechMaster" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -43,19 +47,9 @@
 		05511DE02D118E7300E26F10 /* SpeechMaster */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				05511E062D118E7400E26F10 /* Exceptions for "SpeechMaster" folder in "SpeechMaster" target */,
+				188402A72D3A45630085E5E3 /* Exceptions for "SpeechMaster" folder in "SpeechMaster" target */,
 			);
 			path = SpeechMaster;
-			sourceTree = "<group>";
-		};
-		05511DF72D118E7400E26F10 /* SpeechMasterTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SpeechMasterTests;
-			sourceTree = "<group>";
-		};
-		05511E012D118E7400E26F10 /* SpeechMasterUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SpeechMasterUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -65,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				961768A32D610C26006C6DAF /* GoogleGenerativeAI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,8 +84,6 @@
 			isa = PBXGroup;
 			children = (
 				05511DE02D118E7300E26F10 /* SpeechMaster */,
-				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
-				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 				05511DDF2D118E7300E26F10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,6 +118,7 @@
 			);
 			name = SpeechMaster;
 			packageProductDependencies = (
+				961768A22D610C26006C6DAF /* GoogleGenerativeAI */,
 			);
 			productName = SpeechMaster;
 			productReference = 05511DDE2D118E7300E26F10 /* SpeechMaster.app */;
@@ -142,9 +136,6 @@
 			);
 			dependencies = (
 				05511DF62D118E7400E26F10 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				05511DF72D118E7400E26F10 /* SpeechMasterTests */,
 			);
 			name = SpeechMasterTests;
 			packageProductDependencies = (
@@ -165,9 +156,6 @@
 			);
 			dependencies = (
 				05511E002D118E7400E26F10 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				05511E012D118E7400E26F10 /* SpeechMasterUITests */,
 			);
 			name = SpeechMasterUITests;
 			packageProductDependencies = (
@@ -208,6 +196,10 @@
 			);
 			mainGroup = 05511DD52D118E7300E26F10;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				18BD192C2D3A69AA004A1471 /* XCRemoteSwiftPackageReference "Charts" */,
+				961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 05511DDF2D118E7300E26F10 /* Products */;
 			projectDirPath = "";
@@ -287,23 +279,34 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MM968H474S;
+				DEVELOPMENT_TEAM = 7KG2H5D767;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eloquent;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "for keynotes";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "SpeechMaster needs access to save your practice session videos to your photo library.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMaster;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery23hjh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -315,23 +318,34 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = MM968H474S;
+				DEVELOPMENT_TEAM = 7KG2H5D767;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eloquent;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSDocumentsFolderUsageDescription = "for keynotes";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "SpeechMaster needs access to save your practice session videos to your photo library.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMaster;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gu.SpeechMastery23hjh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -569,6 +583,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		18BD192C2D3A69AA004A1471 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
+		961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google-gemini/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		961768A22D610C26006C6DAF /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 961768A12D610C26006C6DAF /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 05511DD62D118E7300E26F10 /* Project object */;
 }
