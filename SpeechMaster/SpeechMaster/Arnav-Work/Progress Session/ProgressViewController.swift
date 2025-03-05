@@ -115,16 +115,16 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             }
             
             
-            let regenerate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
-                print("Regenerate Tapped")
-            }
-            
-            let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { _ in
-                print("Share Tapped")
-            }
+//            let regenerate = UIAction(title: "Regenerate", image: UIImage(systemName: "arrow.2.circlepath.circle")) { _ in
+//                print("Regenerate Tapped")
+//            }
+//            
+//            let share = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up")) { _ in
+//                print("Share Tapped")
+//            }
             
             // Return the menu
-            return UIMenu(title: "", children: [edit, regenerate, share])
+            return UIMenu(title: "", children: [edit])
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -182,11 +182,13 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         collectionView.register(OverallProgressCell.self, forCellWithReuseIdentifier: "OverallProgressCell")
         
         // Setup collection view layout
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumInteritemSpacing = 10
-            layout.minimumLineSpacing = 10
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        }
+//        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+//            layout.minimumInteritemSpacing = 10
+//            layout.minimumLineSpacing = 10
+//            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+//        }
+        print(dataSource.getScriptTitle(for: scriptId))
+        self.title = dataSource.getScriptTitle(for: scriptId)
     }
     
     private func configureTableView() {
@@ -215,7 +217,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             layout.minimumInteritemSpacing = 0
             
             // Set collection view height
-            let heightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 250)
+            let heightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 218)
             heightConstraint.priority = .required // Make this required
             heightConstraint.isActive = true
         }
@@ -233,39 +235,39 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         tableView.reloadData()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        // Set fixed heights
-        let spacing: CGFloat = 16
-        
-        // Make sure table view doesn't overlap with button
-        let tableViewBottom = reheraseB.frame.origin.y - spacing
-        let tableViewTop = segemtedControlOutlet.frame.maxY + spacing
-        let tableViewHeight = tableViewBottom - tableViewTop
-        
-        // Update table view frame
-        tableView.frame = CGRect(
-            x: tableView.frame.origin.x,
-            y: tableViewTop,
-            width: tableView.frame.width,
-            height: tableViewHeight
-        )
-        
-        // Update rehearse button width to make room for memorize button
-        if memorizeButton != nil {
-            // Adjust rehearse button width to be about 60% of available width
-            let availableWidth = view.bounds.width - 40 // 20 points padding on each side
-            let rehearseButtonWidth = availableWidth * 0.6
-            
-            reheraseB.frame = CGRect(
-                x: 20,
-                y: reheraseB.frame.origin.y,
-                width: rehearseButtonWidth,
-                height: reheraseB.frame.height
-            )
-        }
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        
+//        // Set fixed heights
+//        let spacing: CGFloat = 16
+//        
+//        // Make sure table view doesn't overlap with button
+//        let tableViewBottom = reheraseB.frame.origin.y - spacing
+//        let tableViewTop = segemtedControlOutlet.frame.maxY + spacing
+//        let tableViewHeight = tableViewBottom - tableViewTop
+//        
+//        // Update table view frame
+//        tableView.frame = CGRect(
+//            x: tableView.frame.origin.x,
+//            y: tableViewTop,
+//            width: tableView.frame.width,
+//            height: tableViewHeight
+//        )
+//        
+//        // Update rehearse button width to make room for memorize button
+//        if memorizeButton != nil {
+//            // Adjust rehearse button width to be about 60% of available width
+//            let availableWidth = view.bounds.width - 40 // 20 points padding on each side
+//            let rehearseButtonWidth = availableWidth * 0.6
+//            
+//            reheraseB.frame = CGRect(
+//                x: 20,
+//                y: reheraseB.frame.origin.y,
+//                width: rehearseButtonWidth,
+//                height: reheraseB.frame.height
+//            )
+//        }
+//    }
     
     func updateLongPress(){
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
@@ -307,7 +309,7 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     func updateButtonName() {
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
             reheraseB.setTitle("Rehearse Again", for: .normal)
-            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .bold)
+            reheraseB.titleLabel?.font = .systemFont(ofSize: 20, weight: .heavy)
             let sessions = dataSource.getSessions(for: scriptId)
             if sessions.isEmpty{
                 display = "No Practice Sessions"
@@ -389,52 +391,115 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             if qnaSessions.isEmpty {
                 print("No QnA sessions to display")
                 return
+            }else{
+                let selectedSession = qnaSessions[indexPath.row]
+                
+                // Get questions for this session
+                let questions = dataSource.getQuestions(for: selectedSession.id)
+                print("Loading report for session: \(selectedSession.title)")
+                print("Found \(questions.count) questions for session ID: \(selectedSession.id)")
+                
+                // Create and configure QuestionAnswerList
+                if let questionListVC = UIStoryboard(name: "QuestionAndAnswers", bundle: nil)
+                    .instantiateViewController(withIdentifier: "QuestionAnswerList") as? QuestionAnswerList {
+                    
+                    // Pass the questions to QuestionAnswerList and mark as viewing existing session
+                    questionListVC.qna_dataController.questions = questions
+                    questionListVC.isViewingExistingSession = true
+                    
+                    // Push the view controller
+                    navigationController?.pushViewController(questionListVC, animated: true)
+                    // ... rest of your Q&A handling code ...
+                }
             }
-            // ... rest of your Q&A handling code ...
         }
     }
-    
-    // Add this as a property
-    private var emptyStateLabel: UILabel?
-    private var display: String = "" {
-        didSet {
-            emptyStateLabel?.text = display
+        // Add this as a property
+        private var emptyStateLabel: UILabel?
+        private var display: String = "" {
+            didSet {
+                emptyStateLabel?.text = display
+            }
         }
-    }
-    
-    private func createEmptyStateView() -> UIView {
-        let view = UIView()
-        let label = UILabel()
-        emptyStateLabel = label  // Store reference to label
-        label.text = display
-        label.textAlignment = .center
-        label.textColor = .gray
-        label.font = .systemFont(ofSize: 16)
         
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        private func createEmptyStateView() -> UIView {
+            let view = UIView()
+            let label = UILabel()
+            emptyStateLabel = label  // Store reference to label
+            label.text = display
+            label.textAlignment = .center
+            label.textColor = .gray
+            label.font = .systemFont(ofSize: 16)
+            
+            view.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ])
+            
+            return view
+        }
         
-        return view
+        // Update the text like this:
+        func updateEmptyStateVisibility() {
+            if segemtedControlOutlet.selectedSegmentIndex == 1 {
+                let qnaSessions = dataSource.getQnASessions(for: scriptId)
+                if qnaSessions.isEmpty {
+                    display = "No Q&A Sessions Available"
+                }
+                tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
+            } else {
+                let sessions = dataSource.getSessions(for: scriptId)
+                if sessions.isEmpty {
+                    display = "No Sessions Available"
+                }
+                tableView.backgroundView?.isHidden = !sessions.isEmpty
+            }
+        }
+        
+        //    private func setupMemorizeButton() {
+        //        // Create memorize button if it doesn't exist in storyboard
+        //        if memorizeButton == nil {
+        //            let button = UIButton(type: .system)
+        //            button.translatesAutoresizingMaskIntoConstraints = false
+        //            button.setTitle("Memorize", for: .normal)
+        //            button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        //            button.backgroundColor = .systemIndigo
+        //            button.setTitleColor(.white, for: .normal)
+        //            button.layer.cornerRadius = 10
+        //            button.clipsToBounds = true
+        //
+        //            view.addSubview(button)
+        //
+        //            // Position beside rehearse button
+        //            NSLayoutConstraint.activate([
+        //                button.centerYAnchor.constraint(equalTo: reheraseB.centerYAnchor),
+        //                button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        //                button.leadingAnchor.constraint(equalTo: reheraseB.trailingAnchor, constant: 16),
+        //                button.heightAnchor.constraint(equalTo: reheraseB.heightAnchor)
+        //            ])
+        //
+        //            button.addTarget(self, action: #selector(memorizeButtonTapped), for: .touchUpInside)
+        //            memorizeButton = button
+        //        }
+        //    }
+        
+        //    @objc public func memorizeButtonTapped() {
+        //        let memorizationVC = MemorizationViewController()
+        //        memorizationVC.scriptId = scriptId
+        //        memorizationVC.scriptTitle = scriptTitle
+        //        navigationController?.pushViewController(memorizationVC, animated: true)
+        //    }
+        
+        //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //        if indexPath.row == 0 {
+        //            return CGSize(width: 353, height: 218)
+        //        }
+        //        return CGSize(width: collectionView.bounds.width - 20, height: 100)
+        //    }
+        //    }
+        
     }
     
-    // Update the text like this:
-    func updateEmptyStateVisibility() {
-        if segemtedControlOutlet.selectedSegmentIndex == 1 {
-            let qnaSessions = dataSource.getQnASessions(for: scriptId)
-            if qnaSessions.isEmpty {
-                display = "No Q&A Sessions Available"
-            }
-            tableView.backgroundView?.isHidden = !qnaSessions.isEmpty
-        } else {
-            let sessions = dataSource.getSessions(for: scriptId)
-            if sessions.isEmpty {
-                display = "No Sessions Available"
-            }
-            tableView.backgroundView?.isHidden = !sessions.isEmpty
-        }
-    }
-}
+

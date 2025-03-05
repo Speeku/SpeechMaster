@@ -156,6 +156,13 @@ class HomeViewModel: ObservableObject {
         return ""
     }
     
+    func getScriptTitle(for scriptId: UUID) -> String {
+        if let script = scripts.first(where: { $0.id == scriptId }) {
+            return script.title
+        }
+        return "Untitled Script"
+    }
+    
     // MARK: -  QNA Session Management
     
     func addQnASessions(_ qna: QnASession) {
