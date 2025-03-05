@@ -9,100 +9,112 @@ import UIKit
 class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITableViewDataSource{
     private let dataSource = HomeViewModel.shared
     let scriptId = HomeViewModel.shared.currentScriptID
-    var progressOfSession : [Progress] = [
-        Progress(name: "Session 1", fillerWords: 20, missingWords: 10, pace: 123, pronunciation: 1),
-        Progress(name: "Session 2", fillerWords: 40, missingWords: 10, pace: 100, pronunciation: 5),
-        Progress(name: "Session 3", fillerWords: 50, missingWords: 10, pace: 170, pronunciation: 4),
-        Progress(name: "Session 4", fillerWords: 100, missingWords: 12, pace: 140, pronunciation: 6),
-        
-    ]
-    var left : Progress?
-    var right : Progress?
+    
+    // Remove hardcoded progressOfSession array
+    var left: PerformanceReport?
+    var right: PerformanceReport?
     
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     let afterClicking = UIImage(systemName: "chevron.down")
     let beforeClicking = UIImage(systemName: "chevron.right")
     var stateOfButtonPrevious : Bool = false
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        dataSource.getSessions(for: scriptId).count
+        let sessions = dataSource.getSessions(for: scriptId)
+        return sessions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = dataSource.getSessions(for: scriptId)[indexPath.row].title
+        let sessions = dataSource.getSessions(for: scriptId)
+        cell.textLabel?.text = sessions[indexPath.row].title
         return cell
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Deselect the row with animation
         tableView.deselectRow(at: indexPath, animated: true)
         
         // Hide the table view and reset button image
-        // and animate the button
         UIView.animate(withDuration: 0.3) {
             tableView.isHidden = true
             
-            // Reset appropriate button image based on which table view was selected
-            // case if something is selected from the table view and table
-            // view hides so to return the button back to its normal >
             if tableView == self.TableView1 {
                 self.leftButton.setImage(self.beforeClicking, for: .normal)
             } else {
                 self.rightButton.setImage(self.beforeClicking, for: .normal)
             }
         }
-        let selectedText = tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
-        if tableView.tag == 1{
+        
+        let sessions = dataSource.getSessions(for: scriptId)
+        let selectedSession = sessions[indexPath.row]
+        let selectedText = selectedSession.title
+        
+        if tableView.tag == 1 {
             stateOfButtonPrevious = false
-            left = progressOfSession[indexPath.row]
+            left = dataSource.getPerformanceReport(for: selectedSession.id)
             previous.text = selectedText
             TableView1.isHidden = true
-            print("left used")
         }
         
-        if tableView.tag == 2{
+        if tableView.tag == 2 {
             stateOfButtonCurrent = false
-            right = progressOfSession[indexPath.row]
+            right = dataSource.getPerformanceReport(for: selectedSession.id)
             TableView2.isHidden = true
             current.text = selectedText
-            print("right used")
         }
-        if let leftProgress = left, let rightProgress = right {
-                setData(leftProgress: leftProgress, rightProgress: rightProgress)
-            }
         
-    }
-    func setData(leftProgress : Progress,rightProgress : Progress){
-
-            // Table view 1
-        // when data change so it animates
-        UIView.animate(withDuration: 2){
-            self.fillerP1.progress = CGFloat(leftProgress.fillerWords) / 100
-            self.missingP1.progress = CGFloat(leftProgress.missingWords) / 100
-            self.paceP1.progress = CGFloat(leftProgress.pace) / 200
-            self.pronunciationP1.progress = CGFloat(leftProgress.pronunciation) / 100
-            self.overallP1.progress = CGFloat(leftProgress.overall) / 100
-            
-            // Table view 2
-            self.fillerP2.progress = CGFloat(rightProgress.fillerWords) / 100
-            self.missingP2.progress = CGFloat(rightProgress.missingWords) / 100
-            self.paceP2.progress = CGFloat(rightProgress.pace) / 200
-            self.prounciationP2.progress = CGFloat(rightProgress.pronunciation) / 100
-            self.overrallP2.progress = CGFloat(rightProgress.overall) / 100
-            
+        if let leftReport = left, let rightReport = right {
+            setData(leftReport: leftReport, rightReport: rightReport)
         }
+    }
+    
+    func setData(leftReport: PerformanceReport, rightReport: PerformanceReport) {
+        // Animate progress updates
+        UIView.animate(withDuration: 2) {
+            // Calculate scores for left side
+            let leftFillerScore = max(0, 100 - (Double(leftReport.fillerWords.count) * 5)) / 100
+            let leftMissingScore = max(0, 100 - (Double(leftReport.missingWords.count) * 5)) / 100
+            let leftPaceScore = min(100, Double(leftReport.wordsPerMinute)) / 200
+            let leftPronunciationScore = max(0, 100 - (Double(leftReport.pronunciationErrors.count) * 5)) / 100
+            let leftOverallScore = (leftFillerScore + leftMissingScore + leftPaceScore + leftPronunciationScore) / 4
+            
+            // Calculate scores for right side
+            let rightFillerScore = max(0, 100 - (Double(rightReport.fillerWords.count) * 5)) / 100
+            let rightMissingScore = max(0, 100 - (Double(rightReport.missingWords.count) * 5)) / 100
+            let rightPaceScore = min(100, Double(rightReport.wordsPerMinute)) / 200
+            let rightPronunciationScore = max(0, 100 - (Double(rightReport.pronunciationErrors.count) * 5)) / 100
+            let rightOverallScore = (rightFillerScore + rightMissingScore + rightPaceScore + rightPronunciationScore) / 4
+            
+            // Left side progress
+            self.fillerP1.progress = leftFillerScore
+            self.missingP1.progress = leftMissingScore
+            self.paceP1.progress = leftPaceScore
+            self.pronunciationP1.progress = leftPronunciationScore
+            self.overallP1.progress = leftOverallScore
+            
+            // Right side progress
+            self.fillerP2.progress = rightFillerScore
+            self.missingP2.progress = rightMissingScore
+            self.paceP2.progress = rightPaceScore
+            self.prounciationP2.progress = rightPronunciationScore
+            self.overrallP2.progress = rightOverallScore
+            
+            // Update overall score colors based on comparison
+            self.overallP1.progressColor = (leftOverallScore < rightOverallScore) ? .systemRed : .systemBlue
+            self.overrallP2.progressColor = (rightOverallScore < leftOverallScore) ? .systemRed : .systemBlue
+        }
+        
         updateColor(leftProgress: fillerP1, rightProgress: fillerP2)
         updateColor(leftProgress: missingP1, rightProgress: missingP2)
         updateColor(leftProgress: pronunciationP1, rightProgress: prounciationP2)
-        self.paceP1.progressColor = (leftProgress.pace < 80 || rightProgress.pace > 150) ? .systemRed : .systemBlue
-        self.paceP2.progressColor = (rightProgress.pace < 80 || leftProgress.pace > 150) ? .systemRed : .systemBlue
-        self.overallP1.progressColor = (leftProgress.overall<rightProgress.overall) ? .systemRed : .systemBlue
-        self.overrallP2.progressColor = (rightProgress.overall<leftProgress.overall) ? .systemRed : .systemBlue
         
-           
-
-        
+        // Update pace colors based on words per minute
+        self.paceP1.progressColor = (leftReport.wordsPerMinute < 80 || leftReport.wordsPerMinute > 150) ? .systemRed : .systemBlue
+        self.paceP2.progressColor = (rightReport.wordsPerMinute < 80 || rightReport.wordsPerMinute > 150) ? .systemRed : .systemBlue
     }
+    
     func updateColor(leftProgress : RoundedEndProgress, rightProgress : RoundedEndProgress){
         if(leftProgress.progress < rightProgress.progress){
             leftProgress.progressColor = .systemBlue
