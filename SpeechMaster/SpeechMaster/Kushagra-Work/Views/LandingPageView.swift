@@ -1,6 +1,17 @@
 import SwiftUI
 import UIKit
+
 struct LandingPageView: View {
+    init() {
+        // Debug: Print all available font families
+        for family in UIFont.familyNames.sorted() {
+            print("Font Family: \(family)")
+            for font in UIFont.fontNames(forFamilyName: family).sorted() {
+                print("- \(font)")
+            }
+        }
+    }
+    
     @StateObject private var viewModel = HomeViewModel.shared
     @StateObject private var videoViewModel = VideoPlayerViewModel()
     @StateObject private var fileUploadViewModel = FileUploadViewModel()
@@ -38,8 +49,7 @@ struct LandingPageView: View {
                         // Header
                         HStack {
                             Text("Eloquent")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
+                                .font(.custom("SonsieOne-Regular", size: 34))
                             Spacer()
                             //NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
                                // Image(systemName: "person.circle.fill")

@@ -6,6 +6,10 @@
 	<string></string>
 	<key>API_KEY</key>
 	<string>AIzaSyBO1kDM-13zCl9hPyjtNd6Wkcr9_igKfzc</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SonsieOne-Regular.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
