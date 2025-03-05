@@ -56,12 +56,6 @@ struct TopSpeechCard: View {
                         Label(formatDuration(speech.duration), systemImage: "clock")
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.9))
-                        
-                        if speech.isFeatured {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
-                                .font(.caption)
-                        }
                     }
                 }
             }

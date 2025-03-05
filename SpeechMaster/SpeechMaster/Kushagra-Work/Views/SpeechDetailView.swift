@@ -35,10 +35,6 @@ struct SpeechDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 16) {
-                    Button(action: { isBookmarked.toggle() }) {
-                        Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                    }
-                    
                     Button(action: { showingShareSheet = true }) {
                         Image(systemName: "square.and.arrow.up")
                     }
@@ -46,7 +42,12 @@ struct SpeechDetailView: View {
             }
         }
         .sheet(isPresented: $showingShareSheet) {
-            ShareSheet(items: [speech.title, speech.description])
+            if let videoURL = viewModel.videoDetails[speech.imageName]?.videoURL,
+               let url = URL(string: videoURL) {
+                ShareSheet(items: [url])
+            } else {
+                ShareSheet(items: [speech.title]) // Fallback to sharing just the title if URL is invalid
+            }
         }
     }
     
