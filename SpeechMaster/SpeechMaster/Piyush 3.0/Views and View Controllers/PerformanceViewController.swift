@@ -8,9 +8,10 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     
-    // Add property to track if keynote is being used
+    // Keynote ko track karne ke liya
     private var isUsingKeynote: Bool = false
     
+    //MARK: UI work
     private let timerLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -122,7 +123,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
             UIColor.clear.cgColor,
             UIColor.black.withAlphaComponent(0.3).cgColor
         ]
-        gradientLayer.locations = [0.0, 0.5]
+        gradientLayer.locations = [0.0, 0.5] // bara chota iss se hogo
         view.layer.addSublayer(gradientLayer)
         
         return view
@@ -161,7 +162,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.minimumValue = 16
         slider.maximumValue = 40
-        slider.value = 26 // Default font size
+        slider.value = 26
         return slider
     }()
     
@@ -180,10 +181,10 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         return toggle
     }()
     
-    // Add this property to track the current height constraint
+    // keynote ke current height constrain
     private var keynoteHeightConstraint: NSLayoutConstraint?
     
-    // Add this property to track script visibility
+    // script visibility
     private var isScriptVisible: Bool = true {
         didSet {
             updateScriptButtonIcon()
@@ -192,26 +193,28 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         }
     }
     
-    // Add these properties
+  // script scroll jo bottom me ho raha haa is sa he ho raha haa
     private var scrollTimer: Timer?
     private var scrollSpeed: Float = 5.0 // Default speed
+    
+    
     private var videoOutputURL: URL?
     private var videoWriter: AVAssetWriter?
     private var videoWriterInput: AVAssetWriterInput?
     private var isAutoScrollEnabled: Bool = false
     
-    // Add properties
+
     private var coachView: CoachView?
     private var isCoachEnabled = false
     private var speechMonitorTimer: Timer?
     private var currentWordCount = 0
     private var lastUpdateTime = Date()
     
-    // Add property to track words for accurate pace calculation
+    //  pace calculation
     private var wordCount = 0
     private var speakingStartTime: Date?
     
-    // Add these properties
+  // performance setting ke features ha ye
     private struct SettingsKeys {
         static let scriptSize = "scriptSize"
         static let scrollSpeed = "scrollSpeed"
@@ -219,14 +222,15 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         static let previewRatio = "previewRatio"
     }
     
-    // Add property to track current ratio if not already present
+    // keynote and camera view ka default ratio haa 30:70 .. change in "performanceSettingViewController" for later
+    
     private var currentPreviewRatio: PreviewRatio = .thirty70 {
         didSet {
             UserDefaults.standard.set(currentPreviewRatio.rawValue, forKey: SettingsKeys.previewRatio)
         }
     }
     
-    // Add these properties at the top of PerformanceViewController
+    // ak path setup ho raha ha performance content ko store karne ke liye
     private var videoRecordingOutput: AVCaptureMovieFileOutput?
     private var recordedVideoURL: URL? {
         let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -246,7 +250,7 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         super.viewDidLoad()
         
         // Hide the back button
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = false
         
         loadSavedSettings()
         // Set timer as navigation title

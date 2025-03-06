@@ -516,6 +516,9 @@ struct GlowingTextField: View {
     @FocusState private var isFocused: Bool
     @State private var keyboardHeight: CGFloat = 0
     @State private var isHovered = false
+    @State private var starScale: CGFloat = 1.0
+    @State private var starOpacity: Double = 0.8
+    @State private var borderColorChange = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -536,10 +539,42 @@ struct GlowingTextField: View {
                     
                     // Text field container
                     HStack(spacing: 12) {
-                        Image(systemName: "wand.and.stars")
-                            .font(.system(size: 20))
-                            .foregroundColor(.blue)
-                            .padding(.leading, 16)
+                        // Glowing icon container
+                        ZStack {
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color.blue.opacity(1.0),
+                                            Color.blue
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .frame(width: 36, height: 36)
+                                .overlay(
+                                    Circle()
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [
+                                                    Color.white.opacity(0.5),
+                                                    Color.white.opacity(0.0)
+                                                ]),
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .frame(width: 36, height: 36)
+                                )
+                            
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.white)
+                                .opacity(starOpacity)
+                                .scaleEffect(starScale)
+                        }
+                        .padding(.leading, 16)
                         
                         TextField("Describe Your Script", text: $text)
                             .font(.system(size: 16))
@@ -578,10 +613,21 @@ struct GlowingTextField: View {
                         .padding(.trailing, 16)
                     }
                     .background(Color(.systemBackground))
-                    .cornerRadius(12)
+                    .cornerRadius(24)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(.systemGray4), lineWidth: 0.5)
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        borderColorChange ? .pink : .blue,
+                                        borderColorChange ? .blue : .pink
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                            .animation(.easeInOut(duration: 2).repeatForever(autoreverses: true), value: borderColorChange)
                     )
                     .shadow(color: isBlueGlow ? .blue.opacity(shadowOpacity) : .pink.opacity(shadowOpacity),
                             radius: shadowRadius,
@@ -597,6 +643,14 @@ struct GlowingTextField: View {
             .onAppear {
                 isFocused = true
                 startGlowAnimation()
+                startBorderAnimation()
+                
+                // Animate sparkle
+                withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                    starScale = 1.2
+                    starOpacity = 1.0
+                }
+                
                 NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
                     if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                         keyboardHeight = keyboardFrame.height
@@ -606,6 +660,12 @@ struct GlowingTextField: View {
                     keyboardHeight = 0
                 }
             }
+        }
+    }
+    
+    private func startBorderAnimation() {
+        withAnimation(Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+            borderColorChange.toggle()
         }
     }
     
@@ -676,6 +736,67 @@ struct PromptInputView: View {
     }
 }
 
+// Add this new view for the glowing AI button
+struct GlowingAIButton: View {
+    @State private var isGlowing = false
+    @State private var starScale: CGFloat = 1.0
+    @State private var starOpacity: Double = 0.8
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color.blue.opacity(1.0),
+                                Color.blue
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 56, height: 56)
+                    .overlay(
+                        Circle()
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color.white.opacity(0.5),
+                                        Color.white.opacity(0.0)
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .frame(width: 56, height: 56)
+                    )
+                
+                // Main sparkle icon
+                Image(systemName: "sparkles")
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(.white)
+                    .opacity(starOpacity)
+                    .scaleEffect(starScale)
+            }
+        }
+        .onAppear {
+            // Start multiple animations
+            withAnimation(Animation.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
+                isGlowing = true
+            }
+            
+            // Animate main sparkle
+            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+                starScale = 1.2
+                starOpacity = 1.0
+            }
+        }
+    }
+}
+
 struct ScriptCreationView: View {
     @ObservedObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
@@ -737,28 +858,18 @@ struct ScriptCreationView: View {
                     .padding(.horizontal)
             }
             
-            // Floating AI Button
+            // Updated Floating AI Button
             VStack {
                 Spacer()
                 HStack {
                     Spacer()
-                    Button(action: { 
+                    GlowingAIButton {
                         withAnimation {
                             showingPromptInput.toggle()
                             if !showingPromptInput {
                                 promptText = ""
                             }
                         }
-                    }) {
-                        Image(systemName: "wand.and.stars")
-                            .font(.system(size: 24))
-                            .foregroundColor(.white)
-                            .frame(width: 56, height: 56)
-                            .background(
-                                Circle()
-                                    .fill(Color.blue)
-                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
-                            )
                     }
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
