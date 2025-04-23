@@ -2,14 +2,12 @@ import Foundation
 import GoogleGenerativeAI
 
 private enum StorageKeys {
-    static let scripts = "saved_scripts"
     static let sessions = "practice_sessions"
     static let qnaSessions = "qna_sessions"
     static let qnaQuestions = "qna_questions"
     static let performanceReports = "performance_reports"
     static let userName = "user_name"
     static let overallImprovement = "overall_improvement"
-    static let memorizationSessions = "memorization_sessions"
 }
 
 class HomeViewModel: ObservableObject {
@@ -17,7 +15,7 @@ class HomeViewModel: ObservableObject {
     static let shared = HomeViewModel()
     
     // MARK: - Published Properties
-    @Published var userName: String = "Piyush"
+    @Published var userName: String = ""
     @Published var scripts: [Script] = []
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
@@ -29,7 +27,11 @@ class HomeViewModel: ObservableObject {
     @Published var qnaArray: [QnASession] = []
     @Published var userPerformanceReports : [PerformanceReport] = []
     @Published var qnaQuestions: [QnAQuestion] = []
-//    @Published var memorizationSessions: [MemorizationSession] = []
+    @Published var isLoading: Bool = false
+    
+    // MARK: - Services
+    private let supabaseManager = SupabaseManager.shared
+    
     // MARK: - API Configuration
     private let geminiAPIEndpoint = "YOUR_GEMINI_API_ENDPOINT"
     private var geminiAPIKey: String {
@@ -42,11 +44,16 @@ class HomeViewModel: ObservableObject {
     private init() {
         // Private initializer to ensure singleton pattern
         loadData()
+        
+        // Load scripts from Supabase when user is logged in
+        if supabaseManager.currentUser != nil {
+            Task {
+                await loadScriptsFromSupabase()
+            }
+        }
     }
     
     // MARK: - AI Content Generation
-//    private let model = GenerativeModel(name: "gemini-pro",
-//                                        apiKey: "AIzaSyBbpl3vZYTRTwcfra97T-NdsR2TIfCICOY")
     let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
     func generateScript(prompt: String) async throws -> String {
         do {
@@ -81,50 +88,139 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Script Management
+    // MARK: - Supabase Script Management
+    
+    /// Load scripts from Supabase
+    @MainActor
+    func loadScriptsFromSupabase() async {
+        guard supabaseManager.currentUser != nil else {
+            print("Cannot load scripts: No user logged in")
+            return
+        }
+        
+        isLoading = true
+        
+        do {
+            let fetchedScripts = try await supabaseManager.fetchScripts()
+            self.scripts = fetchedScripts
+            self.sortScripts()
+            isLoading = false
+            print("Successfully loaded \(fetchedScripts.count) scripts from Supabase")
+        } catch {
+            print("Error loading scripts from Supabase: \(error)")
+            isLoading = false
+        }
+    }
+    
+    /// Add a new script to Supabase
     func addScript(_ script: Script) {
-        DispatchQueue.main.async {
-            self.scripts.append(script)
-            self.sortScripts()
-            self.saveData()
+        Task {
+            do {
+                let newScript = try await supabaseManager.createScript(
+                    title: script.title,
+                    scriptText: script.scriptText,
+                    isPinned: script.isPinned
+                )
+                
+                await MainActor.run {
+                    self.scripts.append(newScript)
+                    self.sortScripts()
+                }
+                print("Successfully added script to Supabase: \(newScript.id)")
+            } catch {
+                print("Error adding script to Supabase: \(error)")
+            }
         }
     }
     
+    /// Delete a script from Supabase
     func deleteScript(_ script: Script) {
-        DispatchQueue.main.async {
-            self.scripts.removeAll { $0.id == script.id }
-            self.sortScripts()
-            self.saveData()
+        Task {
+            do {
+                try await supabaseManager.deleteScript(id: script.id)
+                
+                await MainActor.run {
+                    self.scripts.removeAll { $0.id == script.id }
+                    self.sortScripts()
+                }
+                print("Successfully deleted script from Supabase: \(script.id)")
+            } catch {
+                print("Error deleting script from Supabase: \(error)")
+            }
         }
     }
     
+    /// Delete a script at specified index
     func deleteScript(at indexSet: IndexSet) {
-        DispatchQueue.main.async {
-            self.scripts.remove(atOffsets: indexSet)
-            self.sortScripts()
-            self.saveData()
+        for index in indexSet {
+            let scriptToDelete = scripts[index]
+            deleteScript(scriptToDelete)
         }
     }
     
-    func pinToTop(_ script: Script) {
-        if let index = scripts.firstIndex(where: { $0.id == script.id }) {
-            scripts[index].isPinned = true
-            sortScripts()
-        }
-    }
-    
-    func unpinScript(_ script: Script) {
-        if let index = scripts.firstIndex(where: { $0.id == script.id }) {
-            scripts[index].isPinned = false
-            sortScripts()
-        }
-    }
-    
+    /// Toggle pin status for a script
     func togglePin(for script: Script) {
-        DispatchQueue.main.async {
-            if let index = self.scripts.firstIndex(where: { $0.id == script.id }) {
-                self.scripts[index].isPinned.toggle()
-                self.sortScripts()
+        Task {
+            do {
+                let toggledPinStatus = !script.isPinned
+                let updatedScript = try await supabaseManager.updateScript(
+                    id: script.id,
+                    isPinned: toggledPinStatus
+                )
+                
+                await MainActor.run {
+                    if let index = self.scripts.firstIndex(where: { $0.id == script.id }) {
+                        self.scripts[index] = updatedScript
+                        self.sortScripts()
+                    }
+                }
+                print("Successfully toggled pin status for script: \(script.id)")
+            } catch {
+                print("Error toggling pin status: \(error)")
+            }
+        }
+    }
+    
+    /// Pin a script to the top
+    func pinToTop(_ script: Script) {
+        Task {
+            do {
+                let updatedScript = try await supabaseManager.updateScript(
+                    id: script.id,
+                    isPinned: true
+                )
+                
+                await MainActor.run {
+                    if let index = self.scripts.firstIndex(where: { $0.id == script.id }) {
+                        self.scripts[index] = updatedScript
+                        self.sortScripts()
+                    }
+                }
+                print("Successfully pinned script: \(script.id)")
+            } catch {
+                print("Error pinning script: \(error)")
+            }
+        }
+    }
+    
+    /// Unpin a script
+    func unpinScript(_ script: Script) {
+        Task {
+            do {
+                let updatedScript = try await supabaseManager.updateScript(
+                    id: script.id,
+                    isPinned: false
+                )
+                
+                await MainActor.run {
+                    if let index = self.scripts.firstIndex(where: { $0.id == script.id }) {
+                        self.scripts[index] = updatedScript
+                        self.sortScripts()
+                    }
+                }
+                print("Successfully unpinned script: \(script.id)")
+            } catch {
+                print("Error unpinning script: \(error)")
             }
         }
     }
@@ -162,14 +258,25 @@ class HomeViewModel: ObservableObject {
         }
         return "Untitled Script"
     }
+    
     func setScriptText(for scriptId: UUID, text: String) {
-        if let index = scripts.firstIndex(where: { $0.id == scriptId }) {
-            print("📝 Updating script with ID: \(scriptId)")
-            scripts[index].scriptText = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            saveData() // Make sure this is called to persist changes
-            print("📊 New script word count: \(text.split(separator: " ").count)")
-        } else {
-            print("⚠️ No script found for ID: \(scriptId)")
+        Task {
+            do {
+                let updatedScript = try await supabaseManager.updateScript(
+                    id: scriptId,
+                    scriptText: text.trimmingCharacters(in: .whitespacesAndNewlines)
+                )
+                
+                await MainActor.run {
+                    if let index = self.scripts.firstIndex(where: { $0.id == scriptId }) {
+                        self.scripts[index] = updatedScript
+                    }
+                }
+                print("📝 Updated script with ID: \(scriptId)")
+                print("📊 New script word count: \(text.split(separator: " ").count)")
+            } catch {
+                print("⚠️ Error updating script text: \(error)")
+            }
         }
     }
     
@@ -197,10 +304,7 @@ class HomeViewModel: ObservableObject {
         return sessionsArray.filter { $0.scriptId == scriptId }
             .sorted { $0.createdAt > $1.createdAt } // Sort by creation date, newest first
     }
-    //    func getQnASessions(for scriptId: UUID) -> [QnASession] {
-    //        return qnaArray.filter { $0.scriptId == scriptId }
-    //    }
-    //
+    
     // MARK: - Qna methods
     
     func addQnAQuestions(_ questions: [QnAQuestion]) {
@@ -217,90 +321,96 @@ class HomeViewModel: ObservableObject {
     
     func getQnASessions(for scriptId: UUID) -> [QnASession] {
         return qnaArray.filter { $0.scriptId == scriptId }
-        // MARK: - Performance Report Management
     }
-        func addPerformanceReport(_ report: PerformanceReport) {
-            DispatchQueue.main.async {
-                if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
-                    self.userPerformanceReports[existingIndex] = report
-                } else {
-                    self.userPerformanceReports.append(report)
-                }
-                self.saveData()
-                self.objectWillChange.send()
+    
+    // MARK: - Performance Report Management
+    func addPerformanceReport(_ report: PerformanceReport) {
+        DispatchQueue.main.async {
+            if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
+                self.userPerformanceReports[existingIndex] = report
+            } else {
+                self.userPerformanceReports.append(report)
             }
+            self.saveData()
+            self.objectWillChange.send()
+        }
+    }
+    
+    func getPerformanceReport(for sessionID: UUID) -> PerformanceReport? {
+        return userPerformanceReports.first { $0.sessionID == sessionID }
+    }
+    
+    func getAllPerformanceReports() -> [PerformanceReport] {
+        return userPerformanceReports.sorted { $0.sessionID > $1.sessionID }
+    }
+        
+    // MARK: - Data Persistence
+    private func saveData() {
+        let encoder = JSONEncoder()
+        // Scripts are now stored in Supabase
+        
+        if let sessionsData = try? encoder.encode(sessionsArray) {
+            UserDefaults.standard.set(sessionsData, forKey: StorageKeys.sessions)
+        }
+        if let qnaSessionsData = try? encoder.encode(qnaArray) {
+            UserDefaults.standard.set(qnaSessionsData, forKey: StorageKeys.qnaSessions)
+        }
+        if let qnaQuestionsData = try? encoder.encode(qnaQuestions) {
+            UserDefaults.standard.set(qnaQuestionsData, forKey: StorageKeys.qnaQuestions)
+        }
+        if let reportsData = try? encoder.encode(userPerformanceReports) {
+            UserDefaults.standard.set(reportsData, forKey: StorageKeys.performanceReports)
         }
         
-        func getPerformanceReport(for sessionID: UUID) -> PerformanceReport? {
-            return userPerformanceReports.first { $0.sessionID == sessionID }
+        UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
+        UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
+    }
+    
+    private func loadData() {
+        let decoder = JSONDecoder()
+        
+        // Scripts are now loaded from Supabase
+        
+        if let sessionsData = UserDefaults.standard.data(forKey: StorageKeys.sessions),
+           let decodedSessions = try? decoder.decode([PracticeSession].self, from: sessionsData) {
+            sessionsArray = decodedSessions
         }
         
-        func getAllPerformanceReports() -> [PerformanceReport] {
-            return userPerformanceReports.sorted { $0.sessionID > $1.sessionID }
+        if let qnaSessionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaSessions),
+           let decodedQnASessions = try? decoder.decode([QnASession].self, from: qnaSessionsData) {
+            qnaArray = decodedQnASessions
         }
         
-        // MARK: - Memorization Methods
+        if let qnaQuestionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaQuestions),
+           let decodedQuestions = try? decoder.decode([QnAQuestion].self, from: qnaQuestionsData) {
+            qnaQuestions = decodedQuestions
+        }
         
+        if let reportsData = UserDefaults.standard.data(forKey: StorageKeys.performanceReports),
+           let decodedReports = try? decoder.decode([PerformanceReport].self, from: reportsData) {
+            userPerformanceReports = decodedReports
+        }
+        
+        userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
+        overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
+    }
+    
+    // MARK: - User Authentication
+    func userDidLogIn() {
+        Task {
+            await loadScriptsFromSupabase()
+        }
+    }
+    
+    func userDidLogOut() {
+        DispatchQueue.main.async {
+            self.scripts = []
+        }
+    }
 
-        
-        // MARK: - Data Persistence
-        private func saveData() {
-            let encoder = JSONEncoder()
-            if let scriptsData = try? encoder.encode(scripts) {
-                UserDefaults.standard.set(scriptsData, forKey: StorageKeys.scripts)
-            }
-            if let sessionsData = try? encoder.encode(sessionsArray) {
-                UserDefaults.standard.set(sessionsData, forKey: StorageKeys.sessions)
-            }
-            if let qnaSessionsData = try? encoder.encode(qnaArray) {
-                UserDefaults.standard.set(qnaSessionsData, forKey: StorageKeys.qnaSessions)
-            }
-            if let qnaQuestionsData = try? encoder.encode(qnaQuestions) {
-                UserDefaults.standard.set(qnaQuestionsData, forKey: StorageKeys.qnaQuestions)
-            }
-            if let reportsData = try? encoder.encode(userPerformanceReports) {
-                UserDefaults.standard.set(reportsData, forKey: StorageKeys.performanceReports)
-            }
-
-            
-            UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
-            UserDefaults.standard.set(overallImprovement, forKey: StorageKeys.overallImprovement)
-        }
-        
-        private func loadData() {
-            let decoder = JSONDecoder()
-            
-            if let scriptsData = UserDefaults.standard.data(forKey: StorageKeys.scripts),
-               let decodedScripts = try? decoder.decode([Script].self, from: scriptsData) {
-                scripts = decodedScripts
-            }
-            
-            if let sessionsData = UserDefaults.standard.data(forKey: StorageKeys.sessions),
-               let decodedSessions = try? decoder.decode([PracticeSession].self, from: sessionsData) {
-                sessionsArray = decodedSessions
-            }
-            
-            if let qnaSessionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaSessions),
-               let decodedQnASessions = try? decoder.decode([QnASession].self, from: qnaSessionsData) {
-                qnaArray = decodedQnASessions
-            }
-            
-            if let qnaQuestionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaQuestions),
-               let decodedQuestions = try? decoder.decode([QnAQuestion].self, from: qnaQuestionsData) {
-                qnaQuestions = decodedQuestions
-            }
-            
-            if let reportsData = UserDefaults.standard.data(forKey: StorageKeys.performanceReports),
-               let decodedReports = try? decoder.decode([PerformanceReport].self, from: reportsData) {
-                userPerformanceReports = decodedReports
-            }
-            
-            userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
-            overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
-        }
-        // MARK: - Top Speeches
-        @Published var selectedCategory: SpeechCategory?
-        @Published var selectedTags: Set<String> = []
+    // MARK: - Top Speeches
+    @Published var selectedCategory: SpeechCategory?
+    @Published var selectedTags: Set<String> = []
     
     let topSpeeches: [TopSpeech] = [
         TopSpeech(

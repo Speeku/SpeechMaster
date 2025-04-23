@@ -8,9 +8,9 @@
 import UIKit
 import SwiftUI
 
-class LandingPageHostingController: UIHostingController<LandingPageView> {
+class LandingPageHostingController: UIHostingController<RootView> {
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder, rootView: LandingPageView())
+        super.init(coder: aDecoder, rootView: RootView())
     }
 }
 

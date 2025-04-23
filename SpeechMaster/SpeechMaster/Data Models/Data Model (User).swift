@@ -33,7 +33,7 @@ enum AuthError: Error {
 struct Script: Identifiable,Codable,Equatable {
     let id: UUID
     //let userId: UUID
-    let title: String
+    var title: String
     var scriptText: String
     //var progress: Double = 0
     let createdAt: Date
@@ -86,7 +86,7 @@ struct QnAQuestion: Identifiable, Codable {
     let id: UUID
     let qna_session_Id : UUID
     let questionText: String
-    let userAnswer: String
+    var userAnswer: String
     let suggestedAnswer: String
     let timeTaken : TimeInterval
 }

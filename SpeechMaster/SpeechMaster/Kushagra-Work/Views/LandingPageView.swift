@@ -1,31 +1,23 @@
 import SwiftUI
 import UIKit
 
-struct LandingPageView: View {
-    init() {
-        // Debug: Print all available font families
-        for family in UIFont.familyNames.sorted() {
-            print("Font Family: \(family)")
-            for font in UIFont.fontNames(forFamilyName: family).sorted() {
-                print("- \(font)")
-            }
-        }
-    }
-    
-    @StateObject private var viewModel = HomeViewModel.shared
+struct LandingPageView: View {    
+    @EnvironmentObject var viewModel: HomeViewModel
     @StateObject private var videoViewModel = VideoPlayerViewModel()
     @StateObject private var fileUploadViewModel = FileUploadViewModel()
     @State private var showingActionSheet = false
     @State private var showingScriptCreation = false
     @State private var showingDiscardAlert = false
-    @Environment(\.dismiss) private var dismiss // Add this line
+    @Environment(\.dismiss) private var dismiss
 
     private func deleteScript(at offsets: IndexSet) {
         viewModel.scripts.remove(atOffsets: offsets)
-   }
+    }
+    
     func unwindSegue(_ unwindSegue: UIStoryboardSegue) {
         
     }
+    
     private var emptyScriptsView: some View {
         VStack(spacing: 24) {
             Image(systemName: "doc.text.fill")
@@ -51,13 +43,13 @@ struct LandingPageView: View {
                             Text("Eloquent")
                                 .font(.custom("SonsieOne-Regular", size: 34))
                             Spacer()
-                            //NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
-                               // Image(systemName: "person.circle.fill")
-                               //     .resizable()
-                                //    .frame(width: 38, height: 38)
-                                //    .clipShape(Circle())
-                                //    .foregroundColor(.gray)
-                          //  }
+                            NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
+                                Image(systemName: "person.circle.fill")
+                                    .resizable()
+                                    .frame(width: 38, height: 38)
+                                    .clipShape(Circle())
+                                    .foregroundColor(.gray)
+                            }
                         }
                         .padding(.horizontal, 17)
                         
@@ -221,4 +213,5 @@ struct LandingPageView: View {
 
 #Preview {
     LandingPageView()
+        .environmentObject(HomeViewModel.shared)
 }
