@@ -425,7 +425,7 @@ class SupabaseManager: ObservableObject {
         do {
             let response = try await client
                 .from("Script")
-                .select()
+                .select("*")
                 .eq("user_id", value: currentUserId.uuidString)
                 .order("created_at", ascending: false)
                 .execute()
@@ -452,10 +452,14 @@ class SupabaseManager: ObservableObject {
         do {
             let response = try await client
                 .from("Script")
-                .select()
+                .select("*")
                 .eq("id", value: id.uuidString)
                 .single()
                 .execute()
+            
+            if let jsonString = String(data: response.data, encoding: .utf8) {
+                print("Fetched single script response: \(jsonString)")
+            }
             
             // Convert response to Script object
             let script = try mapScriptFromResponse(responseData: response.data)
@@ -561,20 +565,30 @@ class SupabaseManager: ObservableObject {
             let script_text: String
             let is_Pinned: Bool?
             let created_at: String
+            let user_id: String?
         }
         
         let decoder = JSONDecoder()
-        let response = try decoder.decode(ScriptResponse.self, from: responseData)
         
-        let dateFormatter = ISO8601DateFormatter()
-        
-        return Script(
-            id: UUID(uuidString: response.id) ?? UUID(),
-            title: response.title ?? "Untitled",
-            scriptText: response.script_text,
-            createdAt: dateFormatter.date(from: response.created_at) ?? Date(),
-            isPinned: response.is_Pinned ?? false
-        )
+        do {
+            let response = try decoder.decode(ScriptResponse.self, from: responseData)
+            
+            let dateFormatter = ISO8601DateFormatter()
+            
+            return Script(
+                id: UUID(uuidString: response.id) ?? UUID(),
+                title: response.title ?? "Untitled",
+                scriptText: response.script_text,
+                createdAt: dateFormatter.date(from: response.created_at) ?? Date(),
+                isPinned: response.is_Pinned ?? false
+            )
+        } catch {
+            print("Failed to decode script response: \(error)")
+            if let dataString = String(data: responseData, encoding: .utf8) {
+                print("Response data: \(dataString)")
+            }
+            throw error
+        }
     }
     
     /// Maps the JSON response to an array of Script objects
@@ -585,21 +599,31 @@ class SupabaseManager: ObservableObject {
             let script_text: String
             let is_Pinned: Bool?
             let created_at: String
+            let user_id: String?
         }
         
         let decoder = JSONDecoder()
-        let responses = try decoder.decode([ScriptResponse].self, from: responseData)
         
-        let dateFormatter = ISO8601DateFormatter()
-        
-        return responses.map { response in
-            Script(
-                id: UUID(uuidString: response.id) ?? UUID(),
-                title: response.title ?? "Untitled",
-                scriptText: response.script_text,
-                createdAt: dateFormatter.date(from: response.created_at) ?? Date(),
-                isPinned: response.is_Pinned ?? false
-            )
+        do {
+            let responses = try decoder.decode([ScriptResponse].self, from: responseData)
+            
+            let dateFormatter = ISO8601DateFormatter()
+            
+            return responses.map { response in
+                Script(
+                    id: UUID(uuidString: response.id) ?? UUID(),
+                    title: response.title ?? "Untitled",
+                    scriptText: response.script_text,
+                    createdAt: dateFormatter.date(from: response.created_at) ?? Date(),
+                    isPinned: response.is_Pinned ?? false
+                )
+            }
+        } catch {
+            print("Failed to decode scripts response: \(error)")
+            if let dataString = String(data: responseData, encoding: .utf8) {
+                print("Response data: \(dataString)")
+            }
+            throw error
         }
     }
 } 
