@@ -1,5 +1,7 @@
 import Foundation
 import GoogleGenerativeAI
+import Combine
+import SwiftUI
 
 private enum StorageKeys {
     static let sessions = "practice_sessions"
@@ -31,6 +33,7 @@ class HomeViewModel: ObservableObject {
     
     // MARK: - Services
     private let supabaseManager = SupabaseManager.shared
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: - API Configuration
     private let geminiAPIEndpoint = "YOUR_GEMINI_API_ENDPOINT"
@@ -47,6 +50,48 @@ class HomeViewModel: ObservableObject {
         
         // Load scripts from Supabase when user is logged in
         if supabaseManager.currentUser != nil {
+            Task {
+                await loadScriptsFromSupabase()
+            }
+        }
+        
+        // Set up notification observers
+        setupNotificationObservers()
+    }
+    
+    private func setupNotificationObservers() {
+        // Listen for refresh data notification
+        NotificationCenter.default.publisher(for: NSNotification.Name("RefreshSupabaseData"))
+            .sink { [weak self] _ in
+                print("Received notification to refresh Supabase data")
+                guard let self = self else { return }
+                
+                Task {
+                    await self.loadScriptsFromSupabase()
+                }
+            }
+            .store(in: &cancellables)
+        
+        // Listen for view appearance in SwiftUI
+        NotificationCenter.default.publisher(for: UIScene.willEnterForegroundNotification)
+            .sink { [weak self] _ in
+                print("App will enter foreground - refreshing scripts")
+                guard let self = self else { return }
+                
+                if self.isLoggedIn && supabaseManager.currentUser != nil {
+                    Task {
+                        await self.loadScriptsFromSupabase()
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    // MARK: - Landing Page Appearance
+    
+    /// Call this method when landing page appears
+    func onLandingPageAppear() {
+        if isLoggedIn && supabaseManager.currentUser != nil {
             Task {
                 await loadScriptsFromSupabase()
             }
@@ -716,4 +761,5 @@ class HomeViewModel: ObservableObject {
             return max(-100, min(100, improvement))
         }
     }
+
 

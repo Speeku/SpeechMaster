@@ -115,7 +115,11 @@ struct ScriptsListView: View {
             .padding(.vertical, 8)
             .background(Color(.systemBackground))
             
-            if filteredScripts.isEmpty {
+            if viewModel.isLoading {
+                ProgressView("Loading scripts...")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.systemBackground))
+            } else if filteredScripts.isEmpty {
                 emptyStateView
                     .transition(.opacity)
             } else {
@@ -172,7 +176,8 @@ struct ScriptsListView: View {
                 }
                 .listStyle(.plain)
                 .refreshable {
-                    // Refresh scripts data if needed
+                    // Refresh scripts data when user pulls to refresh
+                    await viewModel.loadScriptsFromSupabase()
                 }
             }
         }
@@ -184,6 +189,21 @@ struct ScriptsListView: View {
                     Image(systemName: "plus")
                 }
             }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    Task {
+                        await viewModel.loadScriptsFromSupabase()
+                    }
+                }) {
+                    Image(systemName: "arrow.clockwise")
+                }
+                .disabled(viewModel.isLoading)
+            }
+        }
+        .onAppear {
+            print("ScriptsListView appeared - loading scripts data")
+            viewModel.onLandingPageAppear()
         }
         .confirmationDialog("New Practice", isPresented: $showNewScriptDialog, titleVisibility: .visible) {
             Button("Upload Script") {
@@ -213,8 +233,6 @@ struct ScriptsListView: View {
         }
         NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {
         }
-        
-
     }
     
     private var emptyStateView: some View {

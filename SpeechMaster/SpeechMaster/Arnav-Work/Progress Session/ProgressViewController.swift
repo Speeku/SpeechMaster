@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Supabase // {{Add Supabase import}}
 
 class ProgressViewController: UIViewController,UICollectionViewDelegate,
                           UICollectionViewDataSource,
