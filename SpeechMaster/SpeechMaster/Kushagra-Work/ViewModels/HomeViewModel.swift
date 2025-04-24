@@ -867,6 +867,14 @@ class HomeViewModel: ObservableObject {
             let improvement = ((latestScore - previousScore) / previousScore) * 100
             return max(-100, min(100, improvement))
         }
+        
+        func updateUserProfileImage(_ imageURL: String) {
+            if var currentUser = SupabaseManager.shared.currentUser {
+                currentUser.profileImageURL = imageURL
+                SupabaseManager.shared.currentUser = currentUser
+            }
+        }
     }
+
 
 

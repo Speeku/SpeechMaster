@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-struct LandingPageView: View {    
+struct LandingPageView: View {
     @EnvironmentObject var viewModel: HomeViewModel
     @StateObject private var videoViewModel = VideoPlayerViewModel()
     @StateObject private var fileUploadViewModel = FileUploadViewModel()
@@ -9,6 +9,9 @@ struct LandingPageView: View {
     @State private var showingScriptCreation = false
     @State private var showingDiscardAlert = false
     @Environment(\.dismiss) private var dismiss
+    
+    // Add reference to SupabaseManager
+    private let supabaseManager = SupabaseManager.shared
 
     private func deleteScript(at offsets: IndexSet) {
         viewModel.scripts.remove(atOffsets: offsets)
@@ -44,11 +47,16 @@ struct LandingPageView: View {
                                 .font(.custom("SonsieOne-Regular", size: 34))
                             Spacer()
                             NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
-                                Image(systemName: "person.circle.fill")
-                                    .resizable()
-                                    .frame(width: 38, height: 38)
-                                    .clipShape(Circle())
-                                    .foregroundColor(.gray)
+                                if let userId = supabaseManager.currentUser?.id.uuidString,
+                                   let profileImageURL = supabaseManager.currentUser?.profileImageURL {
+                                    ProfileImageView(userId: userId, imageURL: profileImageURL)
+                                } else {
+                                    Image(systemName: "person.circle.fill")
+                                        .resizable()
+                                        .frame(width: 38, height: 38)
+                                        .clipShape(Circle())
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                         .padding(.horizontal, 17)

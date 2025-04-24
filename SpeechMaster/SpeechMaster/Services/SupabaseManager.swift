@@ -358,7 +358,7 @@ class SupabaseManager: ObservableObject {
         
         let fileName = "\(userId.uuidString)_\(Date().timeIntervalSince1970).jpg"
         let storageResponse = try await client.storage
-            .from("profile_images")
+            .from("profile-photo")
             .upload(
                 fileName,
                 data: imageData,
@@ -392,7 +392,7 @@ class SupabaseManager: ObservableObject {
         print("Downloading profile image from path: \(path)")
         
         let imageData = try await client.storage
-            .from("profile_images")
+            .from("profile-photo")
             .download(path: path)
         
         print("Image downloaded successfully, size: \(imageData.count) bytes")
@@ -410,7 +410,7 @@ class SupabaseManager: ObservableObject {
         
         // createSignedURL returns a URL object directly, not a string
         let url = try await client.storage
-            .from("profile_images")
+            .from("profile-photo")
             .createSignedURL(path: path, expiresIn: 3600)
         
         print("Profile image signed URL created: \(url)")

@@ -311,30 +311,29 @@ struct UserProfileView: View {
         
         isLoading = true
         
-        // Save image to file system
+        // Save image to file system (keep local caching for faster loading)
         if saveImageToFileSystem(imageData: imageData, forKey: userId) {
-            // Also update the Supabase record with a flag that indicates local image storage
+            // Also upload to Supabase
             Task {
                 do {
-                    // Instead of uploading to Supabase, just update the user's preferences
-                    // This allows us to know a profile image exists locally
-                    let preferences = User.UserPreferences(
-                        isDarkMode: isDarkMode,
-                        notificationsEnabled: notificationsEnabled,
-                        emailNotificationsEnabled: emailNotificationsEnabled
-                    )
+                    // Upload to Supabase storage
+                    let fileName = try await supabaseManager.uploadProfileImage(userId: UUID(uuidString: userId)!, imageData: imageData)
                     
-                    try await supabaseManager.updateUserPreferences(preferences: preferences)
-                    
-                    await MainActor.run {
-                        isLoading = false
-                        showingSuccess = true
+                    // Update current user's profileImageURL property
+                    if var updatedUser = supabaseManager.currentUser {
+                        updatedUser.profileImageURL = fileName
+                        
+                        await MainActor.run {
+                            // Update viewModel to reflect changes
+                            viewModel.updateUserProfileImage(fileName)
+                            isLoading = false
+                            showingSuccess = true
+                        }
                     }
                 } catch {
                     await MainActor.run {
-                        // Even if Supabase update fails, the image is still saved locally
+                        showError(message: "Failed to upload image to Supabase: \(error.localizedDescription)")
                         isLoading = false
-                        showingSuccess = true
                     }
                 }
             }
