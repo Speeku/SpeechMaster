@@ -21,7 +21,7 @@ class HomeViewModel: ObservableObject {
     @Published var scripts: [Script] = []
     @Published var isLoggedIn: Bool = true
     @Published var searchText: String = ""
-    @Published var overallImprovement: Double = 50
+    @Published var overallImprovement: Double = 0
     @Published var navigateToPiyushScreen = false
     @Published var uploadedScriptText = ""
     @Published var currentScriptID: UUID = UUID()
@@ -335,9 +335,26 @@ class HomeViewModel: ObservableObject {
     }
     
     func addSession(_ session: PracticeSession) {
-        DispatchQueue.main.async {
-            self.sessionsArray.append(session)
-            self.saveData()
+        Task {
+            do {
+                let newSession = try await supabaseManager.createPracticeSession(
+                    scriptId: session.scriptId,
+                    title: session.title
+                )
+                
+                await MainActor.run {
+                    self.sessionsArray.append(newSession)
+                    self.objectWillChange.send()
+                }
+                print("Successfully added practice session to Supabase: \(newSession.id)")
+            } catch {
+                print("Error adding practice session to Supabase: \(error)")
+                // Fallback to local storage if Supabase fails
+                await MainActor.run {
+                    self.sessionsArray.append(session)
+                    self.saveData()
+                }
+            }
         }
     }
     
@@ -345,7 +362,30 @@ class HomeViewModel: ObservableObject {
         return sessionsArray
     }
     
+    @MainActor
+    func loadPracticeSessionsFromSupabase(for scriptId: UUID) async {
+        guard supabaseManager.currentUser != nil else {
+            print("Cannot load practice sessions: No user logged in")
+            return
+        }
+        
+        do {
+            let fetchedSessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+            self.sessionsArray = fetchedSessions
+            print("Successfully loaded \(fetchedSessions.count) practice sessions from Supabase")
+        } catch {
+            print("Error loading practice sessions from Supabase: \(error)")
+        }
+    }
+    
     func getSessions(for scriptId: UUID) -> [PracticeSession] {
+        // Load sessions from Supabase if user is logged in
+        if isLoggedIn && supabaseManager.currentUser != nil {
+            Task {
+                await loadPracticeSessionsFromSupabase(for: scriptId)
+            }
+        }
+        
         return sessionsArray.filter { $0.scriptId == scriptId }
             .sorted { $0.createdAt > $1.createdAt } // Sort by creation date, newest first
     }
@@ -370,41 +410,100 @@ class HomeViewModel: ObservableObject {
     
     // MARK: - Performance Report Management
     func addPerformanceReport(_ report: PerformanceReport) {
-        DispatchQueue.main.async {
-            if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
-                self.userPerformanceReports[existingIndex] = report
-            } else {
-                self.userPerformanceReports.append(report)
+        Task {
+            do {
+                let reportID = try await supabaseManager.createPerformanceReport(report: report)
+                print("Successfully added performance report to Supabase: \(reportID)")
+                
+                // Update local cache
+                await MainActor.run {
+                    if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
+                        self.userPerformanceReports[existingIndex] = report
+                    } else {
+                        self.userPerformanceReports.append(report)
+                    }
+                    self.objectWillChange.send()
+                }
+            } catch {
+                print("Error adding performance report to Supabase: \(error)")
+                // Fallback to local storage if Supabase fails
+                await MainActor.run {
+                    if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
+                        self.userPerformanceReports[existingIndex] = report
+                    } else {
+                        self.userPerformanceReports.append(report)
+                    }
+                    self.saveData()
+                    self.objectWillChange.send()
+                }
             }
-            self.saveData()
-            self.objectWillChange.send()
         }
     }
     
     func getPerformanceReport(for sessionID: UUID) -> PerformanceReport? {
+        // Try to fetch from Supabase if user is logged in
+        if isLoggedIn && supabaseManager.currentUser != nil {
+            Task {
+                do {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionID) {
+                        await MainActor.run {
+                            // Update local cache
+                            if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == sessionID }) {
+                                self.userPerformanceReports[existingIndex] = report
+                            } else {
+                                self.userPerformanceReports.append(report)
+                            }
+                            self.objectWillChange.send()
+                        }
+                    }
+                } catch {
+                    print("Error fetching performance report from Supabase: \(error)")
+                }
+            }
+        }
+        
+        // Return from local cache
         return userPerformanceReports.first { $0.sessionID == sessionID }
     }
     
+    @MainActor
+    func loadPerformanceReportsFromSupabase() async {
+        guard supabaseManager.currentUser != nil else {
+            print("Cannot load performance reports: No user logged in")
+            return
+        }
+        
+        do {
+            let fetchedReports = try await supabaseManager.fetchAllPerformanceReports()
+            self.userPerformanceReports = fetchedReports
+            print("Successfully loaded \(fetchedReports.count) performance reports from Supabase")
+        } catch {
+            print("Error loading performance reports from Supabase: \(error)")
+        }
+    }
+    
     func getAllPerformanceReports() -> [PerformanceReport] {
+        // Load reports from Supabase if user is logged in
+        if isLoggedIn && supabaseManager.currentUser != nil {
+            Task {
+                await loadPerformanceReportsFromSupabase()
+            }
+        }
+        
         return userPerformanceReports.sorted { $0.sessionID > $1.sessionID }
     }
         
     // MARK: - Data Persistence
     private func saveData() {
         let encoder = JSONEncoder()
-        // Scripts are now stored in Supabase
+        // Scripts, Practice Sessions, and Performance Reports are now stored in Supabase
         
-        if let sessionsData = try? encoder.encode(sessionsArray) {
-            UserDefaults.standard.set(sessionsData, forKey: StorageKeys.sessions)
-        }
+        // Only QnA sessions and questions are still stored locally
         if let qnaSessionsData = try? encoder.encode(qnaArray) {
             UserDefaults.standard.set(qnaSessionsData, forKey: StorageKeys.qnaSessions)
         }
         if let qnaQuestionsData = try? encoder.encode(qnaQuestions) {
             UserDefaults.standard.set(qnaQuestionsData, forKey: StorageKeys.qnaQuestions)
-        }
-        if let reportsData = try? encoder.encode(userPerformanceReports) {
-            UserDefaults.standard.set(reportsData, forKey: StorageKeys.performanceReports)
         }
         
         UserDefaults.standard.set(userName, forKey: StorageKeys.userName)
@@ -414,13 +513,10 @@ class HomeViewModel: ObservableObject {
     private func loadData() {
         let decoder = JSONDecoder()
         
-        // Scripts are now loaded from Supabase
+        // Scripts, Practice Sessions, and Performance Reports are now loaded from Supabase
+        // We'll load them when needed using the respective methods
         
-        if let sessionsData = UserDefaults.standard.data(forKey: StorageKeys.sessions),
-           let decodedSessions = try? decoder.decode([PracticeSession].self, from: sessionsData) {
-            sessionsArray = decodedSessions
-        }
-        
+        // Only load QnA sessions and questions from local storage
         if let qnaSessionsData = UserDefaults.standard.data(forKey: StorageKeys.qnaSessions),
            let decodedQnASessions = try? decoder.decode([QnASession].self, from: qnaSessionsData) {
             qnaArray = decodedQnASessions
@@ -431,25 +527,36 @@ class HomeViewModel: ObservableObject {
             qnaQuestions = decodedQuestions
         }
         
-        if let reportsData = UserDefaults.standard.data(forKey: StorageKeys.performanceReports),
-           let decodedReports = try? decoder.decode([PerformanceReport].self, from: reportsData) {
-            userPerformanceReports = decodedReports
-        }
-        
         userName = UserDefaults.standard.string(forKey: StorageKeys.userName) ?? "User"
         overallImprovement = UserDefaults.standard.double(forKey: StorageKeys.overallImprovement)
+        
+        // If user is logged in, load data from Supabase
+        if supabaseManager.currentUser != nil {
+            Task {
+                await loadScriptsFromSupabase()
+                // We'll load practice sessions and performance reports when needed
+            }
+        }
     }
     
     // MARK: - User Authentication
     func userDidLogIn() {
         Task {
             await loadScriptsFromSupabase()
+            // We'll load practice sessions and performance reports when needed
+            // Clear any local-only data to ensure we're using fresh data from Supabase
+            await MainActor.run {
+                self.sessionsArray = []
+                self.userPerformanceReports = []
+            }
         }
     }
     
     func userDidLogOut() {
         DispatchQueue.main.async {
             self.scripts = []
+            self.sessionsArray = []
+            self.userPerformanceReports = []
         }
     }
 

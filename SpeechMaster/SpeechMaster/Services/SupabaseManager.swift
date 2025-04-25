@@ -959,7 +959,7 @@ class SupabaseManager: ObservableObject {
         
         do {
             let response = try await client
-                .from("Performace_Report")
+                .from("Performance_Report")
                 .insert(reportData)
                 .select()
                 .single()
@@ -994,7 +994,7 @@ class SupabaseManager: ObservableObject {
         
         do {
             let response = try await client
-                .from("Performace_Report")
+                .from("Performance_Report")
                 .select("*")
                 .eq("session_id", value: sessionId.uuidString)
                 .single()
@@ -1063,6 +1063,97 @@ class SupabaseManager: ObservableObject {
             if let dataString = String(data: responseData, encoding: .utf8) {
                 print("Response data: \(dataString)")
             }
+            throw error
+        }
+    }
+    
+    /// Fetches all performance reports for the current user
+    func fetchAllPerformanceReports() async throws -> [PerformanceReport] {
+        print("Fetching all performance reports for current user")
+        
+        guard let userId = currentUser?.id else {
+            print("Cannot fetch performance reports: No user logged in")
+            throw AuthError.userNotFound
+        }
+        
+        do {
+            // First get all practice sessions for the user to get their IDs
+            let sessionsResponse = try await client
+                .from("Practice_Session")
+                .select("id")
+                .eq("user_id", value: userId.uuidString)
+                .execute()
+            
+            struct SessionIDResponse: Codable {
+                let id: String
+            }
+            
+            let decoder = JSONDecoder()
+            let sessionIDs = try decoder.decode([SessionIDResponse].self, from: sessionsResponse.data)
+            
+            if sessionIDs.isEmpty {
+                print("No practice sessions found for user, returning empty reports array")
+                return []
+            }
+            
+            // Now fetch all performance reports that match these session IDs
+            // We need to use in() filter with the session IDs
+            let sessionIDStrings = sessionIDs.map { $0.id }
+            
+            let reportsResponse = try await client
+                .from("Performance_Report")
+                .select("*")
+                .filter("session_id", operator: "in", value: #"("# + sessionIDStrings.joined(separator: ",") + #")"#)
+                .execute()
+            
+            if let jsonString = String(data: reportsResponse.data, encoding: .utf8) {
+                print("Fetched performance reports response: \(jsonString)")
+            }
+            
+            // Parse the response data into an array of PerformanceReportResponse objects
+            struct PerformanceReportListResponse: Codable {
+                let id: String
+                let session_id: String
+                let pace_interval: Double
+                let video_url: String?
+                let filler_words: String
+                let missing_words: String
+                let pronunciation_errors: String
+                let duration: Double
+                let created_at: String
+            }
+            
+            let reportResponses = try decoder.decode([PerformanceReportListResponse].self, from: reportsResponse.data)
+            
+            // Map each response to a PerformanceReport object
+            var reports: [PerformanceReport] = []
+            
+            for response in reportResponses {
+                // Decode the JSON strings back into arrays
+                let fillerWords = try decoder.decode([SpeechAnalysisResult.FillerWord].self, from: Data(response.filler_words.utf8))
+                let missingWords = try decoder.decode([SpeechAnalysisResult.MissingWord].self, from: Data(response.missing_words.utf8))
+                let pronunciationErrors = try decoder.decode([SpeechAnalysisResult.PronunciationError].self, from: Data(response.pronunciation_errors.utf8))
+                
+                // Create a URL from the video URL string if one exists
+                let videoURL = response.video_url != nil ? URL(string: response.video_url!) : nil
+                
+                let report = PerformanceReport(
+                    sessionID: UUID(uuidString: response.session_id) ?? UUID(),
+                    wordsPerMinute: Int(response.pace_interval),
+                    fillerWords: fillerWords,
+                    missingWords: missingWords,
+                    pronunciationErrors: pronunciationErrors,
+                    duration: response.duration,
+                    videoURL: videoURL
+                )
+                
+                reports.append(report)
+            }
+            
+            print("Successfully fetched \(reports.count) performance reports")
+            return reports
+        } catch {
+            print("Error fetching performance reports: \(error)")
             throw error
         }
     }
@@ -1428,4 +1519,4 @@ class SupabaseManager: ObservableObject {
             throw error
         }
     }
-} 
+}
