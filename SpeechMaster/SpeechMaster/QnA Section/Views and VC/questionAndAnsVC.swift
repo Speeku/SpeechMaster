@@ -522,38 +522,54 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         let sessionNumber = HomeViewModel.shared.getQnASessions(for: HomeViewModel.shared.currentScriptID).count + 1
         let sessionName = "Q&A Session \(sessionNumber)"
         
-        // Create session ID
-        let sessionId = UUID()
-        
-        // Create and save session with current date
-        let qnaSession = QnASession(
-            id: sessionId,
-            scriptId: HomeViewModel.shared.currentScriptID,
-            createdAt: Date(),
-            title: sessionName
-        )
-        
-        // Create new questions array with updated session ID
-        let updatedQuestions = qna_dataController.questions.map { question in
-            return QnAQuestion(
-                id: question.id,
-                qna_session_Id: sessionId,  // Use the new session ID
-                questionText: question.questionText,
-                userAnswer: question.userAnswer,
-                suggestedAnswer: question.suggestedAnswer,
-                timeTaken: question.timeTaken
-            )
+        // Save session and questions to Supabase
+        Task {
+            do {
+                // First, create the QnA session in the database to get a valid session ID
+                let createdSession = try await SupabaseManager.shared.createQnASession(
+                    scriptId: HomeViewModel.shared.currentScriptID,
+                    title: sessionName
+                )
+                
+                print("Session created in database with ID: \(createdSession.id)")
+                
+                // Now create new questions array with the valid session ID from the database
+                let updatedQuestions = qna_dataController.questions.map { question in
+                    return QnAQuestion(
+                        id: question.id,
+                        qna_session_Id: createdSession.id,  // Use the database-generated session ID
+                        questionText: question.questionText,
+                        userAnswer: question.userAnswer,
+                        suggestedAnswer: question.suggestedAnswer,
+                        timeTaken: question.timeTaken
+                    )
+                }
+                
+                // Update the data controller's questions
+                await MainActor.run {
+                    qna_dataController.questions = updatedQuestions
+                }
+                
+                // Save questions using the valid session ID
+                print("Saving session: \(sessionName) with ID: \(createdSession.id)")
+                print("Number of questions being saved: \(updatedQuestions.count)")
+                
+                // Add session to local cache
+                await MainActor.run {
+                    HomeViewModel.shared.qnaArray.append(createdSession)
+                }
+                
+                // Save questions to database
+                HomeViewModel.shared.addQnAQuestions(updatedQuestions)
+                
+            } catch {
+                print("Error saving QnA session: \(error)")
+                // Show error alert to user
+                await MainActor.run {
+                    self.showAlert(title: "Error", message: "Failed to save your Q&A session. Please try again.")
+                }
+            }
         }
-        
-        // Update the data controller's questions
-        qna_dataController.questions = updatedQuestions
-        
-        // Save both session and questions
-        print("Saving session: \(sessionName) with ID: \(sessionId)")
-        print("Number of questions being saved: \(updatedQuestions.count)")
-        
-        HomeViewModel.shared.addQnASessions(qnaSession)
-        HomeViewModel.shared.addQnAQuestions(updatedQuestions)
     }
     
     // Add this line
@@ -577,9 +593,26 @@ class questionAndAnsVC: UIViewController, SFSpeechRecognizerDelegate, UITextView
         alert.addAction(UIAlertAction(title: "End Session", style: .default) { [weak self] _ in
             guard let self = self else { return }
             
-            // Save session and navigate
-            if let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionAnswerList") {
-                self.navigationController?.setViewControllers([destinationVC], animated: true)
+            // Show loading indicator
+            let loadingAlert = UIAlertController(title: nil, message: "Saving your session...", preferredStyle: .alert)
+            let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+            loadingIndicator.hidesWhenStopped = true
+            loadingIndicator.style = .medium
+            loadingIndicator.startAnimating()
+            loadingAlert.view.addSubview(loadingIndicator)
+            self.present(loadingAlert, animated: true)
+            
+            // Save session and wait for completion before navigating
+            self.saveSession()
+            
+            // Use a delay to allow time for the session to be saved
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                loadingAlert.dismiss(animated: true) {
+                    // Navigate to the next screen after saving is complete
+                    if let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "QuestionAnswerList") {
+                        self.navigationController?.setViewControllers([destinationVC], animated: true)
+                    }
+                }
             }
         })
         
