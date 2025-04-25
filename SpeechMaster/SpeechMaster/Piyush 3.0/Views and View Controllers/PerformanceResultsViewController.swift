@@ -865,6 +865,54 @@ class PerformanceResultsViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    private func saveReportOnly(name: String) {
+        // Set the session name
+        self.sessionName = name
+        
+        // Create a session object - don't use the ID yet
+        let newSession = PracticeSession(id: UUID(), // This ID won't actually be used
+                                       scriptId: self.scriptId,
+                                       createdAt: Date(),
+                                       title: self.sessionName)
+        
+        // Save in sequence - first create session, get its real ID from Supabase, then create report
+        Task {
+            do {
+                // Create the session in Supabase and get the actual session object back
+                let createdSession = try await SupabaseManager.shared.createPracticeSession(
+                    scriptId: self.scriptId,
+                    title: self.sessionName
+                )
+                
+                // Now use the actual session ID returned from Supabase
+                let newReport = PerformanceReport(
+                    sessionID: createdSession.id,
+                    wordsPerMinute: Int(self.results.averageWordsPerMinute),
+                    fillerWords: self.results.fillerWords,
+                    missingWords: self.results.missingWords,
+                    pronunciationErrors: self.results.pronunciationErrors,
+                    duration: self.results.totalDuration,
+                    videoURL: nil
+                )
+                
+                // Try to fix any potential foreign key constraint issues
+                try? await SupabaseManager.shared.fixForeignKeyConstraint()
+                
+                // Then save the report using the correct session ID
+                try await self.ds.addPerformanceReport(newReport)
+                
+                await MainActor.run {
+                    self.showSuccessAndDismiss(message: "Performance report saved successfully")
+                }
+            } catch {
+                print("Error saving performance report: \(error.localizedDescription)")
+                await MainActor.run {
+                    self.showError("Failed to save performance report: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     private func saveVideoAndReport(name: String) {
         // Set the session name
         self.sessionName = name
@@ -883,7 +931,7 @@ class PerformanceResultsViewController: UIViewController {
             guard let self = self else { return }
             
             // Create a dispatch work item for the main queue
-            DispatchQueue.main.async(execute: DispatchWorkItem {
+            DispatchQueue.main.async {
                 if success {
                     // Delete the video file from app storage
                     do {
@@ -892,59 +940,47 @@ class PerformanceResultsViewController: UIViewController {
                     } catch {
                         print("Error deleting video file: \(error.localizedDescription)")
                     }
-                    // Create a new session
-                    let newSession = PracticeSession(id: UUID(),
-                                                   scriptId: self.scriptId,
-                                                   createdAt: Date(),
-                                                   title: self.sessionName)
                     
-                    // Create and save the report
-                    let newReport = PerformanceReport(
-                        sessionID: newSession.id,
-                        wordsPerMinute: Int(self.results.averageWordsPerMinute),
-                        fillerWords: self.results.fillerWords,
-                        missingWords: self.results.missingWords,
-                        pronunciationErrors: self.results.pronunciationErrors,
-                        duration: self.results.totalDuration,
-                        videoURL: nil
-                    )
-                    
-                    // Save Session and Report
-                    self.ds.addSession(newSession)
-                    self.ds.addPerformanceReport(newReport)
-                    self.showSuccessAndDismiss(message: "Performance report and video saved to Photos")
+                    Task {
+                        do {
+                            // Create the session in Supabase and get the actual session back with its server-generated ID
+                            let createdSession = try await SupabaseManager.shared.createPracticeSession(
+                                scriptId: self.scriptId,
+                                title: self.sessionName
+                            )
+                            
+                            // Create the report with the actual session ID from Supabase
+                            let newReport = PerformanceReport(
+                                sessionID: createdSession.id,
+                                wordsPerMinute: Int(self.results.averageWordsPerMinute),
+                                fillerWords: self.results.fillerWords,
+                                missingWords: self.results.missingWords,
+                                pronunciationErrors: self.results.pronunciationErrors,
+                                duration: self.results.totalDuration,
+                                videoURL: nil
+                            )
+                            
+                            // Try to fix any potential foreign key constraint issues
+                            try? await SupabaseManager.shared.fixForeignKeyConstraint()
+                            
+                            // Then save the report
+                            try await self.ds.addPerformanceReport(newReport)
+                            
+                            await MainActor.run {
+                                self.showSuccessAndDismiss(message: "Performance report and video saved to Photos")
+                            }
+                        } catch {
+                            print("Error saving performance report: \(error.localizedDescription)")
+                            await MainActor.run {
+                                self.showError("Video saved to Photos, but failed to save performance report: \(error.localizedDescription)")
+                            }
+                        }
+                    }
                 } else {
                     self.showError("Failed to save video: \(error?.localizedDescription ?? "Unknown error")")
                 }
-            })
+            }
         }
-    }
-    
-    private func saveReportOnly(name: String) {
-        // Set the session name
-        self.sessionName = name
-        
-        let newSession = PracticeSession(id: UUID(),
-                                       scriptId: self.scriptId,
-                                       createdAt: Date(),
-                                       title: self.sessionName)
-        
-        // Create and save the report
-        let newReport = PerformanceReport(
-            sessionID: newSession.id,
-            wordsPerMinute: Int(self.results.averageWordsPerMinute),
-            fillerWords: self.results.fillerWords,
-            missingWords: self.results.missingWords,
-            pronunciationErrors: self.results.pronunciationErrors,
-            duration: self.results.totalDuration,
-            videoURL: nil
-        )
-        
-        // Save Session and Report
-        self.ds.addSession(newSession)
-        self.ds.addPerformanceReport(newReport)
-        
-        showSuccessAndDismiss(message: "Performance report saved successfully")
     }
     
     private func showSuccessAndDismiss(message: String) {

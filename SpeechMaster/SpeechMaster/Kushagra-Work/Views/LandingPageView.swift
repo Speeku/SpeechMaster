@@ -3,13 +3,17 @@ import UIKit
 
 struct LandingPageView: View {
     @EnvironmentObject var viewModel: HomeViewModel
-    @StateObject private var videoViewModel = VideoPlayerViewModel()
-    @StateObject private var fileUploadViewModel = FileUploadViewModel()
-    @State private var showingActionSheet = false
-    @State private var showingScriptCreation = false
-    @State private var showingDiscardAlert = false
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
     
+    @StateObject private var fileUploadViewModel = FileUploadViewModel()
+    @StateObject private var videoViewModel = VideoPlayerViewModel()
+    
+    @State private var showingActionSheet = false
+    @State private var showingDiscardAlert = false
+    @State private var showingScriptCreation = false
+    @State private var overallImprovementValue: Double = 0
+
     // Add reference to SupabaseManager
     private let supabaseManager = SupabaseManager.shared
 
@@ -117,7 +121,7 @@ struct LandingPageView: View {
                                 ProgressCardView(
                                     viewModel: viewModel,
                                     title: "Overall Improvement",
-                                    progress: viewModel.calculateOverallImprovement(for: viewModel.scripts.first?.id),
+                                    progress: overallImprovementValue,
                                     fgColor: .black,
                                     bgColor: Color.green.opacity(0.1),
                                     circleColor: .green,
@@ -127,6 +131,17 @@ struct LandingPageView: View {
                                 .padding(.top,-10)
                             }
                             .padding(.vertical, 8)
+                            .onAppear {
+                                // Load the improvement data when the view appears
+                                Task {
+                                    if let scriptId = viewModel.scripts.first?.id {
+                                        let value = await viewModel.calculateOverallImprovement(for: scriptId)
+                                        await MainActor.run {
+                                            overallImprovementValue = value
+                                        }
+                                    }
+                                }
+                            }
 
                             // My Scripts Section
                             VStack(alignment: .leading) {

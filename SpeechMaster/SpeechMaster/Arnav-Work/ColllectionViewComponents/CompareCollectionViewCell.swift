@@ -33,40 +33,60 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Deselect the row with animation
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        // Hide the table view and reset button image
-        UIView.animate(withDuration: 0.3) {
-            tableView.isHidden = true
-            
-            if tableView == self.TableView1 {
-                self.leftButton.setImage(self.beforeClicking, for: .normal)
-            } else {
-                self.rightButton.setImage(self.beforeClicking, for: .normal)
-            }
-        }
-        
         let sessions = dataSource.getSessions(for: scriptId)
         let selectedSession = sessions[indexPath.row]
         let selectedText = selectedSession.title
         
-        if tableView.tag == 1 {
-            stateOfButtonPrevious = false
-            left = dataSource.getPerformanceReport(for: selectedSession.id)
-            previous.text = selectedText
-            TableView1.isHidden = true
-        }
-        
-        if tableView.tag == 2 {
-            stateOfButtonCurrent = false
-            right = dataSource.getPerformanceReport(for: selectedSession.id)
-            TableView2.isHidden = true
-            current.text = selectedText
-        }
-        
-        if let leftReport = left, let rightReport = right {
-            setData(leftReport: leftReport, rightReport: rightReport)
+        Task {
+            if tableView.tag == 1 {
+                stateOfButtonPrevious = false
+                do {
+                    left = try await dataSource.getPerformanceReport(for: selectedSession.id)
+                    
+                    await MainActor.run {
+                        print("left", left ?? "No report found for left session")
+                        previous.text = selectedText
+                        TableView1.isHidden = true
+                        
+                        // Check if we can update the comparison
+                        if let leftReport = left, let rightReport = right {
+                            setData(leftReport: leftReport, rightReport: rightReport)
+                        }
+                    }
+                } catch {
+                    print("Error fetching left performance report: \(error)")
+                    
+                    await MainActor.run {
+                        previous.text = selectedText
+                        TableView1.isHidden = true
+                    }
+                }
+            }
+            
+            if tableView.tag == 2 {
+                stateOfButtonCurrent = false
+                do {
+                    right = try await dataSource.getPerformanceReport(for: selectedSession.id)
+                    
+                    await MainActor.run {
+                        print("right", right ?? "No report found for right session")
+                        current.text = selectedText
+                        TableView2.isHidden = true
+                        
+                        // Check if we can update the comparison
+                        if let leftReport = left, let rightReport = right {
+                            setData(leftReport: leftReport, rightReport: rightReport)
+                        }
+                    }
+                } catch {
+                    print("Error fetching right performance report: \(error)")
+                    
+                    await MainActor.run {
+                        current.text = selectedText
+                        TableView2.isHidden = true
+                    }
+                }
+            }
         }
     }
     

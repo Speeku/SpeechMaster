@@ -10,21 +10,16 @@ struct ProgressCardView: View {
     let circleColor: Color
     let lastCreatedScriptName: String?
     
+    @State private var progressPercentage: Int = 0
+    @State private var recentImprovement: Double = 0
+    
     private var currentScriptId: UUID? {
         viewModel.scripts.first?.id
-    }
-    
-    private var progressPercentage: Int {
-        Int(viewModel.calculateOverallImprovement(for: currentScriptId))
     }
     
     private var sessionCount: Int {
         guard let scriptId = currentScriptId else { return 0 }
         return viewModel.sessionsArray.filter { $0.scriptId == scriptId }.count
-    }
-    
-    private var recentImprovement: Double {
-        viewModel.calculateRecentImprovement(for: currentScriptId)
     }
     
     var body: some View {
@@ -61,6 +56,23 @@ struct ProgressCardView: View {
         .frame(maxWidth: .infinity)
         .background(Color.blue.opacity(0.1))
         .cornerRadius(16)
+        .onAppear {
+            // Use a Task to fetch the improvement calculations asynchronously
+            Task {
+                do {
+                    let overallValue = await viewModel.calculateOverallImprovement(for: currentScriptId)
+                    let recentValue = await viewModel.calculateRecentImprovement(for: currentScriptId)
+                    
+                    // Update the state properties on the main thread
+                    await MainActor.run {
+                        progressPercentage = Int(overallValue)
+                        recentImprovement = recentValue
+                    }
+                } catch {
+                    print("Error fetching improvement data: \(error)")
+                }
+            }
+        }
     }
 }
 

@@ -2,7 +2,9 @@ import UIKit
 
 class OverallProgressCell: UICollectionViewCell {
     
-    var dataSource = HomeViewModel.shared
+    var dataSource: HomeViewModel!
+    var scriptId: UUID!
+    
     // MARK: - UI Elements
     private let circularProgressView: MultiColorCircularProgressView = {
         let view = MultiColorCircularProgressView(frame: .zero)
@@ -63,6 +65,13 @@ class OverallProgressCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+    }
+    
+    // MARK: - Lifecycle
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupViews()
+        // Loading data will happen when dataSource and scriptId are set
     }
     
     // MARK: - Setup
@@ -246,31 +255,46 @@ class OverallProgressCell: UICollectionViewCell {
         circularProgressView.setSegmentValues(fillers: 0, missing: 0, pronunciation: 0)
     }
     
-    func testWithSimpleValues() {
-        // Get actual improvement values from HomeViewModel
-        let fillerImprovement = dataSource.calculateFillerWordsImprovement(for: dataSource.currentScriptID)
-        let missingImprovement = dataSource.calculateMissingWordsImprovement(for: dataSource.currentScriptID)
-        let pronunciationImprovement = dataSource.calculatePronunciationImprovement(for: dataSource.currentScriptID)
+    func loadImprovementData() {
+        // Make sure we have the required data
+        guard dataSource != nil && scriptId != nil else {
+            print("Cannot load improvement data: dataSource or scriptId is nil")
+            return
+        }
         
-        // Update progress bars with actual values (convert to Float and normalize to 0-1 range)
-        fillersProgressView.progress = Float(abs(fillerImprovement) / 100)
-        missingWordsProgressView.progress = Float(abs(missingImprovement) / 100)
-        pronunciationProgressView.progress = Float(abs(pronunciationImprovement) / 100)
-        
-        // Update percentage labels with actual improvement values
-        updateValueLabel(fillersValueLabel, improvement: fillerImprovement / 100)
-        updateValueLabel(missingWordsValueLabel, improvement: missingImprovement / 100)
-        updateValueLabel(pronunciationValueLabel, improvement: pronunciationImprovement / 100)
-        
-        // Calculate overall improvement (average)
-        let overallImprovement = dataSource.calculateOverallImprovement(for: dataSource.currentScriptID)
-        overallPercentLabel.text = String(format: "%.0f%%", overallImprovement)
-        
-        // Update the circle with actual proportional values
-        circularProgressView.setSegmentValues(
-            fillers: Int(abs(fillerImprovement)),
-            missing: Int(abs(missingImprovement)),
-            pronunciation: Int(abs(pronunciationImprovement))
-        )
+        Task {
+            do {
+                // Fetch all improvement metrics asynchronously
+                let fillerImprovement = await dataSource.calculateFillerWordsImprovement(for: scriptId)
+                let missingImprovement = await dataSource.calculateMissingWordsImprovement(for: scriptId)
+                let pronunciationImprovement = await dataSource.calculatePronunciationImprovement(for: scriptId)
+                let overallImprovement = await dataSource.calculateOverallImprovement(for: scriptId)
+                
+                // Update UI on main thread
+                await MainActor.run {
+                    // Update percentage labels with actual improvement values
+                    updateValueLabel(fillersValueLabel, improvement: fillerImprovement / 100)
+                    updateValueLabel(missingWordsValueLabel, improvement: missingImprovement / 100)
+                    updateValueLabel(pronunciationValueLabel, improvement: pronunciationImprovement / 100)
+                    
+                    // Update overall percentage
+                    overallPercentLabel.text = String(format: "%.0f%%", overallImprovement)
+                    
+                    // Update the circle with actual proportional values
+                    circularProgressView.setSegmentValues(
+                        fillers: Int(abs(fillerImprovement)),
+                        missing: Int(abs(missingImprovement)),
+                        pronunciation: Int(abs(pronunciationImprovement))
+                    )
+                    
+                    // Update progress bars
+                    fillersProgressView.progress = Float(abs(fillerImprovement) / 100)
+                    missingWordsProgressView.progress = Float(abs(missingImprovement) / 100)
+                    pronunciationProgressView.progress = Float(abs(pronunciationImprovement) / 100)
+                }
+            } catch {
+                print("Error loading improvement data: \(error)")
+            }
+        }
     }
 } 

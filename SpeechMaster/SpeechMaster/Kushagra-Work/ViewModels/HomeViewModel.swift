@@ -327,10 +327,63 @@ class HomeViewModel: ObservableObject {
     
     // MARK: -  QNA Session Management
     
-    func addQnASessions(_ qna: QnASession) {
-        DispatchQueue.main.async {
-            self.qnaArray.append(qna)
-            self.saveData()
+    @MainActor
+    func loadQnASessionsFromSupabase(for scriptId: UUID) async {
+        guard supabaseManager.currentUser != nil else {
+            print("Cannot load QnA sessions: No user logged in")
+            return
+        }
+        
+        do {
+            let fetchedSessions = try await supabaseManager.fetchQnASessions(for: scriptId)
+            self.qnaArray = fetchedSessions
+            print("Successfully loaded \(fetchedSessions.count) QnA sessions from Supabase")
+        } catch {
+            print("Error loading QnA sessions from Supabase: \(error)")
+        }
+    }
+    
+    @MainActor
+    func loadQnAQuestionsFromSupabase(for sessionId: UUID) async {
+        guard supabaseManager.currentUser != nil else {
+            print("Cannot load QnA questions: No user logged in")
+            return
+        }
+        
+        do {
+            let fetchedQuestions = try await supabaseManager.fetchQnAQuestions(for: sessionId)
+            // Append to existing questions - keeping local questions as well
+            let existingIds = Set(self.qnaQuestions.map { $0.id })
+            let newQuestions = fetchedQuestions.filter { !existingIds.contains($0.id) }
+            
+            self.qnaQuestions.append(contentsOf: newQuestions)
+            print("Successfully loaded \(fetchedQuestions.count) QnA questions from Supabase")
+        } catch {
+            print("Error loading QnA questions from Supabase: \(error)")
+        }
+    }
+    
+    func addQnASessions(_ qnaSession: QnASession) {
+        Task {
+            do {
+                let newSession = try await supabaseManager.createQnASession(
+                    scriptId: qnaSession.scriptId,
+                    title: qnaSession.title
+                )
+                
+                await MainActor.run {
+                    self.qnaArray.append(newSession)
+                    self.objectWillChange.send()
+                }
+                print("Successfully added QnA session to Supabase: \(newSession.id)")
+            } catch {
+                print("Error adding QnA session to Supabase: \(error)")
+                // Fallback to local storage if Supabase fails
+                await MainActor.run {
+                    self.qnaArray.append(qnaSession)
+                    self.saveData()
+                }
+            }
         }
     }
     
@@ -390,80 +443,144 @@ class HomeViewModel: ObservableObject {
             .sorted { $0.createdAt > $1.createdAt } // Sort by creation date, newest first
     }
     
-    // MARK: - Qna methods
+    // MARK: - QnA methods
     
     func addQnAQuestions(_ questions: [QnAQuestion]) {
-        DispatchQueue.main.async {
-            self.qnaQuestions.append(contentsOf: questions)
-            self.saveData()
-            print("Added \(questions.count) questions to storage")
+        Task {
+            var successCount = 0
+            var errorCount = 0
+            
+            for question in questions {
+                do {
+                    let newQuestion = try await supabaseManager.createQnAQuestion(
+                        qnaSessionId: question.qna_session_Id,
+                        questionText: question.questionText,
+                        suggestedAnswer: question.suggestedAnswer
+                    )
+                    
+                    // If the question already has a user answer and time, update it
+                    if !question.userAnswer.isEmpty || question.timeTaken > 0 {
+                        _ = try await supabaseManager.updateQnAQuestion(
+                            id: newQuestion.id,
+                            userAnswer: question.userAnswer,
+                            timeTaken: question.timeTaken
+                        )
+                    }
+                    
+                    successCount += 1
+                } catch {
+                    print("Error adding QnA question to Supabase: \(error)")
+                    errorCount += 1
+                }
+            }
+            
+            print("Added \(successCount) QnA questions to Supabase, failed: \(errorCount)")
+            
+            // Refresh local cache
+            if let sessionId = questions.first?.qna_session_Id {
+                await loadQnAQuestionsFromSupabase(for: sessionId)
+            }
+            
+            // Fallback to local storage for any questions that failed
+            if errorCount > 0 {
+                await MainActor.run {
+                    self.qnaQuestions.append(contentsOf: questions)
+                    self.saveData()
+                }
+            }
+        }
+    }
+    
+    func updateQnAQuestion(question: QnAQuestion) {
+        Task {
+            do {
+                let updatedQuestion = try await supabaseManager.updateQnAQuestion(
+                    id: question.id,
+                    userAnswer: question.userAnswer,
+                    timeTaken: question.timeTaken
+                )
+                
+                await MainActor.run {
+                    if let index = self.qnaQuestions.firstIndex(where: { $0.id == question.id }) {
+                        self.qnaQuestions[index] = updatedQuestion
+                    }
+                    self.objectWillChange.send()
+                }
+                print("Successfully updated QnA question in Supabase: \(question.id)")
+            } catch {
+                print("Error updating QnA question in Supabase: \(error)")
+                // Update local copy regardless of server status
+                await MainActor.run {
+                    if let index = self.qnaQuestions.firstIndex(where: { $0.id == question.id }) {
+                        self.qnaQuestions[index] = question
+                    }
+                    self.saveData()
+                }
+            }
         }
     }
     
     func getQuestions(for sessionId: UUID) -> [QnAQuestion] {
+        // Load questions from Supabase if user is logged in
+        if isLoggedIn && supabaseManager.currentUser != nil {
+            Task {
+                await loadQnAQuestionsFromSupabase(for: sessionId)
+            }
+        }
+        
         return qnaQuestions.filter { $0.qna_session_Id == sessionId }
     }
     
     func getQnASessions(for scriptId: UUID) -> [QnASession] {
-        return qnaArray.filter { $0.scriptId == scriptId }
-    }
-    
-    // MARK: - Performance Report Management
-    func addPerformanceReport(_ report: PerformanceReport) {
-        Task {
-            do {
-                let reportID = try await supabaseManager.createPerformanceReport(report: report)
-                print("Successfully added performance report to Supabase: \(reportID)")
-                
-                // Update local cache
-                await MainActor.run {
-                    if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
-                        self.userPerformanceReports[existingIndex] = report
-                    } else {
-                        self.userPerformanceReports.append(report)
-                    }
-                    self.objectWillChange.send()
-                }
-            } catch {
-                print("Error adding performance report to Supabase: \(error)")
-                // Fallback to local storage if Supabase fails
-                await MainActor.run {
-                    if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == report.sessionID }) {
-                        self.userPerformanceReports[existingIndex] = report
-                    } else {
-                        self.userPerformanceReports.append(report)
-                    }
-                    self.saveData()
-                    self.objectWillChange.send()
-                }
-            }
-        }
-    }
-    
-    func getPerformanceReport(for sessionID: UUID) -> PerformanceReport? {
-        // Try to fetch from Supabase if user is logged in
+        // Load sessions from Supabase if user is logged in
         if isLoggedIn && supabaseManager.currentUser != nil {
             Task {
-                do {
-                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionID) {
-                        await MainActor.run {
-                            // Update local cache
-                            if let existingIndex = self.userPerformanceReports.firstIndex(where: { $0.sessionID == sessionID }) {
-                                self.userPerformanceReports[existingIndex] = report
-                            } else {
-                                self.userPerformanceReports.append(report)
-                            }
-                            self.objectWillChange.send()
-                        }
-                    }
-                } catch {
-                    print("Error fetching performance report from Supabase: \(error)")
-                }
+                await loadQnASessionsFromSupabase(for: scriptId)
             }
         }
         
-        // Return from local cache
-        return userPerformanceReports.first { $0.sessionID == sessionID }
+        return qnaArray.filter { $0.scriptId == scriptId }
+            .sorted { $0.createdAt > $1.createdAt } // Sort by creation date, newest first
+    }
+    
+    // MARK: - Performance Report Management
+    func addPerformanceReport(_ report: PerformanceReport) async throws {
+        do {
+            let reportID = try await supabaseManager.createPerformanceReport(report: report)
+            print("Successfully added performance report to Supabase: \(reportID)")
+            
+            // Force refresh the performance reports from Supabase to ensure cache is up to date
+            if isLoggedIn && supabaseManager.currentUser != nil {
+                await loadPerformanceReportsFromSupabase()
+            }
+        } catch {
+            print("Error adding performance report to Supabase: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            
+            // Re-throw the error so the caller can handle it
+            throw error
+        }
+    }
+    
+    func getPerformanceReport(for sessionID: UUID) async throws -> PerformanceReport? {
+        guard isLoggedIn && supabaseManager.currentUser != nil else {
+            print("Cannot get performance report: No user logged in")
+            return nil
+        }
+        
+        // Always fetch from Supabase directly
+        do {
+            let report = try await supabaseManager.fetchPerformanceReport(for: sessionID)
+            if let report = report {
+                print("Successfully fetched performance report from Supabase for session: \(sessionID)")
+            } else {
+                print("No performance report found in Supabase for session: \(sessionID)")
+            }
+            return report
+        } catch {
+            print("Error fetching performance report from Supabase: \(error)")
+            throw error
+        }
     }
     
     @MainActor
@@ -482,17 +599,23 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func getAllPerformanceReports() -> [PerformanceReport] {
-        // Load reports from Supabase if user is logged in
-        if isLoggedIn && supabaseManager.currentUser != nil {
-            Task {
-                await loadPerformanceReportsFromSupabase()
-            }
+    func getAllPerformanceReports() async throws -> [PerformanceReport] {
+        guard isLoggedIn && supabaseManager.currentUser != nil else {
+            print("Cannot get performance reports: No user logged in")
+            return []
         }
         
-        return userPerformanceReports.sorted { $0.sessionID > $1.sessionID }
+        // Always fetch fresh data from Supabase
+        do {
+            let reports = try await supabaseManager.fetchAllPerformanceReports()
+            print("Successfully fetched \(reports.count) performance reports from Supabase")
+            return reports.sorted { $0.sessionID > $1.sessionID }
+        } catch {
+            print("Error fetching performance reports from Supabase: \(error)")
+            throw error
+        }
     }
-        
+    
     // MARK: - Data Persistence
     private func saveData() {
         let encoder = JSONEncoder()
@@ -548,6 +671,8 @@ class HomeViewModel: ObservableObject {
             await MainActor.run {
                 self.sessionsArray = []
                 self.userPerformanceReports = []
+                self.qnaArray = []
+                self.qnaQuestions = []
             }
         }
     }
@@ -557,6 +682,8 @@ class HomeViewModel: ObservableObject {
             self.scripts = []
             self.sessionsArray = []
             self.userPerformanceReports = []
+            self.qnaArray = []
+            self.qnaQuestions = []
         }
     }
 
@@ -725,147 +852,239 @@ class HomeViewModel: ObservableObject {
             }
         }
         
-        func calculateOverallImprovement(for scriptId: UUID? = nil) -> Double {
+        func calculateOverallImprovement(for scriptId: UUID? = nil) async -> Double {
             // If no scriptId provided, use the most recent script's ID
             let targetScriptId = scriptId ?? scripts.first?.id
             
-            guard let scriptId = targetScriptId else { 
-                DispatchQueue.main.async {
+            guard let scriptId = targetScriptId, isLoggedIn && supabaseManager.currentUser != nil else { 
+                await MainActor.run {
                     self.overallImprovement = 0
                 }
                 return 0 
             }
             
-            // Filter reports for the specific script
-            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
-            let scriptSessionIds = Set(scriptSessions.map { $0.id })
-            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-            
-            guard !scriptReports.isEmpty else {
-                DispatchQueue.main.async {
+            do {
+                // Get sessions for the script from Supabase
+                let sessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+                let sessionIds = Set(sessions.map { $0.id })
+                
+                // Create an array to hold reports
+                var reports: [PerformanceReport] = []
+                
+                // Fetch each report individually
+                for sessionId in sessionIds {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionId) {
+                        reports.append(report)
+                    }
+                }
+                
+                guard !reports.isEmpty else {
+                    await MainActor.run {
+                        self.overallImprovement = 0
+                    }
+                    return 0
+                }
+                
+                // Calculate average scores from script's reports
+                var totalScore = 0.0
+                
+                for report in reports {
+                    let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
+                    let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
+                    let paceScore = min(100, Double(report.wordsPerMinute))
+                    
+                    let reportScore = (fillerWordsScore * 0.3 +
+                                     missingWordsScore * 0.3 +
+                                     paceScore * 0.4)
+                    
+                    totalScore += reportScore
+                }
+                
+                let averageScore = totalScore / Double(reports.count)
+                
+                // Update the published property
+                await MainActor.run {
+                    self.overallImprovement = averageScore
+                }
+                
+                return averageScore
+            } catch {
+                print("Error calculating overall improvement: \(error)")
+                await MainActor.run {
                     self.overallImprovement = 0
                 }
                 return 0
             }
-            
-            // Calculate average scores from script's reports
-            var totalScore = 0.0
-            
-            for report in scriptReports {
-                let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
-                let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
-                let paceScore = min(100, Double(report.wordsPerMinute))
-                
-                let reportScore = (fillerWordsScore * 0.3 +
-                                 missingWordsScore * 0.3 +
-                                 paceScore * 0.4)
-                
-                totalScore += reportScore
-            }
-            
-            let averageScore = totalScore / Double(scriptReports.count)
-            
-            // Update the published property
-            DispatchQueue.main.async {
-                self.overallImprovement = averageScore
-            }
-            
-            return averageScore
         }
 
-        func calculateRecentImprovement(for scriptId: UUID? = nil) -> Double {
-            guard let scriptId = scriptId else { return 0 }
-            
-            // Filter reports for the specific script
-            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
-            let scriptSessionIds = Set(scriptSessions.map { $0.id })
-            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-            .sorted { $0.sessionID > $1.sessionID }
-            
-            guard scriptReports.count >= 2 else { return 0 }
-            
-            let latest = scriptReports[0]
-            let previous = scriptReports[1]
-            
-            func calculateScore(for report: PerformanceReport) -> Double {
-                let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
-                let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
-                let paceScore = min(100, Double(report.wordsPerMinute))
-                
-                return (fillerWordsScore * 0.3 + missingWordsScore * 0.3 + paceScore * 0.4)
+        func calculateRecentImprovement(for scriptId: UUID? = nil) async -> Double {
+            guard let scriptId = scriptId, isLoggedIn && supabaseManager.currentUser != nil else { 
+                return 0 
             }
             
-            let latestScore = calculateScore(for: latest)
-            let previousScore = calculateScore(for: previous)
-            let improvement = ((latestScore - previousScore) / previousScore) * 100
-            return max(-100, min(100, improvement))
+            do {
+                // Get sessions for the script from Supabase
+                let sessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+                let sessionIds = sessions.map { $0.id }
+                
+                // Create an array to hold reports
+                var reports: [PerformanceReport] = []
+                
+                // Fetch each report individually
+                for sessionId in sessionIds {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionId) {
+                        reports.append(report)
+                    }
+                }
+                
+                // Sort reports by session ID (most recent first)
+                let sortedReports = reports.sorted { $0.sessionID > $1.sessionID }
+                
+                guard sortedReports.count >= 2 else { return 0 }
+                
+                let latest = sortedReports[0]
+                let previous = sortedReports[1]
+                
+                func calculateScore(for report: PerformanceReport) -> Double {
+                    let fillerWordsScore = max(0, 100 - (Double(report.fillerWords.count) * 5))
+                    let missingWordsScore = max(0, 100 - (Double(report.missingWords.count) * 5))
+                    let paceScore = min(100, Double(report.wordsPerMinute))
+                    
+                    return (fillerWordsScore * 0.3 + missingWordsScore * 0.3 + paceScore * 0.4)
+                }
+                
+                let latestScore = calculateScore(for: latest)
+                let previousScore = calculateScore(for: previous)
+                let improvement = ((latestScore - previousScore) / previousScore) * 100
+                return max(-100, min(100, improvement))
+            } catch {
+                print("Error calculating recent improvement: \(error)")
+                return 0
+            }
         }
 
-        func calculateFillerWordsImprovement(for scriptId: UUID? = nil) -> Double {
+        func calculateFillerWordsImprovement(for scriptId: UUID? = nil) async -> Double {
             let targetScriptId = scriptId ?? scripts.first?.id
             
-            guard let scriptId = targetScriptId else { return 0 }
+            guard let scriptId = targetScriptId, isLoggedIn && supabaseManager.currentUser != nil else { 
+                return 0 
+            }
             
-            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
-            let scriptSessionIds = Set(scriptSessions.map { $0.id })
-            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-                .sorted { $0.sessionID > $1.sessionID }
-            
-            guard scriptReports.count >= 2 else { return 0 }
-            
-            let latest = scriptReports[0]
-            let previous = scriptReports[1]
-            
-            let latestScore = max(0, 100 - (Double(latest.fillerWords.count) * 5))
-            let previousScore = max(0, 100 - (Double(previous.fillerWords.count) * 5))
-            
-            let improvement = ((latestScore - previousScore) / previousScore) * 100
-            return max(-100, min(100, improvement))
+            do {
+                // Get sessions for the script from Supabase
+                let sessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+                let sessionIds = sessions.map { $0.id }
+                
+                // Create an array to hold reports
+                var reports: [PerformanceReport] = []
+                
+                // Fetch each report individually
+                for sessionId in sessionIds {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionId) {
+                        reports.append(report)
+                    }
+                }
+                
+                // Sort reports by session ID (most recent first)
+                let sortedReports = reports.sorted { $0.sessionID > $1.sessionID }
+                
+                guard sortedReports.count >= 2 else { return 0 }
+                
+                let latest = sortedReports[0]
+                let previous = sortedReports[1]
+                
+                let latestScore = max(0, 100 - (Double(latest.fillerWords.count) * 5))
+                let previousScore = max(0, 100 - (Double(previous.fillerWords.count) * 5))
+                
+                let improvement = ((latestScore - previousScore) / previousScore) * 100
+                return max(-100, min(100, improvement))
+            } catch {
+                print("Error calculating filler words improvement: \(error)")
+                return 0
+            }
         }
         
-        func calculateMissingWordsImprovement(for scriptId: UUID? = nil) -> Double {
+        func calculateMissingWordsImprovement(for scriptId: UUID? = nil) async -> Double {
             let targetScriptId = scriptId ?? scripts.first?.id
             
-            guard let scriptId = targetScriptId else { return 0 }
+            guard let scriptId = targetScriptId, isLoggedIn && supabaseManager.currentUser != nil else { 
+                return 0 
+            }
             
-            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
-            let scriptSessionIds = Set(scriptSessions.map { $0.id })
-            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-                .sorted { $0.sessionID > $1.sessionID }
-            
-            guard scriptReports.count >= 2 else { return 0 }
-            
-            let latest = scriptReports[0]
-            let previous = scriptReports[1]
-            
-            let latestScore = max(0, 100 - (Double(latest.missingWords.count) * 5))
-            let previousScore = max(0, 100 - (Double(previous.missingWords.count) * 5))
-            
-            let improvement = ((latestScore - previousScore) / previousScore) * 100
-            return max(-100, min(100, improvement))
+            do {
+                // Get sessions for the script from Supabase
+                let sessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+                let sessionIds = sessions.map { $0.id }
+                
+                // Create an array to hold reports
+                var reports: [PerformanceReport] = []
+                
+                // Fetch each report individually
+                for sessionId in sessionIds {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionId) {
+                        reports.append(report)
+                    }
+                }
+                
+                // Sort reports by session ID (most recent first)
+                let sortedReports = reports.sorted { $0.sessionID > $1.sessionID }
+                
+                guard sortedReports.count >= 2 else { return 0 }
+                
+                let latest = sortedReports[0]
+                let previous = sortedReports[1]
+                
+                let latestScore = max(0, 100 - (Double(latest.missingWords.count) * 5))
+                let previousScore = max(0, 100 - (Double(previous.missingWords.count) * 5))
+                
+                let improvement = ((latestScore - previousScore) / previousScore) * 100
+                return max(-100, min(100, improvement))
+            } catch {
+                print("Error calculating missing words improvement: \(error)")
+                return 0
+            }
         }
         
-        func calculatePronunciationImprovement(for scriptId: UUID? = nil) -> Double {
+        func calculatePronunciationImprovement(for scriptId: UUID? = nil) async -> Double {
             let targetScriptId = scriptId ?? scripts.first?.id
             
-            guard let scriptId = targetScriptId else { return 0 }
+            guard let scriptId = targetScriptId, isLoggedIn && supabaseManager.currentUser != nil else { 
+                return 0 
+            }
             
-            let scriptSessions = sessionsArray.filter { $0.scriptId == scriptId }
-            let scriptSessionIds = Set(scriptSessions.map { $0.id })
-            let scriptReports = userPerformanceReports.filter { scriptSessionIds.contains($0.sessionID) }
-                .sorted { $0.sessionID > $1.sessionID }
-            
-            guard scriptReports.count >= 2 else { return 0 }
-            
-            let latest = scriptReports[0]
-            let previous = scriptReports[1]
-            
-            // Assuming pronunciation score is based on words per minute as a proxy
-            let latestScore = min(100, Double(latest.wordsPerMinute))
-            let previousScore = min(100, Double(previous.wordsPerMinute))
-            
-            let improvement = ((latestScore - previousScore) / previousScore) * 100
-            return max(-100, min(100, improvement))
+            do {
+                // Get sessions for the script from Supabase
+                let sessions = try await supabaseManager.fetchPracticeSessions(for: scriptId)
+                let sessionIds = sessions.map { $0.id }
+                
+                // Create an array to hold reports
+                var reports: [PerformanceReport] = []
+                
+                // Fetch each report individually
+                for sessionId in sessionIds {
+                    if let report = try await supabaseManager.fetchPerformanceReport(for: sessionId) {
+                        reports.append(report)
+                    }
+                }
+                
+                // Sort reports by session ID (most recent first)
+                let sortedReports = reports.sorted { $0.sessionID > $1.sessionID }
+                
+                guard sortedReports.count >= 2 else { return 0 }
+                
+                let latest = sortedReports[0]
+                let previous = sortedReports[1]
+                
+                // Assuming pronunciation score is based on words per minute as a proxy
+                let latestScore = min(100, Double(latest.wordsPerMinute))
+                let previousScore = min(100, Double(previous.wordsPerMinute))
+                
+                let improvement = ((latestScore - previousScore) / previousScore) * 100
+                return max(-100, min(100, improvement))
+            } catch {
+                print("Error calculating pronunciation improvement: \(error)")
+                return 0
+            }
         }
         
         func updateUserProfileImage(_ imageURL: String) {
@@ -875,6 +1094,7 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
+
 
 
 

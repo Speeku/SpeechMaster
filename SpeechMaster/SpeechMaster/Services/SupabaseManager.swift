@@ -905,6 +905,20 @@ class SupabaseManager: ObservableObject {
     func createPerformanceReport(report: PerformanceReport) async throws -> UUID {
         print("Creating new performance report for session: \(report.sessionID.uuidString)")
         
+        // First, check if the session exists
+        let sessionExists = try await verifySessionExists(sessionId: report.sessionID)
+        if !sessionExists {
+            throw AuthError.unknown("Session with ID \(report.sessionID.uuidString) does not exist in the database")
+        }
+        
+        // Try to fix the foreign key constraint
+        _ = try? await fixForeignKeyConstraint()
+        
+        // First, check if the table exists and has the correct structure
+        if let tableInfo = try? await checkPerformanceReportTable() {
+            print("Performance_Report table structure: \(tableInfo)")
+        }
+        
         // Encode the filler words, missing words, and pronunciation errors to JSON
         let encoder = JSONEncoder()
         
@@ -958,6 +972,9 @@ class SupabaseManager: ObservableObject {
         )
         
         do {
+            print("Attempting to insert performance report into Supabase...")
+            print("Report data: session_id=\(reportData.session_id), pace=\(reportData.pace_interval), duration=\(reportData.duration)")
+            
             let response = try await client
                 .from("Performance_Report")
                 .insert(reportData)
@@ -984,6 +1001,16 @@ class SupabaseManager: ObservableObject {
             return reportId
         } catch {
             print("Error creating performance report: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            
+            // If this is a PostgreSQL error with details, try to extract and print them
+            if error.localizedDescription.contains("PostgreSQL error") {
+                print("PostgreSQL error detected: \(error.localizedDescription)")
+            }
+            
+            // Try to see if we can determine more about table structure or constraints
+            print("Attempting to get table information for Performance_Report...")
+            
             throw error
         }
     }
@@ -1024,6 +1051,11 @@ class SupabaseManager: ObservableObject {
     
     /// Maps the JSON response to a PerformanceReport object
     private func mapPerformanceReportFromResponse(responseData: Data) throws -> PerformanceReport {
+        // Print the raw response for debugging
+        if let jsonString = String(data: responseData, encoding: .utf8) {
+            print("Raw performance report JSON: \(jsonString)")
+        }
+        
         struct PerformanceReportResponse: Codable {
             let id: String
             let session_id: String
@@ -1033,7 +1065,7 @@ class SupabaseManager: ObservableObject {
             let missing_words: String
             let pronunciation_errors: String
             let duration: Double
-            let created_at: String
+            let created_at: String?  // Make this optional to handle cases where it doesn't exist
         }
         
         let decoder = JSONDecoder()
@@ -1120,7 +1152,7 @@ class SupabaseManager: ObservableObject {
                 let missing_words: String
                 let pronunciation_errors: String
                 let duration: Double
-                let created_at: String
+                let created_at: String?  // Make this optional to handle cases where it doesn't exist
             }
             
             let reportResponses = try decoder.decode([PerformanceReportListResponse].self, from: reportsResponse.data)
@@ -1517,6 +1549,142 @@ class SupabaseManager: ObservableObject {
                 print("Response data: \(dataString)")
             }
             throw error
+        }
+    }
+    
+    // MARK: - Debugging Helpers
+    
+    /// Check if the Performance_Report table exists and has the correct structure
+    private func checkPerformanceReportTable() async throws -> String {
+        do {
+            // Query the information schema to get table information
+            let response = try await client
+                .rpc("get_table_info", params: ["table_name": "Performance_Report"])
+                .execute()
+            
+            if let jsonString = String(data: response.data, encoding: .utf8) {
+                return jsonString
+            }
+            return "No table info available"
+        } catch {
+            print("Error checking Performance_Report table: \(error)")
+            
+            // Try to create the table if it doesn't exist
+            do {
+                let createTableResponse = try await client
+                    .rpc("create_performance_report_table")
+                    .execute()
+                
+                if let jsonString = String(data: createTableResponse.data, encoding: .utf8) {
+                    return "Table created: \(jsonString)"
+                }
+                return "Table created but no response data"
+            } catch {
+                return "Failed to check or create table: \(error.localizedDescription)"
+            }
+        }
+    }
+    
+    /// Verify that session exists before trying to reference it
+    private func verifySessionExists(sessionId: UUID) async throws -> Bool {
+        print("Verifying session existence for ID: \(sessionId.uuidString)")
+        
+        // Retry logic with exponential backoff
+        let maxRetries = 3
+        var delay: UInt64 = 500_000_000 // 0.5 seconds
+        
+        for attempt in 1...maxRetries {
+            do {
+                let response = try await client
+                    .from("Practice_Session")
+                    .select("*")
+                    .eq("id", value: sessionId.uuidString)
+                    .single()
+                    .execute()
+                
+                // If the response contains data, the session exists
+                if let jsonString = String(data: response.data, encoding: .utf8),
+                   !jsonString.isEmpty && jsonString != "null" {
+                    print("✅ Session exists (attempt \(attempt)): \(jsonString)")
+                    return true
+                } else {
+                    print("⚠️ Session with ID \(sessionId.uuidString) not found on attempt \(attempt)")
+                    
+                    if attempt < maxRetries {
+                        print("Waiting \(delay/1_000_000_000) seconds before retry...")
+                        try await Task.sleep(nanoseconds: delay)
+                        delay *= 2 // Exponential backoff
+                    }
+                }
+            } catch {
+                print("Error verifying session existence (attempt \(attempt)): \(error)")
+                
+                if attempt < maxRetries {
+                    print("Waiting \(delay/1_000_000_000) seconds before retry...")
+                    try await Task.sleep(nanoseconds: delay)
+                    delay *= 2 // Exponential backoff
+                }
+            }
+        }
+        
+        print("❌ Session with ID \(sessionId.uuidString) not found after \(maxRetries) attempts")
+        return false
+    }
+    
+    /// Fix the foreign key constraint if it has issues
+    public func fixForeignKeyConstraint() async throws -> Bool {
+        do {
+            print("Attempting to fix foreign key constraint...")
+            
+            // First, check the current constraints
+            let checkSQL = """
+            SELECT conname FROM pg_constraint
+            WHERE conrelid = 'Performance_Report'::regclass::oid
+            AND contype = 'f';
+            """
+            
+            let checkResponse = try await client.database.rpc("query", params: ["query": checkSQL]).execute()
+            print("Current constraints: \(String(data: checkResponse.data, encoding: .utf8) ?? "No constraints found")")
+            
+            // SQL to fix the constraint
+            let sql = """
+            -- Drop the incorrect constraint if it exists
+            ALTER TABLE "Performance_Report" DROP CONSTRAINT IF EXISTS "Performace_Report_session_id_fkey";
+            
+            -- Also try with other potential misspellings
+            ALTER TABLE "Performance_Report" DROP CONSTRAINT IF EXISTS "Performance_Report_session_id_fkey";
+            
+            -- Create the correct constraint
+            ALTER TABLE "Performance_Report" ADD CONSTRAINT "Performance_Report_session_id_fkey" 
+            FOREIGN KEY (session_id) REFERENCES "Practice_Session"(id) ON DELETE CASCADE;
+            """
+            
+            let response = try await client.database.rpc("query", params: ["query": sql]).execute()
+            print("Foreign key constraint SQL execution result: \(String(data: response.data, encoding: .utf8) ?? "No response")")
+            
+            // Verify the constraint was fixed correctly
+            let verifySQL = """
+            SELECT conname FROM pg_constraint
+            WHERE conrelid = 'Performance_Report'::regclass::oid
+            AND contype = 'f';
+            """
+            
+            let verifyResponse = try await client.database.rpc("query", params: ["query": verifySQL]).execute()
+            let verifyResult = String(data: verifyResponse.data, encoding: .utf8) ?? "No response"
+            print("Constraint verification after fix: \(verifyResult)")
+            
+            // If verification shows the constraint is still not correct, return false
+            if !verifyResult.contains("Performance_Report_session_id_fkey") {
+                print("WARNING: Foreign key constraint still not correctly fixed after attempt")
+                return false
+            }
+            
+            print("Foreign key constraint successfully fixed")
+            return true
+        } catch {
+            print("Error fixing foreign key constraint: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            return false
         }
     }
 }

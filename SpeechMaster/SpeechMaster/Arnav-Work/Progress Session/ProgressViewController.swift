@@ -69,13 +69,10 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OverallProgressCell", for: indexPath) as? OverallProgressCell else {
-                return UICollectionViewCell()
-            }
-            
-            // Use this for testing
-            cell.testWithSimpleValues() // or cell.testWithDummyData() if you want to use the full version
-            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OverallProgressCell", for: indexPath) as! OverallProgressCell
+            cell.dataSource = dataSource
+            cell.scriptId = scriptId
+            cell.loadImprovementData() // Call the async method to load real data
             return cell
         }
         
@@ -402,10 +399,25 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         
         if segemtedControlOutlet.selectedSegmentIndex == 0 {
             let practiceSession = dataSource.getSessions(for: scriptId)[indexPath.row]
-            let report = dataSource.getPerformanceReport(for: practiceSession.id)
-            let session = Session(from: practiceSession, report: report)
-            let detailsVC = SessionDetailsViewController(session: session)
-            navigationController?.pushViewController(detailsVC, animated: true)
+            
+            // Use Task to handle async call
+            Task {
+                var report: PerformanceReport?
+                do {
+                    report = try await dataSource.getPerformanceReport(for: practiceSession.id)
+                } catch {
+                    print("Error fetching performance report: \(error)")
+                }
+                
+                // Create a session object with the fetched report
+                let session = Session(from: practiceSession, report: report)
+                
+                // Update UI on the main thread
+                await MainActor.run {
+                    let detailsVC = SessionDetailsViewController(session: session)
+                    self.navigationController?.pushViewController(detailsVC, animated: true)
+                }
+            }
         } else {
             let qnaSessions = dataSource.getQnASessions(for: scriptId)
             if qnaSessions.isEmpty {
@@ -429,7 +441,6 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
                     
                     // Push the view controller
                     navigationController?.pushViewController(questionListVC, animated: true)
-                    // ... rest of your Q&A handling code ...
                 }
             }
         }

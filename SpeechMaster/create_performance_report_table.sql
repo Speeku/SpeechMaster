@@ -1,0 +1,2 @@
+-- Create a function to check and report table info
+CREATE OR REPLACE FUNCTION public.get_table_info(table_name text) RETURNS json LANGUAGE plpgsql SECURITY DEFINER AS $$ BEGIN RETURN (SELECT json_build_object(\"exists\", EXISTS (SELECT FROM information_schema.tables WHERE table_schema = \"public\" AND table_name = $1), \"columns\", (SELECT json_agg(json_build_object(\"column_name\", column_name, \"data_type\", data_type, \"is_nullable\", is_nullable)) FROM information_schema.columns WHERE table_schema = \"public\" AND table_name = $1))); END; $$;
