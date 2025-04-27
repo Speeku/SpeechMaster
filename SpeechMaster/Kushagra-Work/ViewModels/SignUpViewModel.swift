@@ -38,13 +38,6 @@ class SignUpViewModel: ObservableObject {
     init() {
         setupPasswordRequirements()
         setupValidation()
-        
-        // Set up notification observer for email verification dismissal
-        NotificationCenter.default.addObserver(forName: .dismissEmailVerification, 
-                                              object: nil, 
-                                              queue: .main) { [weak self] _ in
-            self?.showEmailVerification = false
-        }
     }
     
     // MARK: - Setup Methods
@@ -123,36 +116,28 @@ class SignUpViewModel: ObservableObject {
         }
         
         isLoading = true
-        print("DEBUG: Starting signup process for \(email)")
+        print("Starting signup process for \(email)")
         
         // Use Supabase for user registration
         Task {
             do {
-                print("DEBUG: Calling Supabase signUp method")
                 let user = try await supabaseManager.signUp(
                     name: name,
                     email: email,
                     password: password
                 )
                 
-                print("DEBUG: Supabase signUp completed successfully")
-                
                 // Update UI on main thread
                 await MainActor.run {
-                    print("DEBUG: Setting userToVerify and showEmailVerification")
                     self.userToVerify = user
                     self.isLoading = false
                     
                     // Show verification screen immediately (no navigation needed)
-                    print("DEBUG: User created successfully with ID: \(user.id)")
-                    print("DEBUG: Setting showEmailVerification to true")
+                    print("User created successfully with ID: \(user.id)")
+                    print("Showing email verification overlay")
                     self.showEmailVerification = true
-                    
-                    // Verify the value was actually set
-                    print("DEBUG: showEmailVerification is now: \(self.showEmailVerification)")
                 }
             } catch let error as AuthError {
-                print("DEBUG: Auth error during signup: \(error)")
                 await MainActor.run {
                     switch error {
                     case .emailAlreadyInUse:
@@ -167,7 +152,6 @@ class SignUpViewModel: ObservableObject {
                     self.isLoading = false
                 }
             } catch {
-                print("DEBUG: Unexpected error during signup: \(error)")
                 await MainActor.run {
                     self.showError(message: "An unexpected error occurred: \(error.localizedDescription)")
                     self.isLoading = false
@@ -238,6 +222,7 @@ class SignUpViewModel: ObservableObject {
         }
         
         isLoading = true
+        print("Verification successful, completing registration for user ID: \(user.id)")
         
         // Complete the signup process after verification
         Task {

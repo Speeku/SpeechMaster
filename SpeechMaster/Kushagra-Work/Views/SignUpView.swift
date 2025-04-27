@@ -1,8 +1,5 @@
 import SwiftUI
 
-// Import the OTPDigitBox from module (it should already be visible if in the same module)
-// No need for explicit import if in the same module
-
 struct SignUpView: View {
     @ObservedObject var viewModel: SignUpViewModel
     @Environment(\.dismiss) private var dismiss
@@ -194,9 +191,6 @@ struct SignUpView: View {
                     otpVerificationOverlay
                         .transition(.opacity)
                         .zIndex(3)
-                        .onAppear {
-                            print("DEBUG: OTP overlay appeared in UI")
-                        }
                 }
                 
                 // Loading view
@@ -230,32 +224,263 @@ struct SignUpView: View {
                         .shadow(radius: 10)
                     }
                     .transition(.opacity)
-                    .zIndex(2)
+                    .zIndex(5)
                 }
                 
                 // Show error alert if needed
                 if viewModel.showError {
                     errorAlert
+                        .zIndex(5)
+                }
+                
+                // OTP Error Alert
+                if showOtpError {
+                    otpErrorAlert
+                        .zIndex(5)
+                }
+            }
+            .navigationTitle("Create Account")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(false)
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.7)) {
+                    isAnimating = true
                 }
             }
         }
-        .navigationTitle("Create Account")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(false)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.7)) {
-                isAnimating = true
+    }
+    
+    // MARK: - OTP Verification Components
+    
+    private var otpVerificationOverlay: some View {
+        VStack(spacing: 24) {
+            // Header
+            VStack(spacing: 16) {
+                Image(systemName: "envelope.badge.shield.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                
+                Text("Verify Your Email")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                
+                Text("Enter the verification code sent to your email")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+                
+                Text(viewModel.email)
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
             }
             
-            // Debug check
-            print("DEBUG: SignUpView appeared")
+            // OTP Boxes
+            HStack(spacing: 8) {
+                ForEach(0..<6, id: \.self) { index in
+                    OTPDigitBox(
+                        digit: $otpDigits[index],
+                        isFocused: otpFocusField == index,
+                        onCommit: { moveToNextOTPField(from: index) }
+                    )
+                    .focused($otpFocusField, equals: index)
+                    .onChange(of: otpDigits[index]) { newValue in
+                        if newValue.count == 1 {
+                            moveToNextOTPField(from: index)
+                        }
+                    }
+                }
+            }
+            .padding(.vertical, 10)
+            
+            // Buttons
+            VStack(spacing: 16) {
+                // Verify button
+                Button(action: verifyOTP) {
+                    HStack {
+                        Text("Verify Email")
+                            .fontWeight(.semibold)
+                        
+                        Image(systemName: "checkmark")
+                            .font(.footnote.bold())
+                            .padding(.leading, 4)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color(red: 0.2, green: 0.5, blue: 0.9))
+                    )
+                }
+                .disabled(!isValidOTP() || isVerifying)
+                .opacity(isValidOTP() ? 1.0 : 0.7)
+                
+                // Resend button
+                Button(action: resendOTP) {
+                    Text("Didn't receive a code? Resend")
+                        .font(.subheadline)
+                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                }
+                
+                // Cancel button
+                Button(action: {
+                    withAnimation {
+                        viewModel.showEmailVerification = false
+                        // Reset OTP
+                        otpDigits = ["", "", "", "", "", ""]
+                    }
+                }) {
+                    Text("Cancel")
+                        .font(.subheadline)
+                        .foregroundColor(.red)
+                }
+                .padding(.top, 8)
+            }
         }
-        .onReceive(viewModel.$showEmailVerification) { shouldShow in
-            print("DEBUG: showEmailVerification changed to \(shouldShow)")
+        .padding(24)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color(.systemBackground))
+                .shadow(color: Color.black.opacity(0.2), radius: 15, x: 0, y: 5)
+        )
+        .padding(20)
+        .onAppear {
+            // Send OTP when overlay appears
+            sendOTP()
+            
+            // Set focus to first OTP field
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                otpFocusField = 0
+            }
         }
     }
     
-    // MARK: - View Components
+    private var otpErrorAlert: some View {
+        ZStack {
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    showOtpError = false
+                }
+            
+            VStack(spacing: 20) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .font(.system(size: 36))
+                    .foregroundColor(.orange)
+                
+                Text("Verification Error")
+                    .font(.headline)
+                
+                Text(otpErrorMessage)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                
+                Button(action: { showOtpError = false }) {
+                    Text("OK")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 45)
+                        .background(Color(red: 0.2, green: 0.5, blue: 0.9))
+                        .cornerRadius(10)
+                }
+            }
+            .padding(20)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.systemBackground))
+            )
+            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
+            .padding(30)
+        }
+        .transition(.opacity)
+    }
+    
+    // MARK: - OTP Verification Methods
+    
+    private func isValidOTP() -> Bool {
+        let otp = otpDigits.joined()
+        return otp.count == 6 && otp.allSatisfy { $0.isNumber }
+    }
+    
+    private func moveToNextOTPField(from currentIndex: Int) {
+        if currentIndex < 5 && !otpDigits[currentIndex].isEmpty {
+            otpFocusField = currentIndex + 1
+        } else if currentIndex == 5 {
+            otpFocusField = nil
+            if isValidOTP() {
+                verifyOTP()
+            }
+        }
+    }
+    
+    private func sendOTP() {
+        Task {
+            do {
+                print("Sending OTP to \(viewModel.email)")
+                try await SupabaseManager.shared.sendEmailVerificationOTP(email: viewModel.email)
+                print("OTP sent successfully to \(viewModel.email)")
+            } catch {
+                print("Failed to send OTP: \(error)")
+                await MainActor.run {
+                    otpErrorMessage = "Failed to send verification code: \(error.localizedDescription)"
+                    showOtpError = true
+                }
+            }
+        }
+    }
+    
+    private func resendOTP() {
+        // Reset OTP fields
+        otpDigits = ["", "", "", "", "", ""]
+        otpFocusField = 0
+        
+        // Send new OTP
+        sendOTP()
+    }
+    
+    private func verifyOTP() {
+        let otp = otpDigits.joined()
+        print("Verifying OTP: \(otp)")
+        
+        isVerifying = true
+        
+        Task {
+            do {
+                let verified = try await SupabaseManager.shared.verifyOTP(email: viewModel.email, token: otp)
+                
+                await MainActor.run {
+                    isVerifying = false
+                    
+                    if verified {
+                        print("OTP verification successful")
+                        // Clear OTP overlay
+                        viewModel.showEmailVerification = false
+                        // Complete registration
+                        viewModel.onEmailVerified()
+                    } else {
+                        print("OTP verification failed")
+                        otpErrorMessage = "Invalid verification code. Please try again."
+                        showOtpError = true
+                    }
+                }
+            } catch {
+                print("Error verifying OTP: \(error)")
+                await MainActor.run {
+                    isVerifying = false
+                    otpErrorMessage = "Error verifying code: \(error.localizedDescription)"
+                    showOtpError = true
+                }
+            }
+        }
+    }
+    
+    // MARK: - Existing View Components
     
     private var logoView: some View {
         VStack(spacing: 15) {
@@ -427,198 +652,53 @@ struct SignUpView: View {
         }
         .transition(.opacity)
     }
-    
-    // MARK: - OTP Verification Components
-    
-    private var otpVerificationOverlay: some View {
-        VStack(spacing: 24) {
-            // Header
-            VStack(spacing: 16) {
-                Image(systemName: "envelope.badge.shield.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 60, height: 60)
-                    .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
-                
-                Text("Verify Your Email")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
-                
-                Text("Enter the verification code sent to your email")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 20)
-                
-                Text(viewModel.email)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
-            }
-            
-            // OTP Boxes
-            HStack(spacing: 8) {
-                ForEach(0..<6, id: \.self) { index in
-                    OTPDigitBox(
-                        digit: $otpDigits[index],
-                        isFocused: otpFocusField == index,
-                        onCommit: { moveToNextOTPField(from: index) }
-                    )
-                    .focused($otpFocusField, equals: index)
-                    .onChange(of: otpDigits[index]) { newValue in
-                        if newValue.count == 1 {
-                            moveToNextOTPField(from: index)
-                        }
-                    }
-                }
-            }
-            .padding(.vertical, 10)
-            
-            // Buttons
-            VStack(spacing: 16) {
-                // Verify button
-                Button(action: verifyOTP) {
-                    HStack {
-                        Text("Verify Email")
-                            .fontWeight(.semibold)
-                        
-                        Image(systemName: "checkmark")
-                            .font(.footnote.bold())
-                            .padding(.leading, 4)
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(red: 0.2, green: 0.5, blue: 0.9))
-                    )
-                }
-                .disabled(!isValidOTP() || isVerifying)
-                .opacity(isValidOTP() ? 1.0 : 0.7)
-                
-                // Resend button
-                Button(action: resendOTP) {
-                    Text("Didn't receive a code? Resend")
-                        .font(.subheadline)
-                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
-                }
-                
-                // Cancel button
-                Button(action: {
-                    withAnimation {
-                        viewModel.showEmailVerification = false
-                        // Reset OTP
-                        otpDigits = ["", "", "", "", "", ""]
-                    }
-                }) {
-                    Text("Cancel")
-                        .font(.subheadline)
-                        .foregroundColor(.red)
-                }
-                .padding(.top, 8)
-            }
-        }
-        .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
-                .shadow(color: Color.black.opacity(0.2), radius: 15, x: 0, y: 5)
-        )
-        .padding(20)
-        .onAppear {
-            // Send OTP when overlay appears
-            sendOTP()
-            
-            // Set focus to first OTP field
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                otpFocusField = 0
-            }
-        }
-    }
-    
-    // MARK: - OTP Verification Methods
-    
-    private func isValidOTP() -> Bool {
-        let otp = otpDigits.joined()
-        return otp.count == 6 && otp.allSatisfy { $0.isNumber }
-    }
+}
 
-    private func moveToNextOTPField(from currentIndex: Int) {
-        if currentIndex < 5 && !otpDigits[currentIndex].isEmpty {
-            otpFocusField = currentIndex + 1
-        } else if currentIndex == 5 {
-            otpFocusField = nil
-            if isValidOTP() {
-                verifyOTP()
-            }
-        }
-    }
-
-    private func sendOTP() {
-        Task {
-            do {
-                print("DEBUG: Sending OTP to \(viewModel.email)")
-                try await SupabaseManager.shared.sendEmailVerificationOTP(email: viewModel.email)
-                print("DEBUG: OTP sent successfully to \(viewModel.email)")
-            } catch {
-                print("DEBUG: Failed to send OTP: \(error)")
-                await MainActor.run {
-                    otpErrorMessage = "Failed to send verification code: \(error.localizedDescription)"
-                    showOtpError = true
-                }
-            }
-        }
-    }
-
-    private func resendOTP() {
-        // Reset OTP fields
-        otpDigits = ["", "", "", "", "", ""]
-        otpFocusField = 0
-        
-        // Send new OTP
-        sendOTP()
-    }
-
-    private func verifyOTP() {
-        let otp = otpDigits.joined()
-        print("DEBUG: Verifying OTP: \(otp)")
-        
-        isVerifying = true
-        
-        Task {
-            do {
-                print("DEBUG: Calling SupabaseManager.verifyOTP")
-                let verified = try await SupabaseManager.shared.verifyOTP(email: viewModel.email, token: otp)
-                
-                await MainActor.run {
-                    isVerifying = false
-                    
-                    if verified {
-                        print("DEBUG: OTP verification successful")
-                        // Clear OTP overlay
-                        viewModel.showEmailVerification = false
-                        // Complete registration
-                        viewModel.onEmailVerified()
-                    } else {
-                        print("DEBUG: OTP verification failed")
-                        otpErrorMessage = "Invalid verification code. Please try again."
-                        showOtpError = true
-                    }
-                }
-            } catch {
-                print("DEBUG: Error verifying OTP: \(error)")
-                await MainActor.run {
-                    isVerifying = false
-                    otpErrorMessage = "Error verifying code: \(error.localizedDescription)"
-                    showOtpError = true
-                }
-            }
+// Add this helper wrapper to ensure proper navigation
+struct EmailVerificationNavigationWrapper: View {
+    let email: String
+    let onVerificationSuccess: () -> Void
+    
+    var body: some View {
+        NavigationView {
+            EmailVerificationView(
+                viewModel: EmailVerificationViewModel(email: email),
+                onVerificationSuccess: onVerificationSuccess
+            )
         }
     }
 }
 
-#Preview {
-    SignUpView(viewModel: SignUpViewModel())
+// UIKit-based presenter for reliable modal presentation
+struct ModalPresenter<Content: View>: UIViewControllerRepresentable {
+    @Binding var isPresented: Bool
+    let content: Content
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        let controller = UIViewController()
+        controller.view.backgroundColor = .clear
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        if isPresented {
+            // If not already presented, present the modal
+            if uiViewController.presentedViewController == nil {
+                let hostingController = UIHostingController(rootView: content)
+                hostingController.modalPresentationStyle = .fullScreen
+                uiViewController.present(hostingController, animated: true)
+            }
+        } else {
+            // If presented but should be dismissed
+            if uiViewController.presentedViewController != nil {
+                uiViewController.dismiss(animated: true)
+            }
+        }
+    }
+    
+    static func dismantleUIViewController(_ uiViewController: UIViewController, coordinator: ()) {
+        if uiViewController.presentedViewController != nil {
+            uiViewController.dismiss(animated: false)
+        }
+    }
 } 

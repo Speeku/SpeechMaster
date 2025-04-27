@@ -106,9 +106,9 @@ class SupabaseManager: ObservableObject {
             throw AuthError.unknown("Auth signup failed: \(error.localizedDescription)")
         }
         
-        guard let session = authResponse.session else {
-            print("No session returned after signup for \(email)")
-            throw AuthError.unknown("Failed to create user account - no session")
+        // A session may not be available immediately if email confirmation is required
+        if authResponse.session == nil {
+            print("No session returned - email confirmation may be required for \(email)")
         }
         
         // Check if user ID exists - FIX for UUID optional binding error
@@ -120,31 +120,39 @@ class SupabaseManager: ObservableObject {
         let userId = authResponse.user.id
         print("User created in auth.users with ID: \(userId.uuidString)")
         
-        // Step 2: Explicitly insert the user into the public.User table
+        // Create a temporary user object for the verification process
+        // The actual database insert will happen after verification
+        let tempUser = User(
+            id: userId,
+            email: email,
+            name: name,
+            profileImageURL: nil,
+            createdAt: Date(),
+            lastLoginAt: Date(),
+            preferences: User.UserPreferences(
+                isDarkMode: false,
+                notificationsEnabled: true,
+                emailNotificationsEnabled: true
+            )
+        )
+        
+        return tempUser
+    }
+    
+    // After successful email verification, complete the signup process by 
+    // inserting the user data into our public.User table
+    func completeUserRegistration(user: User) async throws -> User {
+        print("Completing user registration in database for: \(user.email)")
+        
         do {
-            // Create a properly typed dictionary for Postgres JSON insert
-            // Use PostgresJSONB type to insert directly as a string which will be parsed by Postgres
-            let jsonString = """
-            {
-                "id": "\(userId.uuidString)",
-                "email": "\(email)",
-                "name": "\(name)",
-                "preferences": {
-                    "isDarkMode": false,
-                    "notificationsEnabled": true,
-                    "emailNotificationsEnabled": true
-                }
-            }
-            """
-            
-            // Use raw SQL query with parameters to avoid Encodable issues with mixed types
+            // Insert the user into the public.User table
             let result = try await client.database
                 .rpc(
                     "insert_user_record",
                     params: [
-                        "user_id": userId.uuidString,
-                        "user_email": email,
-                        "user_name": name,
+                        "user_id": user.id.uuidString,
+                        "user_email": user.email,
+                        "user_name": user.name,
                         "user_preferences": """
                             {
                                 "isDarkMode": false,
@@ -156,32 +164,20 @@ class SupabaseManager: ObservableObject {
                 )
                 .execute()
             
-            print("User inserted using database RPC function")
+            print("User inserted into public.User table")
             
             // Fetch the user data from public.User table
-            let user = try await fetchUser(userId: userId)
-            
-            print("User successfully inserted into public.User table")
+            let verifiedUser = try await fetchUser(userId: user.id)
             
             // Update current user
             await MainActor.run {
-                self.currentUser = user
+                self.currentUser = verifiedUser
             }
             
-            return user
+            return verifiedUser
         } catch {
-            print("Error inserting user into public.User table: \(error)")
-            
-            // If insertion fails, try to clean up the auth user to avoid orphaned accounts
-            do {
-                print("Attempting to clean up auth user after failed public.User insertion")
-                try await client.auth.admin.deleteUser(id: userId.uuidString)
-                print("Auth user cleanup successful")
-            } catch {
-                print("Failed to clean up auth user: \(error)")
-            }
-            
-            throw AuthError.unknown("Failed to insert user data into public.User table: \(error.localizedDescription)")
+            print("Error inserting user into database: \(error)")
+            throw AuthError.unknown("Failed to insert user data: \(error.localizedDescription)")
         }
     }
     
@@ -1685,6 +1681,75 @@ class SupabaseManager: ObservableObject {
             print("Error fixing foreign key constraint: \(error)")
             print("Error details: \(error.localizedDescription)")
             return false
+        }
+    }
+    
+    // MARK: - Email Verification Methods
+    
+    func sendEmailVerificationOTP(email: String) async throws {
+        print("Starting sendEmailVerificationOTP for \(email)")
+        
+        do {
+            // Check if the user exists in the auth system
+            let result = try await client.auth.resend(
+                email: email,
+                type: .signup
+            )
+            
+            print("OTP sent successfully to \(email)")
+        } catch {
+            print("Error in sendEmailVerificationOTP: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            throw AuthError.unknown("Failed to send verification OTP: \(error.localizedDescription)")
+        }
+    }
+    
+    func verifyOTP(email: String, token: String) async throws -> Bool {
+        print("Starting verifyOTP for \(email) with token: \(token)")
+        
+        do {
+            let response = try await client.auth.verifyOTP(
+                email: email,
+                token: token,
+                type: .signup
+            )
+            
+            // Check if verification was successful (we have a valid session)
+            if response.session != nil {
+                print("OTP verification successful for \(email) - session established")
+                
+                // Store the session for the verified user
+                await MainActor.run {
+                    // If needed, update session state here
+                    print("Updated session state on main thread")
+                }
+                
+                return true
+            } else {
+                print("OTP verification failed for \(email) - no session returned")
+                return false
+            }
+        } catch {
+            print("Error in verifyOTP: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            throw AuthError.unknown("Failed to verify OTP: \(error.localizedDescription)")
+        }
+    }
+    
+    func resendOTP(email: String) async throws {
+        print("Starting resendOTP for \(email)")
+        
+        do {
+            let response = try await client.auth.resend(
+                email: email,
+                type: .signup
+            )
+            
+            print("OTP resent successfully to \(email)")
+        } catch {
+            print("Error in resendOTP: \(error)")
+            print("Error details: \(error.localizedDescription)")
+            throw AuthError.unknown("Failed to resend OTP: \(error.localizedDescription)")
         }
     }
 }
