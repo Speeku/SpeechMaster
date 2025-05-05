@@ -39,6 +39,11 @@ class OverallProgressCell: UICollectionViewCell {
         static let background = UIColor.systemGray6.withAlphaComponent(0.2)
         static let improvement = UIColor.systemGreen
         static let decline = UIColor.systemRed
+        
+        // Dark mode versions of the colors (lighter versions for better visibility)
+        static let fillersDark = UIColor(hex: "6B6AD6")    // Lighter navy blue
+        static let missingDark = UIColor(hex: "FF5CA5")    // Lighter pink/magenta
+        static let pronunciationDark = UIColor(hex: "67D5F5") // Lighter blue
     }
     
     // Labels with colors
@@ -105,8 +110,26 @@ class OverallProgressCell: UICollectionViewCell {
     }
     
     private func setupViews() {
-        backgroundColor = .systemBackground
+        // Get the current trait collection to check for dark mode
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Set cell background color based on mode
+        backgroundColor = isDarkMode ? UIColor(white: 0.2, alpha: 1.0) : .systemBackground
+        
+        // Apply corner radius to both the cell and content view
         layer.cornerRadius = 16
+        contentView.layer.cornerRadius = 16
+        
+        // Ensure clipping is enabled for the content view as well
+        layer.masksToBounds = true
+        contentView.clipsToBounds = true
+        
+        // Fix for corner radius in dark mode - ensure frame is set properly
+        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        
+        // Update label colors based on dark mode
+        updateColorsForTraitCollection()
         
         [titleLabel, circularProgressView, overallPercentLabel,
          fillersLabel, fillersProgressView, fillersValueLabel,
@@ -170,6 +193,56 @@ class OverallProgressCell: UICollectionViewCell {
             pronunciationProgressView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             pronunciationProgressView.heightAnchor.constraint(equalToConstant: 6),
         ])
+    }
+    
+    // Add a method to handle color updates when dark mode changes
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColorsForTraitCollection()
+        }
+    }
+    
+    private func updateColorsForTraitCollection() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Update cell background - match the exact color used in CompareCollectionViewCell
+        backgroundColor = isDarkMode ? UIColor(white: 0.22, alpha: 1.0) : .systemBackground
+        
+        // Update label colors
+        titleLabel.textColor = isDarkMode ? .white : .black
+        overallPercentLabel.textColor = isDarkMode ? .white : .black
+        
+        // Update metric labels with appropriate colors for dark/light mode
+        fillersLabel.textColor = isDarkMode ? Colors.fillersDark : Colors.fillers
+        missingWordsLabel.textColor = isDarkMode ? Colors.missingDark : Colors.missing
+        pronunciationLabel.textColor = isDarkMode ? Colors.pronunciationDark : Colors.pronunciation
+        
+        // Also update progress view colors
+        fillersProgressView.progressTintColor = isDarkMode ? Colors.fillersDark : Colors.fillers
+        missingWordsProgressView.progressTintColor = isDarkMode ? Colors.missingDark : Colors.missing
+        pronunciationProgressView.progressTintColor = isDarkMode ? Colors.pronunciationDark : Colors.pronunciation
+        
+        // Update value labels
+        updateColorsForValueLabels()
+    }
+    
+    private func updateColorsForValueLabels() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Only update color if not already set by improvement/decline logic
+        if let text = fillersValueLabel.text, text == "0%" {
+            fillersValueLabel.textColor = isDarkMode ? .lightGray : .darkGray
+        }
+        
+        if let text = missingWordsValueLabel.text, text == "0%" {
+            missingWordsValueLabel.textColor = isDarkMode ? .lightGray : .darkGray
+        }
+        
+        if let text = pronunciationValueLabel.text, text == "0%" {
+            pronunciationValueLabel.textColor = isDarkMode ? .lightGray : .darkGray
+        }
     }
     
     // MARK: - Public Methods
@@ -251,7 +324,11 @@ class OverallProgressCell: UICollectionViewCell {
         missingWordsValueLabel.text = "0%"
         pronunciationValueLabel.text = "0%"
         
+        updateColorsForValueLabels()
+        
         overallPercentLabel.text = "0%"
+        overallPercentLabel.textColor = traitCollection.userInterfaceStyle == .dark ? .white : .black
+        
         circularProgressView.setSegmentValues(fillers: 0, missing: 0, pronunciation: 0)
     }
     

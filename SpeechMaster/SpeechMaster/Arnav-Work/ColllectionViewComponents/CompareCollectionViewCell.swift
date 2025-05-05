@@ -20,6 +20,57 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     let beforeClicking = UIImage(systemName: "chevron.right")
     var stateOfButtonPrevious : Bool = false
     
+    // Add initialization method to set up the cell for dark mode
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        // Apply only the main cell background color to match OverallProgressCell
+        applyMainBackgroundColor()
+        
+        // Update text colors for visibility
+        updateTextColors()
+        
+        setupTableViews()
+        setupButtons()
+        tableViewConstriants()
+        setupInitialState()
+        flipProgressView()
+    }
+    
+    private func applyMainBackgroundColor() {
+        // Apply ONLY the main cell background color to match OverallProgressCell
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Set the background color to a more distinct grey to appear as a section
+        let greyColor = isDarkMode ? UIColor(white: 0.25, alpha: 1.0) : UIColor.systemGray5
+        
+        // Apply the grey color to both the cell and its contentView
+        backgroundColor = greyColor
+        contentView.backgroundColor = greyColor
+        
+        // Add a subtle border for better section appearance
+        layer.borderWidth = 0.5
+        layer.borderColor = isDarkMode ? UIColor.gray.cgColor : UIColor.systemGray3.cgColor
+        
+        // Apply corner radius to maintain appearance
+        layer.cornerRadius = 10
+        layer.masksToBounds = true
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // Apply only main background color
+            applyMainBackgroundColor()
+            
+            // Update text colors for visibility
+            updateTextColors()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sessions = dataSource.getSessions(for: scriptId)
         return sessions.count
@@ -91,6 +142,20 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     }
     
     func setData(leftReport: PerformanceReport, rightReport: PerformanceReport) {
+        // Apply enhanced styling to progress views
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        let progressBgColor = isDarkMode ? UIColor(white: 0.25, alpha: 1.0) : UIColor.systemGray6
+        let progressTrackColor = isDarkMode ? UIColor(white: 0.15, alpha: 1.0) : UIColor.systemGray5
+        
+        // Update progress view styling
+        [fillerP1, missingP1, paceP1, pronunciationP1, overallP1, 
+         fillerP2, missingP2, paceP2, prounciationP2, overrallP2].forEach { progressView in
+            progressView?.backgroundColor = progressBgColor
+            progressView?.trackColor = progressTrackColor
+            progressView?.layer.cornerRadius = 8
+            progressView?.clipsToBounds = true
+        }
+        
         // Animate progress updates
         UIView.animate(withDuration: 2) {
             // Calculate scores for left side
@@ -121,18 +186,24 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
             self.prounciationP2.progress = rightPronunciationScore
             self.overrallP2.progress = rightOverallScore
             
-            // Update overall score colors based on comparison
-            self.overallP1.progressColor = (leftOverallScore < rightOverallScore) ? .systemRed : .systemBlue
-            self.overrallP2.progressColor = (rightOverallScore < leftOverallScore) ? .systemRed : .systemBlue
+            // Update overall score colors based on comparison - use brighter colors in dark mode
+            let goodColor = isDarkMode ? UIColor.systemBlue.withAlphaComponent(0.8) : UIColor.systemBlue
+            let badColor = isDarkMode ? UIColor.systemRed.withAlphaComponent(0.8) : UIColor.systemRed
+            
+            self.overallP1.progressColor = (leftOverallScore < rightOverallScore) ? badColor : goodColor
+            self.overrallP2.progressColor = (rightOverallScore < leftOverallScore) ? badColor : goodColor
         }
         
         updateColor(leftProgress: fillerP1, rightProgress: fillerP2)
         updateColor(leftProgress: missingP1, rightProgress: missingP2)
         updateColor(leftProgress: pronunciationP1, rightProgress: prounciationP2)
         
-        // Update pace colors based on words per minute
-        self.paceP1.progressColor = (leftReport.wordsPerMinute < 80 || leftReport.wordsPerMinute > 150) ? .systemRed : .systemBlue
-        self.paceP2.progressColor = (rightReport.wordsPerMinute < 80 || rightReport.wordsPerMinute > 150) ? .systemRed : .systemBlue
+        // Update pace colors based on words per minute - use brighter colors in dark mode
+        let goodColor = isDarkMode ? UIColor.systemBlue.withAlphaComponent(0.8) : UIColor.systemBlue
+        let badColor = isDarkMode ? UIColor.systemRed.withAlphaComponent(0.8) : UIColor.systemRed
+        
+        self.paceP1.progressColor = (leftReport.wordsPerMinute < 80 || leftReport.wordsPerMinute > 150) ? badColor : goodColor
+        self.paceP2.progressColor = (rightReport.wordsPerMinute < 80 || rightReport.wordsPerMinute > 150) ? badColor : goodColor
     }
     
     func updateColor(leftProgress : RoundedEndProgress, rightProgress : RoundedEndProgress){
@@ -261,16 +332,6 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
     
     
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setupTableViews()
-        setupButtons()
-        tableViewConstriants()
-        setupInitialState()
-        flipProgressView()
-    
-    }
-  
     private func setupTableViews() {
         let table = [TableView1, TableView2]
         table.forEach {
@@ -309,5 +370,53 @@ class CompareCollectionViewCell: UICollectionViewCell,UITableViewDelegate,UITabl
         // table view intially hidden
         TableView1.isHidden = true
         TableView2.isHidden = true
+    }
+
+    // Add a method to be called when the cell becomes visible
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Apply styling to the category labels in the compare view to make them more visible
+        styleComparisonLabels()
+    }
+
+    private func styleComparisonLabels() {
+        // Try to find all labels in the content view that contain comparison categories
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        let categoryNames = ["Fillers", "Missing Words", "Pace", "Pronunciation", "Overall"]
+        
+        // Look for labels in the entire view hierarchy
+        contentView.subviews.forEach { view in
+            if let label = view as? UILabel, categoryNames.contains(where: { label.text?.contains($0) ?? false }) {
+                // Apply enhanced styling to these category labels
+                label.backgroundColor = isDarkMode ? UIColor(white: 0.3, alpha: 1.0) : UIColor.systemGray5
+                label.textColor = isDarkMode ? .white : .black
+                label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+                label.layer.cornerRadius = 8
+                label.clipsToBounds = true
+                
+                // Add a subtle border for better visibility
+                label.layer.borderWidth = 0.5
+                label.layer.borderColor = isDarkMode ? UIColor.gray.cgColor : UIColor.darkGray.cgColor
+            }
+        }
+    }
+
+    private func updateTextColors() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Only update text colors for visibility - not backgrounds
+        if let previousLabel = previous {
+            previousLabel.textColor = isDarkMode ? .white : .black
+        }
+        
+        if let currentLabel = current {
+            currentLabel.textColor = isDarkMode ? .white : .black
+        }
+        
+        // Update buttons text color only
+        [leftButton, rightButton].forEach { button in
+            button?.tintColor = isDarkMode ? .white : .label
+        }
     }
 }

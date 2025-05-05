@@ -4,6 +4,7 @@ struct RootView: View {
     @StateObject var viewModel = HomeViewModel.shared
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("isLoggedIn") private var isLoggedInStorage = false
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         ZStack {
@@ -36,6 +37,7 @@ struct RootView: View {
             viewModel.isLoggedIn = false
             print("Received logout notification, updated isLoggedIn to false")
         }
+        .preferredColorScheme(nil) // Allow system to control dark/light mode
     }
 }
 

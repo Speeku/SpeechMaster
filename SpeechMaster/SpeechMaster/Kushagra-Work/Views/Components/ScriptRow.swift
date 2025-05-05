@@ -48,7 +48,10 @@ struct ScriptRow: View {
                     HStack {
                         Text(script.title)
                             .font(.headline)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(UIColor { traitCollection in
+                                return traitCollection.userInterfaceStyle == .dark ? 
+                                    UIColor.white : UIColor.black
+                            }))
                         if script.isPinned {
                             Image(systemName: "pin.fill")
                                 .foregroundColor(.blue)
@@ -57,7 +60,10 @@ struct ScriptRow: View {
                     }
                     Text(script.createdAt, style: .date)
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color(UIColor { traitCollection in
+                            return traitCollection.userInterfaceStyle == .dark ? 
+                                UIColor.lightGray : UIColor.gray
+                        }))
                 }
             }
             Spacer()

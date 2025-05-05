@@ -10,6 +10,12 @@ class MultiColorCircularProgressView: UIView {
         static let missing = UIColor(hex: "B80E65")      // Pink/Magenta
         static let pronunciation = UIColor(hex: "1791B1") // Light blue
         static let background = UIColor.systemGray4.withAlphaComponent(0.4)
+        
+        // Dark mode versions of the colors (lighter versions for better visibility)
+        static let fillersDark = UIColor(hex: "6B6AD6")    // Lighter navy blue
+        static let missingDark = UIColor(hex: "FF5CA5")    // Lighter pink/magenta
+        static let pronunciationDark = UIColor(hex: "67D5F5") // Lighter blue
+        static let backgroundDark = UIColor.systemGray.withAlphaComponent(0.3)
     }
     
     var progress: CGFloat = 0 {
@@ -39,9 +45,11 @@ class MultiColorCircularProgressView: UIView {
     
     // MARK: - Setup
     private func setupLayers() {
-        // Full gray circle background
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Full circle background
         trackLayer.fillColor = UIColor.clear.cgColor
-        trackLayer.strokeColor = Colors.background.cgColor
+        trackLayer.strokeColor = isDarkMode ? Colors.backgroundDark.cgColor : Colors.background.cgColor
         trackLayer.lineWidth = circleLineWidth
         trackLayer.lineCap = .round
         
@@ -59,11 +67,14 @@ class MultiColorCircularProgressView: UIView {
         layer.addSublayer(trackLayer)
         
         // Colored segments on top
-        let colors = [Colors.fillers, Colors.missing, Colors.pronunciation]
+        let segmentColors = isDarkMode ? 
+            [Colors.fillersDark, Colors.missingDark, Colors.pronunciationDark] : 
+            [Colors.fillers, Colors.missing, Colors.pronunciation]
+        
         for (index, _) in (0..<3).enumerated() {
             let segmentLayer = CAShapeLayer()
             segmentLayer.fillColor = UIColor.clear.cgColor
-            segmentLayer.strokeColor = colors[index].cgColor
+            segmentLayer.strokeColor = segmentColors[index].cgColor
             segmentLayer.lineWidth = circleLineWidth
             segmentLayer.lineCap = .round
             segmentLayer.strokeEnd = 0
@@ -142,9 +153,11 @@ class MultiColorCircularProgressView: UIView {
     }
     
     func setSegmentColors() {
-        segments[0].strokeColor = Colors.fillers.cgColor
-        segments[1].strokeColor = Colors.missing.cgColor
-        segments[2].strokeColor = Colors.pronunciation.cgColor
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        segments[0].strokeColor = isDarkMode ? Colors.fillersDark.cgColor : Colors.fillers.cgColor
+        segments[1].strokeColor = isDarkMode ? Colors.missingDark.cgColor : Colors.missing.cgColor
+        segments[2].strokeColor = isDarkMode ? Colors.pronunciationDark.cgColor : Colors.pronunciation.cgColor
     }
     
     // Update setSegmentValues to make segments proportional to their values
@@ -181,6 +194,29 @@ class MultiColorCircularProgressView: UIView {
         }
         
         CATransaction.commit()
+    }
+    
+    // Add trait collection handling
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateColorsForCurrentMode()
+        }
+    }
+    
+    private func updateColorsForCurrentMode() {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Update track color
+        trackLayer.strokeColor = isDarkMode ? Colors.backgroundDark.cgColor : Colors.background.cgColor
+        
+        // Update segment colors
+        if segments.count >= 3 {
+            segments[0].strokeColor = isDarkMode ? Colors.fillersDark.cgColor : Colors.fillers.cgColor
+            segments[1].strokeColor = isDarkMode ? Colors.missingDark.cgColor : Colors.missing.cgColor
+            segments[2].strokeColor = isDarkMode ? Colors.pronunciationDark.cgColor : Colors.pronunciation.cgColor
+        }
     }
 }
 

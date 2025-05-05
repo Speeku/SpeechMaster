@@ -5,8 +5,7 @@ struct UserProfileView: View {
     @ObservedObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
     
-    // Remove didSet handlers - we'll handle updates manually
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    // Remove dark mode toggle
     @State private var showingLogoutAlert = false
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
@@ -23,7 +22,6 @@ struct UserProfileView: View {
     @State private var preferencesModified = false
     
     // Keep initial values to detect changes
-    @State private var initialDarkMode = false
     @State private var initialNotifications = true
     @State private var initialEmailNotifications = true
     
@@ -77,11 +75,6 @@ struct UserProfileView: View {
                 
                 List {
                     Section("App Settings") {
-                        Toggle("Dark Mode", isOn: $isDarkMode)
-                            .onChange(of: isDarkMode) { _ in
-                                preferencesModified = true
-                            }
-                        
                         Toggle("Notifications", isOn: $notificationsEnabled)
                             .onChange(of: notificationsEnabled) { _ in
                                 preferencesModified = true
@@ -195,12 +188,10 @@ struct UserProfileView: View {
                         userEmail = user.email
                         
                         // Store both current and initial values
-                        isDarkMode = user.preferences.isDarkMode
                         notificationsEnabled = user.preferences.notificationsEnabled
                         emailNotificationsEnabled = user.preferences.emailNotificationsEnabled
                         
                         // Store initial values to detect changes
-                        initialDarkMode = isDarkMode
                         initialNotifications = notificationsEnabled
                         initialEmailNotifications = emailNotificationsEnabled
                         
@@ -243,7 +234,7 @@ struct UserProfileView: View {
         Task {
             do {
                 let preferences = User.UserPreferences(
-                    isDarkMode: isDarkMode,
+                    isDarkMode: false, // Just pass a default value
                     notificationsEnabled: notificationsEnabled,
                     emailNotificationsEnabled: emailNotificationsEnabled
                 )
@@ -255,7 +246,6 @@ struct UserProfileView: View {
                     showingSuccess = true
                     
                     // Update initial values after successful save
-                    initialDarkMode = isDarkMode
                     initialNotifications = notificationsEnabled
                     initialEmailNotifications = emailNotificationsEnabled
                 }

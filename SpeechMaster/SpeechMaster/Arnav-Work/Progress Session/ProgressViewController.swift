@@ -68,23 +68,49 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        let cellBackgroundColor = isDarkMode ? UIColor(white: 0.22, alpha: 1.0) : .systemBackground
+        
         if indexPath.row == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "OverallProgressCell", for: indexPath) as! OverallProgressCell
+            
+            // Configure cell for both light and dark mode
+            cell.layer.cornerRadius = 10
+            cell.contentView.layer.cornerRadius = 10
+            cell.layer.masksToBounds = true
+            cell.contentView.clipsToBounds = true
+            
+            // Force correct background color
+            cell.backgroundColor = cellBackgroundColor
+            cell.contentView.backgroundColor = cellBackgroundColor
+            
+            // Ensure the cell fills the entire width of the collection view
+            cell.contentView.frame = cell.bounds
+            
+            // Set data and load improvement data
             cell.dataSource = dataSource
             cell.scriptId = scriptId
             cell.loadImprovementData() // Call the async method to load real data
             return cell
         }
         
-        if indexPath.row == 1{
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell{
-                print("Yeah")
+        if indexPath.row == 1 {
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CompareCollectionViewCell", for: indexPath) as? CompareCollectionViewCell {
+                // Configure cell for both light and dark mode
+                cell.layer.cornerRadius = 10
+                cell.contentView.layer.cornerRadius = 10
+                cell.layer.masksToBounds = true
+                cell.contentView.clipsToBounds = true
+                
+                // Force correct background color for main cell only, NOT for content view
+                cell.backgroundColor = cellBackgroundColor
+                // DO NOT set contentView.backgroundColor to allow elements to keep their styling
+                
+                // Ensure the cell fills the entire width of the collection view
+                cell.contentView.frame = cell.bounds
+                
                 return cell
             }
-        }
-        else{
-            print("Failed")
-            return UICollectionViewCell()
         }
         
         return UICollectionViewCell()
@@ -165,6 +191,16 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         navigationItem.hidesBackButton = false
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
+        // Set tags for the section headers for dark mode support
+        if let stackView = self.view.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            if let scriptLabel = stackView.arrangedSubviews.first(where: { ($0 as? UILabel)?.text == "Script" }) as? UILabel {
+                scriptLabel.tag = 100
+            }
+            if let progressLabel = stackView.arrangedSubviews.first(where: { ($0 as? UILabel)?.text == "Progress" }) as? UILabel {
+                progressLabel.tag = 101
+            }
+        }
+        
         // Initial setup
         updateCollectionView()
         round()
@@ -192,14 +228,88 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         // Register the cell class programmatically
         collectionView.register(OverallProgressCell.self, forCellWithReuseIdentifier: "OverallProgressCell")
         
-        // Setup collection view layout
-//        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//            layout.minimumInteritemSpacing = 10
-//            layout.minimumLineSpacing = 10
-//            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-//        }
+        // Apply dark mode support
+        setupDarkModeSupport()
+        
         print(dataSource.getScriptTitle(for: scriptId))
         //self.title = dataSource.getScriptTitle(for: scriptId)
+    }
+    
+    // Support for dark mode
+    private func setupDarkModeSupport() {
+        // Apply colors based on the current trait collection
+        applyDarkModeColors(for: traitCollection)
+        
+        // Update the button style
+        reheraseB.setTitleColor(.white, for: .normal)
+        reheraseB.backgroundColor = .systemBlue
+        reheraseB.layer.cornerRadius = 15
+    }
+    
+    // Apply appropriate colors based on the trait collection
+    private func applyDarkModeColors(for traitCollection: UITraitCollection) {
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Main view background - keep it pure black
+        self.view.backgroundColor = isDarkMode ? .black : UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.0)
+        
+        // Script header label
+        if let scriptLabel = self.view.viewWithTag(100) as? UILabel ?? 
+           self.view.subviews.first(where: { $0 is UIStackView })?.subviews.first(where: { $0 is UILabel && ($0 as! UILabel).text == "Script" }) as? UILabel {
+            scriptLabel.textColor = isDarkMode ? .white : .black
+        }
+        
+        // Progress header label
+        if let progressLabel = self.view.viewWithTag(101) as? UILabel ?? 
+           self.view.subviews.first(where: { $0 is UIStackView })?.subviews.first(where: { ($0 as? UILabel)?.text == "Progress" }) as? UILabel {
+            progressLabel.textColor = isDarkMode ? .white : .black
+        }
+        
+        // Script text view background - make it dark gray for contrast
+        textView.backgroundColor = isDarkMode ? UIColor(white: 0.12, alpha: 1.0) : .white
+        textView.textColor = isDarkMode ? .white : .black
+        
+        // Stack view background (main content area)
+        if let stackView = self.view.subviews.first(where: { $0 is UIStackView }) as? UIStackView {
+            stackView.backgroundColor = isDarkMode ? .black : UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.0)
+        }
+        
+        // Table view background - make it slightly lighter gray
+        tableView.backgroundColor = isDarkMode ? UIColor(white: 0.17, alpha: 1.0) : .systemBackground
+        
+        // Bottom container view
+        if let bottomView = self.view.subviews.last as? UIView, bottomView.subviews.first is UIButton {
+            bottomView.backgroundColor = isDarkMode ? .black : .systemBackground
+        }
+        
+        // Collection view background - use the exact same color as the cells
+        collectionView.backgroundColor = isDarkMode ? UIColor(white: 0.22, alpha: 1.0) : .systemBackground
+        
+        // Update segmented control background
+        segemtedControlOutlet.backgroundColor = isDarkMode ? UIColor(white: 0.25, alpha: 1.0) : nil
+    }
+    
+    // Override trait collection did change to update colors when dark mode changes
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // Only update if the user interface style changed (dark/light mode)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // Apply styling from first implementation
+            applyDarkModeColors(for: traitCollection)
+            
+            // Apply styling from second implementation
+            round()
+            
+            // Update empty state view colors
+            if let backgroundView = tableView.backgroundView {
+                let isDarkMode = traitCollection.userInterfaceStyle == .dark
+                backgroundView.backgroundColor = isDarkMode ? UIColor(white: 0.17, alpha: 1.0) : .systemBackground
+                if let label = emptyStateLabel {
+                    label.textColor = isDarkMode ? .lightGray : .gray
+                }
+            }
+        }
     }
     
     private func configureTableView() {
@@ -222,14 +332,26 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         collectionView.dataSource = self
         collectionView.isPagingEnabled = true
         
+        // Ensure the collection view itself has corner radius
+        collectionView.layer.cornerRadius = 10
+        collectionView.clipsToBounds = true
+        
+        // Set the exact background color that matches the cells
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        collectionView.backgroundColor = isDarkMode ? UIColor(white: 0.22, alpha: 1.0) : .systemBackground
+        
+        // Remove any additional spacing or padding that might cause gaps
+        collectionView.contentInsetAdjustmentBehavior = .never
+        
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.scrollDirection = .horizontal
-            layout.minimumLineSpacing = 0
+            layout.minimumLineSpacing = 0 // No space between cells
             layout.minimumInteritemSpacing = 0
+            layout.sectionInset = .zero // No insets
             
             // Set collection view height
             let heightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 218)
-            heightConstraint.priority = .required // Make this required
+            heightConstraint.priority = .required
             heightConstraint.isActive = true
         }
     }
@@ -252,39 +374,21 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         tableView.reloadData()
     }
     
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        
-//        // Set fixed heights
-//        let spacing: CGFloat = 16
-//        
-//        // Make sure table view doesn't overlap with button
-//        let tableViewBottom = reheraseB.frame.origin.y - spacing
-//        let tableViewTop = segemtedControlOutlet.frame.maxY + spacing
-//        let tableViewHeight = tableViewBottom - tableViewTop
-//        
-//        // Update table view frame
-//        tableView.frame = CGRect(
-//            x: tableView.frame.origin.x,
-//            y: tableViewTop,
-//            width: tableView.frame.width,
-//            height: tableViewHeight
-//        )
-//        
-//        // Update rehearse button width to make room for memorize button
-//        if memorizeButton != nil {
-//            // Adjust rehearse button width to be about 60% of available width
-//            let availableWidth = view.bounds.width - 40 // 20 points padding on each side
-//            let rehearseButtonWidth = availableWidth * 0.6
-//            
-//            reheraseB.frame = CGRect(
-//                x: 20,
-//                y: reheraseB.frame.origin.y,
-//                width: rehearseButtonWidth,
-//                height: reheraseB.frame.height
-//            )
-//        }
-//    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        // Ensure the collection view's page width exactly matches its frame width
+        // This prevents partial cells from being visible during page transitions
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.itemSize = CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+            layout.invalidateLayout()
+        }
+        
+        // Make sure to update cells to fill the entire width
+        for cell in collectionView.visibleCells {
+            cell.contentView.frame = cell.bounds
+        }
+    }
     
     func updateLongPress(){
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
@@ -302,10 +406,8 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         
     }
     
-    func round(){
-        textView.layer.cornerRadius = 10
-        textView.clipsToBounds = true
-        segemtedControlOutlet.layer.cornerRadius = 10
+    func round() {
+        // Style collection and table view
         segemtedControlOutlet.clipsToBounds = true
         tableView.layer.cornerRadius = 10
         tableView.clipsToBounds = true
@@ -313,14 +415,51 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         reheraseB.clipsToBounds = true
         collectionView.layer.cornerRadius = 10
         collectionView.clipsToBounds = true
+        
+        // Style for dark mode compatibility
+        let isDarkMode = traitCollection.userInterfaceStyle == .dark
+        
+        // Update text view for dark mode
+        textView.backgroundColor = isDarkMode ? UIColor(white: 0.12, alpha: 1.0) : .white
+        textView.textColor = isDarkMode ? .white : .black
+        
+        // Collection view and table view backgrounds - make collection view (progress section) lighter
+        collectionView.backgroundColor = isDarkMode ? UIColor(white: 0.22, alpha: 1.0) : .systemBackground
+        tableView.backgroundColor = isDarkMode ? UIColor(white: 0.17, alpha: 1.0) : .systemBackground
+        
+        // Update segmented control for better visibility in dark mode
+        if isDarkMode {
+            segemtedControlOutlet.backgroundColor = UIColor(white: 0.25, alpha: 1.0)
+            segemtedControlOutlet.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+            segemtedControlOutlet.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
+        }
+        
+        // Update the rehearse button with better styling
+        reheraseB.backgroundColor = .systemBlue
+        reheraseB.setTitleColor(.white, for: .normal)
+        
+        // Make empty state label use appropriate colors
+        if let emptyLabel = emptyStateLabel {
+            emptyLabel.textColor = isDarkMode ? .lightGray : .gray
+        }
+        
+        // Update section headers for dark mode
+        updateSectionHeadersForDarkMode(isDarkMode)
     }
     
-    
-    
+    // Add this method to handle section header colors
+    private func updateSectionHeadersForDarkMode(_ isDarkMode: Bool) {
+        if let scriptLabel = view.viewWithTag(100) as? UILabel {
+            scriptLabel.textColor = isDarkMode ? .white : .black
+        }
+        
+        if let progressLabel = view.viewWithTag(101) as? UILabel {
+            progressLabel.textColor = isDarkMode ? .white : .black
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        print("Used")
-        return UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        return UIEdgeInsets.zero
     }
     
     func updateButtonName() {
@@ -459,8 +598,15 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
             emptyStateLabel = label  // Store reference to label
             label.text = display
             label.textAlignment = .center
-            label.textColor = .gray
+            // Set color based on current mode
+            let isDarkMode = traitCollection.userInterfaceStyle == .dark
+            label.textColor = isDarkMode ? .lightGray : .gray
             label.font = .systemFont(ofSize: 16)
+            
+            // Set background color of the empty state view to match the table view
+            if isDarkMode {
+                view.backgroundColor = UIColor(white: 0.15, alpha: 1.0)
+            }
             
             view.addSubview(label)
             label.translatesAutoresizingMaskIntoConstraints = false
@@ -523,13 +669,11 @@ class ProgressViewController: UIViewController,UICollectionViewDelegate,
         //        navigationController?.pushViewController(memorizationVC, animated: true)
         //    }
         
-        //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //        if indexPath.row == 0 {
-        //            return CGSize(width: 353, height: 218)
-        //        }
-        //        return CGSize(width: collectionView.bounds.width - 20, height: 100)
-        //    }
-        //    }
+        // Implement this method to ensure cells fill the width of the collection view
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            // Return the exact size of the collection view to ensure full-width cells
+            return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        }
         
     }
     
