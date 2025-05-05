@@ -1,5 +1,6 @@
 import SwiftUI
 import PhotosUI
+// Import FAQView
 
 struct UserProfileView: View {
     @ObservedObject var viewModel: HomeViewModel
@@ -113,6 +114,66 @@ struct UserProfileView: View {
                     Section("Support") {
                         NavigationLink(destination: Text("Help Center")) {
                             Label("Help Center", systemImage: "questionmark.circle")
+                        }
+                        
+                        NavigationLink {
+                            List {
+                                Group {
+                                    DisclosureGroup {
+                                        Text("SpeechMaster is an app designed to help you practice and improve your public speaking skills through script creation, practice sessions, and performance analysis.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("What is SpeechMaster?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("Go to the Scripts tab, tap the '+' button, enter your script title and content, then save it. You can edit it anytime later.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("How do I create a new speech script?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("The Q&A feature generates likely questions based on your script content, allowing you to practice answering questions related to your speech.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("How does the Q&A preparation feature work?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("SpeechMaster tracks metrics like speaking rate (words per minute), filler word usage, pronunciation errors, and script adherence.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("What metrics does SpeechMaster track?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("Yes, SpeechMaster uses secure authentication and storage. Your scripts and recordings are private and only accessible with your login credentials.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("Is my data secure?")
+                                            .font(.headline)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                            .navigationTitle("FAQs")
+                        } label: {
+                            Label("FAQs", systemImage: "questionmark.bubble")
                         }
                         
                         NavigationLink(destination: Text("Privacy Policy")) {
