@@ -61,7 +61,10 @@ struct ScriptsList: View {
                 }
             }
         }
-        .background(Color.white)
+        .background(Color(UIColor { traitCollection in
+            return traitCollection.userInterfaceStyle == .dark ? 
+                UIColor.systemGray6 : UIColor.white
+        }))
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
     

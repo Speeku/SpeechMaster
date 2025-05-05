@@ -49,6 +49,7 @@ struct LandingPageView: View {
                         HStack {
                             Text("Eloquent")
                                 .font(.custom("SonsieOne-Regular", size: 34))
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
                             Spacer()
                             NavigationLink(destination: UserProfileView(viewModel: viewModel)) {
                                 if let userId = supabaseManager.currentUser?.id.uuidString,
@@ -59,7 +60,7 @@ struct LandingPageView: View {
                                         .resizable()
                                         .frame(width: 38, height: 38)
                                         .clipShape(Circle())
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(colorScheme == .dark ? .white : .gray)
                                 }
                             }
                         }
@@ -78,6 +79,7 @@ struct LandingPageView: View {
                                 Text("Highlights")
                                     .font(.title2)
                                     .fontWeight(.bold)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
                                     .padding(.horizontal, 17)
                                 NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
                                 Image("Highlights").resizable()
@@ -95,6 +97,7 @@ struct LandingPageView: View {
                                 Text("Top Speakers")
                                     .font(.title2)
                                     .fontWeight(.bold)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
                                     .padding(.horizontal, 17)
                                     .padding(.bottom,-1)
 
@@ -116,14 +119,15 @@ struct LandingPageView: View {
                                 Text("Recent Progress")
                                     .font(.title2)
                                     .fontWeight(.bold)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
                                     .padding(.horizontal, 17)
 
                                 ProgressCardView(
                                     viewModel: viewModel,
                                     title: "Overall Improvement",
                                     progress: overallImprovementValue,
-                                    fgColor: .black,
-                                    bgColor: Color.green.opacity(0.1),
+                                    fgColor: colorScheme == .dark ? .white : .black,
+                                    bgColor: colorScheme == .dark ? Color.green.opacity(0.2) : Color.green.opacity(0.1),
                                     circleColor: .green,
                                     lastCreatedScriptName: viewModel.scripts.first?.title ?? "No recent scripts"
                                 )
@@ -149,11 +153,12 @@ struct LandingPageView: View {
                                     Text("Recent Scripts")
                                         .font(.title2)
                                         .fontWeight(.bold)
+                                        .foregroundColor(colorScheme == .dark ? .white : .black)
                                     Spacer()
                                     if !viewModel.isScriptsEmpty() {
                                         NavigationLink(destination: ScriptsListView(viewModel: viewModel)) {
                                             Text("See all")
-                                                .foregroundColor(.blue)
+                                                .foregroundColor(colorScheme == .dark ? Color.blue.opacity(0.8) : .blue)
                                         }
                                     }
                                 }
@@ -171,7 +176,7 @@ struct LandingPageView: View {
                         }
                     }
                 }
-                .background(Color.appBackground)
+                .background(Color("AppBackground"))
 
                 // New Practice Button
                 Button(action: { showingActionSheet = true }) {

@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import Supabase
 
 enum PasswordResetStep {
     case emailEntry
@@ -21,6 +22,7 @@ class PasswordResetViewModel: ObservableObject {
     @Published var passwordRequirements: [PasswordRequirement] = []
     
     private var cancellables = Set<AnyCancellable>()
+    let supabaseManager = SupabaseManager.shared
     
     init() {
         setupPasswordRequirements()
@@ -93,14 +95,28 @@ class PasswordResetViewModel: ObservableObject {
         
         isLoading = true
         
-        // Simulate network request
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            self.isLoading = false
-            
-            // Move to OTP verification step
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                self.currentStep = .otpVerification
+        // Use Supabase to send reset code
+        Task {
+            do {
+                // Call the forgot password endpoint with the email
+                // This will trigger Supabase to send a password reset email with OTP
+                try await supabaseManager.client.auth.resetPasswordForEmail(email)
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    
+                    // Move to OTP verification step
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        self.currentStep = .otpVerification
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    self.showErrorMessage("Failed to send reset code: \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -113,14 +129,32 @@ class PasswordResetViewModel: ObservableObject {
         
         isLoading = true
         
-        // Simulate OTP verification
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            self.isLoading = false
-            
-            // Move to new password step
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                self.currentStep = .newPassword
+        // Verify OTP with Supabase
+        Task {
+            do {
+                // Verify the OTP for password reset
+                let response = try await supabaseManager.client.auth.verifyOTP(
+                    email: email,
+                    token: otp,
+                    type: .recovery
+                )
+                
+                // If verification was successful
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    
+                    // Move to new password step
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        self.currentStep = .newPassword
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    self.showErrorMessage("Invalid verification code. Please try again.")
+                }
             }
         }
     }
@@ -137,14 +171,27 @@ class PasswordResetViewModel: ObservableObject {
         
         isLoading = true
         
-        // Simulate password reset
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            self.isLoading = false
-            
-            // Show success
-            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
-                self.currentStep = .success
+        // Reset password with Supabase
+        Task {
+            do {
+                // Use the correct syntax from the Supabase Swift documentation
+                try await supabaseManager.client.auth.update(user: .init(password: newPassword))
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    
+                    // Show success
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                        self.currentStep = .success
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    self.showErrorMessage("Failed to reset password: \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -374,7 +421,7 @@ struct ForgotPasswordView: View {
     
     private var otpVerificationView: some View {
         VStack(spacing: 24) {
-            Text("We've sent a verification code to")
+            Text("If an account exists with this email, we have sent a verification email to reset your password for your email address:")
                 .foregroundColor(.gray)
                 .font(.subheadline)
             
@@ -410,7 +457,29 @@ struct ForgotPasswordView: View {
             )
             
             // Resend code
-            Button(action: viewModel.sendResetEmail) {
+            Button(action: {
+                // Show loading state
+                viewModel.isLoading = true
+                
+                // Use Supabase to resend reset code
+                Task {
+                    do {
+                        // Call the forgot password endpoint again
+                        try await viewModel.supabaseManager.client.auth.resetPasswordForEmail(viewModel.email)
+                        
+                        DispatchQueue.main.async {
+                            viewModel.isLoading = false
+                            // Show success message
+                            viewModel.showErrorMessage("Verification code has been resent to your email")
+                        }
+                    } catch {
+                        DispatchQueue.main.async {
+                            viewModel.isLoading = false
+                            viewModel.showErrorMessage("Failed to resend code: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }) {
                 Text("Resend Code")
                     .font(.subheadline)
                     .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
@@ -580,12 +649,22 @@ struct ForgotPasswordView: View {
                 }
             
             VStack(spacing: 20) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 36))
-                    .foregroundColor(.orange)
-                
-                Text("Error")
-                    .font(.headline)
+                // Show different icon and color based on whether it's an error or success message
+                if viewModel.errorMessage.contains("success") || viewModel.errorMessage.contains("resent") {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 36))
+                        .foregroundColor(.green)
+                    
+                    Text("Success")
+                        .font(.headline)
+                } else {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.system(size: 36))
+                        .foregroundColor(.orange)
+                    
+                    Text("Error")
+                        .font(.headline)
+                }
                 
                 Text(viewModel.errorMessage)
                     .font(.subheadline)

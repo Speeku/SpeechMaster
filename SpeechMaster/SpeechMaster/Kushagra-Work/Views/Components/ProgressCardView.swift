@@ -12,6 +12,7 @@ struct ProgressCardView: View {
     
     @State private var progressPercentage: Int = 0
     @State private var recentImprovement: Double = 0
+    @Environment(\.colorScheme) private var colorScheme
     
     private var currentScriptId: UUID? {
         viewModel.scripts.first?.id
@@ -30,7 +31,7 @@ struct ProgressCardView: View {
                 // Progress percentage
                 Text("\(progressPercentage)%")
                     .font(.system(size: 30, weight: .semibold))
-                    .foregroundColor(.black)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
                 
                 ProgressBarsView(progress: progress)
                 
@@ -44,7 +45,7 @@ struct ProgressCardView: View {
                     
                     Text("Sessions")
                         .font(.system(size: 12))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(colorScheme == .dark ? .white.opacity(0.6) : .black.opacity(0.6))
                 }
             }
             
@@ -54,7 +55,7 @@ struct ProgressCardView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
         .frame(maxWidth: .infinity)
-        .background(Color.blue.opacity(0.1))
+        .background(colorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.2) : Color.blue.opacity(0.1))
         .cornerRadius(16)
         .onAppear {
             // Use a Task to fetch the improvement calculations asynchronously
@@ -107,16 +108,17 @@ private struct ProgressBarsView: View {
 
 private struct BottomContentView: View {
     let lastCreatedScriptName: String?
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Overall Improvement")
                 .font(.system(size: 26, weight: .bold))
-                .foregroundColor(.black.opacity(0.5))
+                .foregroundColor(colorScheme == .dark ? .white.opacity(0.9) : .black.opacity(0.5))
             
             Text("Script: \(lastCreatedScriptName ?? "No recent scripts")")
                 .font(.system(size: 14, weight: .semibold))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(colorScheme == .dark ? .white.opacity(0.7) : .black.opacity(0.6))
             
           
         }

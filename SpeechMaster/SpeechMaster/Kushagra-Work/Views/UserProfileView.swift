@@ -1,12 +1,12 @@
 import SwiftUI
 import PhotosUI
+// Import FAQView
 
 struct UserProfileView: View {
     @ObservedObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
     
-    // Remove didSet handlers - we'll handle updates manually
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    // Remove dark mode toggle
     @State private var showingLogoutAlert = false
     @State private var isLoading = false
     @State private var errorMessage: String? = nil
@@ -23,7 +23,6 @@ struct UserProfileView: View {
     @State private var preferencesModified = false
     
     // Keep initial values to detect changes
-    @State private var initialDarkMode = false
     @State private var initialNotifications = true
     @State private var initialEmailNotifications = true
     
@@ -77,11 +76,6 @@ struct UserProfileView: View {
                 
                 List {
                     Section("App Settings") {
-                        Toggle("Dark Mode", isOn: $isDarkMode)
-                            .onChange(of: isDarkMode) { _ in
-                                preferencesModified = true
-                            }
-                        
                         Toggle("Notifications", isOn: $notificationsEnabled)
                             .onChange(of: notificationsEnabled) { _ in
                                 preferencesModified = true
@@ -120,6 +114,66 @@ struct UserProfileView: View {
                     Section("Support") {
                         NavigationLink(destination: Text("Help Center")) {
                             Label("Help Center", systemImage: "questionmark.circle")
+                        }
+                        
+                        NavigationLink {
+                            List {
+                                Group {
+                                    DisclosureGroup {
+                                        Text("SpeechMaster is an app designed to help you practice and improve your public speaking skills through script creation, practice sessions, and performance analysis.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("What is SpeechMaster?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("Go to the Scripts tab, tap the '+' button, enter your script title and content, then save it. You can edit it anytime later.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("How do I create a new speech script?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("The Q&A feature generates likely questions based on your script content, allowing you to practice answering questions related to your speech.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("How does the Q&A preparation feature work?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("SpeechMaster tracks metrics like speaking rate (words per minute), filler word usage, pronunciation errors, and script adherence.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("What metrics does SpeechMaster track?")
+                                            .font(.headline)
+                                    }
+                                    
+                                    DisclosureGroup {
+                                        Text("Yes, SpeechMaster uses secure authentication and storage. Your scripts and recordings are private and only accessible with your login credentials.")
+                                            .font(.body)
+                                            .foregroundColor(.secondary)
+                                            .padding(.vertical, 8)
+                                    } label: {
+                                        Text("Is my data secure?")
+                                            .font(.headline)
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                            }
+                            .navigationTitle("FAQs")
+                        } label: {
+                            Label("FAQs", systemImage: "questionmark.bubble")
                         }
                         
                         NavigationLink(destination: Text("Privacy Policy")) {
@@ -195,12 +249,10 @@ struct UserProfileView: View {
                         userEmail = user.email
                         
                         // Store both current and initial values
-                        isDarkMode = user.preferences.isDarkMode
                         notificationsEnabled = user.preferences.notificationsEnabled
                         emailNotificationsEnabled = user.preferences.emailNotificationsEnabled
                         
                         // Store initial values to detect changes
-                        initialDarkMode = isDarkMode
                         initialNotifications = notificationsEnabled
                         initialEmailNotifications = emailNotificationsEnabled
                         
@@ -243,7 +295,7 @@ struct UserProfileView: View {
         Task {
             do {
                 let preferences = User.UserPreferences(
-                    isDarkMode: isDarkMode,
+                    isDarkMode: false, // Just pass a default value
                     notificationsEnabled: notificationsEnabled,
                     emailNotificationsEnabled: emailNotificationsEnabled
                 )
@@ -255,7 +307,6 @@ struct UserProfileView: View {
                     showingSuccess = true
                     
                     // Update initial values after successful save
-                    initialDarkMode = isDarkMode
                     initialNotifications = notificationsEnabled
                     initialEmailNotifications = emailNotificationsEnabled
                 }

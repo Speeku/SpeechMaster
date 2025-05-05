@@ -51,6 +51,31 @@ class RoundedEndProgress: UIView {
             setupLayers()
         }
         
+        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                updateForCurrentTraitCollection()
+            }
+        }
+        
+        private func updateForCurrentTraitCollection() {
+            let isDarkMode = traitCollection.userInterfaceStyle == .dark
+            
+            // Default track color in dark mode should be darker to create contrast
+            if trackColor == .clear {
+                trackLayer.strokeColor = (isDarkMode ? UIColor.darkGray.withAlphaComponent(0.3) : UIColor.systemGray4).cgColor
+            }
+            
+            // Ensure progress color is visible in dark mode
+            if progressLayer.strokeColor == UIColor.systemBlue.cgColor {
+                progressLayer.strokeColor = (isDarkMode ? UIColor.systemBlue.withAlphaComponent(0.8) : UIColor.systemBlue).cgColor
+            }
+            
+            // Update layers
+            setupLayers()
+        }
+        
         private func setupLayers() {
             // Create path for the line
             let path = UIBezierPath()
