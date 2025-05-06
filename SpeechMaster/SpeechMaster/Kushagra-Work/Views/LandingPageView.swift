@@ -84,7 +84,7 @@ struct LandingPageView: View {
                                 NavigationLink(destination: ScriptCreationView(viewModel: viewModel)) {
                                 Image("Highlights").resizable()
                                         .frame(height:120)
-                                        .clipShape(.rect(cornerRadius: 10))
+                                        .clipShape(.rect(cornerRadius: 20))
                                         .padding(.horizontal)
                                         .padding(.top,-8)
                                     

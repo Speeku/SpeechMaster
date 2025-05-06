@@ -222,6 +222,7 @@ class PasswordResetViewModel: ObservableObject {
 struct ForgotPasswordView: View {
     @StateObject private var viewModel = PasswordResetViewModel()
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     @State private var isAnimating = false
     @FocusState private var focusedField: FocusField?
     @FocusState private var otpFocusField: Int?
@@ -233,11 +234,15 @@ struct ForgotPasswordView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background gradient - matching Login/SignUp style
+                // Background gradient - adapts to dark mode
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(red: 0.95, green: 0.97, blue: 1.0),
-                        Color(red: 0.9, green: 0.93, blue: 0.98)
+                        colorScheme == .dark 
+                            ? Color(red: 0.1, green: 0.11, blue: 0.15)
+                            : Color(red: 0.95, green: 0.97, blue: 1.0),
+                        colorScheme == .dark 
+                            ? Color(red: 0.15, green: 0.16, blue: 0.22)
+                            : Color(red: 0.9, green: 0.93, blue: 0.98)
                     ]),
                     startPoint: .top,
                     endPoint: .bottom
