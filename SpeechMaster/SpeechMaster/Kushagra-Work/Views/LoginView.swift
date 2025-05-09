@@ -17,16 +17,9 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background gradient - lighter, more professional shade
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(red: 0.95, green: 0.97, blue: 1.0),
-                        Color(red: 0.9, green: 0.93, blue: 0.98)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
+                // Background gradient - adapts to dark mode
+                backgroundGradient
+                    .ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 24) {
@@ -120,10 +113,11 @@ struct LoginView: View {
                             )
                             
                             socialLoginButton(
-                                icon: "g.circle.fill",
                                 text: "Sign in with Google",
-                                backgroundColor: Color(red: 0.98, green: 0.98, blue: 0.98),
-                                textColor: .black,
+                                backgroundColor: colorScheme == .dark ? Color(.systemGray6) : Color(red: 0.98, green: 0.98, blue: 0.98),
+                                textColor: .primary,
+                                isSystemIcon: false,
+                                assetImage: "google",
                                 action: viewModel.signInWithGoogle
                             )
                         }
@@ -142,7 +136,7 @@ struct LoginView: View {
                                 Text("Sign Up")
                                     .fontWeight(.medium)
                                     .font(.footnote)
-                                    .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                                    .foregroundColor(accentColor)
                             }
                         }
                         .padding(.top, 16)
@@ -186,6 +180,38 @@ struct LoginView: View {
         }
     }
     
+    // MARK: - Colors and Styling
+    
+    private var accentColor: Color {
+        colorScheme == .dark ? Color(red: 0.4, green: 0.6, blue: 1.0) : Color(red: 0.2, green: 0.5, blue: 0.9)
+    }
+    
+    private var titleColor: Color {
+        colorScheme == .dark ? Color(red: 0.5, green: 0.6, blue: 0.9) : Color(red: 0.2, green: 0.3, blue: 0.6)
+    }
+    
+    private var backgroundGradient: LinearGradient {
+        if colorScheme == .dark {
+            return LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 0.1, green: 0.1, blue: 0.2),
+                    Color(red: 0.15, green: 0.15, blue: 0.25)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        } else {
+            return LinearGradient(
+                gradient: Gradient(colors: [
+                    Color(red: 0.95, green: 0.97, blue: 1.0),
+                    Color(red: 0.9, green: 0.93, blue: 0.98)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+    }
+    
     // MARK: - View Components
     
     private var logoView: some View {
@@ -194,14 +220,15 @@ struct LoginView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 100, height: 100)
-                .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                .cornerRadius(8)
+                .foregroundColor(accentColor)
                 .opacity(isAnimating ? 1 : 0)
                 .offset(y: isAnimating ? 0 : -20)
                 .animation(.easeOut(duration: 0.8).delay(0.2), value: isAnimating)
             
             Text("Eloquent")
                 .font(.custom("SonsieOne-Regular", size: 32))
-                .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                .foregroundColor(titleColor)
                 .opacity(isAnimating ? 1 : 0)
                 .offset(y: isAnimating ? 0 : -10)
                 .animation(.easeOut(duration: 0.8).delay(0.3), value: isAnimating)
@@ -213,7 +240,7 @@ struct LoginView: View {
             Text("Welcome back")
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                .foregroundColor(titleColor)
             
             Text("Sign in to continue your speech journey")
                 .font(.subheadline)
@@ -239,7 +266,7 @@ struct LoginView: View {
             .frame(height: 52)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 0.2, green: 0.5, blue: 0.9))
+                    .fill(accentColor)
             )
         }
         .disabled(viewModel.isLoading || !viewModel.isFormValid)
@@ -248,12 +275,19 @@ struct LoginView: View {
         .animation(.spring(), value: viewModel.isLoading)
     }
     
-    private func socialLoginButton(icon: String, text: String, backgroundColor: Color, textColor: Color, action: @escaping () -> Void) -> some View {
+    private func socialLoginButton(icon: String = "", text: String, backgroundColor: Color, textColor: Color, isSystemIcon: Bool = true, assetImage: String = "", action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
-                Image(systemName: icon)
-                    .font(.system(size: 16))
-                    .frame(width: 22, height: 22)
+                if isSystemIcon {
+                    Image(systemName: icon)
+                        .font(.system(size: 16))
+                        .frame(width: 22, height: 22)
+                } else {
+                    Image(assetImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                }
                 
                 Text(text)
                     .font(.subheadline)
@@ -299,7 +333,7 @@ struct LoginView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 45)
-                        .background(Color(red: 0.2, green: 0.5, blue: 0.9))
+                        .background(accentColor)
                         .cornerRadius(10)
                 }
             }
@@ -348,19 +382,24 @@ struct FloatingLabelTextField: View {
     
     @State private var isEditing: Bool = false
     @State private var showPassword: Bool = false
+    @Environment(\.colorScheme) private var colorScheme
+    
+    private var accentColor: Color {
+        colorScheme == .dark ? Color(red: 0.4, green: 0.6, blue: 1.0) : Color(red: 0.2, green: 0.5, blue: 0.9)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 12) {
                 Image(systemName: icon)
-                    .foregroundColor(isEditing ? Color(red: 0.2, green: 0.5, blue: 0.9) : .gray)
+                    .foregroundColor(isEditing ? accentColor : .gray)
                     .frame(width: 20)
                 
                 VStack(alignment: .leading, spacing: 0) {
                     if isEditing || !text.isEmpty {
                         Text(placeholderText)
                             .font(.caption)
-                            .foregroundColor(isEditing ? Color(red: 0.2, green: 0.5, blue: 0.9) : .gray)
+                            .foregroundColor(isEditing ? accentColor : .gray)
                             .offset(y: 0)
                     }
                     
@@ -411,8 +450,8 @@ struct FloatingLabelTextField: View {
             .padding(.horizontal, 16)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isEditing ? Color(red: 0.2, green: 0.5, blue: 0.9) : Color.gray.opacity(0.3), lineWidth: 1)
-                    .background(Color(.systemBackground).opacity(0.8).cornerRadius(12))
+                    .stroke(isEditing ? accentColor : Color.gray.opacity(0.3), lineWidth: 1)
+                    .background(colorScheme == .dark ? Color(.systemGray6).cornerRadius(12) : Color(.systemBackground).opacity(0.8).cornerRadius(12))
             )
         }
         .onTapGesture {
@@ -425,4 +464,4 @@ struct FloatingLabelTextField: View {
 
 #Preview {
     LoginView(viewModel: LoginViewModel())
-} 
+}

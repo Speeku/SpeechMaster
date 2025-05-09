@@ -22,16 +22,9 @@ struct SignUpView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                // Background gradient - lighter, more professional shade - matching LoginView
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(red: 0.95, green: 0.97, blue: 1.0),
-                        Color(red: 0.9, green: 0.93, blue: 0.98)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
+                // Background color matching iOS system background in dark mode
+                Color(UIColor.systemBackground)
+                    .ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 24) {
@@ -144,8 +137,8 @@ struct SignUpView: View {
                             socialSignupButton(
                                 icon: "g.circle.fill",
                                 text: "Sign up with Google",
-                                backgroundColor: Color(red: 0.98, green: 0.98, blue: 0.98),
-                                textColor: .black,
+                                backgroundColor: colorScheme == .dark ? Color(red: 0.2, green: 0.2, blue: 0.2) : Color(red: 0.98, green: 0.98, blue: 0.98),
+                                textColor: colorScheme == .dark ? .white : .black,
                                 action: viewModel.signUpWithGoogle
                             )
                         }
@@ -160,7 +153,7 @@ struct SignUpView: View {
                             HStack(spacing: 4) {
                                 Button(action: {}) {
                                     Text("Terms of Service")
-                                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                                        .foregroundColor(Color.accentColor)
                                         .font(.caption)
                                         .fontWeight(.medium)
                                 }
@@ -171,7 +164,7 @@ struct SignUpView: View {
                                 
                                 Button(action: {}) {
                                     Text("Privacy Policy")
-                                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                                        .foregroundColor(Color.accentColor)
                                         .font(.caption)
                                         .fontWeight(.medium)
                                 }
@@ -213,7 +206,7 @@ struct SignUpView: View {
                             Text(viewModel.successMessage)
                                 .font(.headline)
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(.white)
+                                .foregroundColor(colorScheme == .dark ? .white : .primary)
                                 .padding(.horizontal)
                         }
                         .padding(30)
@@ -260,23 +253,23 @@ struct SignUpView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 60, height: 60)
-                    .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                    .foregroundColor(Color.accentColor)
                 
                 Text("Verify Your Email")
                     .font(.title2)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                    .foregroundColor(.primary)
                 
                 Text("Enter the verification code sent to your email")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
                 
                 Text(viewModel.email)
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                    .foregroundColor(.primary)
             }
             
             // OTP Boxes
@@ -314,7 +307,7 @@ struct SignUpView: View {
                     .frame(height: 52)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(red: 0.2, green: 0.5, blue: 0.9))
+                            .fill(Color.accentColor)
                     )
                 }
                 .disabled(!isValidOTP() || isVerifying)
@@ -324,7 +317,7 @@ struct SignUpView: View {
                 Button(action: resendOTP) {
                     Text("Didn't receive a code? Resend")
                         .font(.subheadline)
-                        .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                        .foregroundColor(Color.accentColor)
                 }
                 
                 // Cancel button
@@ -345,7 +338,7 @@ struct SignUpView: View {
         .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 20)
-                .fill(Color(.systemBackground))
+                .fill(Color(UIColor.systemBackground))
                 .shadow(color: Color.black.opacity(0.2), radius: 15, x: 0, y: 5)
         )
         .padding(20)
@@ -386,14 +379,14 @@ struct SignUpView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 45)
-                        .background(Color(red: 0.2, green: 0.5, blue: 0.9))
+                        .background(Color.accentColor)
                         .cornerRadius(10)
                 }
             }
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.systemBackground))
+                    .fill(Color(UIColor.systemBackground))
             )
             .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
             .padding(30)
@@ -488,14 +481,14 @@ struct SignUpView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 80, height: 80)
-                .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
+                .foregroundColor(Color.accentColor)
                 .opacity(isAnimating ? 1 : 0)
                 .offset(y: isAnimating ? 0 : -20)
                 .animation(.easeOut(duration: 0.8).delay(0.2), value: isAnimating)
             
             Text("Eloquent")
                 .font(.custom("SonsieOne-Regular", size: 28))
-                .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                .foregroundColor(.primary)
                 .opacity(isAnimating ? 1 : 0)
                 .offset(y: isAnimating ? 0 : -10)
                 .animation(.easeOut(duration: 0.8).delay(0.3), value: isAnimating)
@@ -507,11 +500,11 @@ struct SignUpView: View {
             Text("Create Account")
                 .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(Color(red: 0.2, green: 0.3, blue: 0.6))
+                .foregroundColor(.primary)
             
             Text("Join us and start your speech journey")
                 .font(.subheadline)
-                .foregroundColor(.gray)
+                .foregroundColor(.secondary)
         }
         .opacity(isAnimating ? 1 : 0)
         .offset(y: isAnimating ? 0 : 10)
@@ -522,7 +515,7 @@ struct SignUpView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Password requirements:")
                 .font(.caption)
-                .foregroundColor(.gray)
+                .foregroundColor(.secondary)
             
             ForEach(viewModel.passwordRequirements) { requirement in
                 HStack(spacing: 10) {
@@ -531,7 +524,7 @@ struct SignUpView: View {
                         .font(.caption)
                     
                     Text(requirement.description)
-                        .foregroundColor(requirement.isMet ? Color(red: 0.2, green: 0.3, blue: 0.6) : .gray)
+                        .foregroundColor(requirement.isMet ? .primary : .secondary)
                         .font(.caption)
                 }
             }
@@ -555,7 +548,7 @@ struct SignUpView: View {
             .frame(height: 52)
             .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(red: 0.2, green: 0.5, blue: 0.9))
+                    .fill(Color.accentColor)
             )
         }
         .disabled(viewModel.isLoading || !viewModel.isFormValid)
@@ -615,14 +608,14 @@ struct SignUpView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 45)
-                        .background(Color(red: 0.2, green: 0.5, blue: 0.9))
+                        .background(Color.accentColor)
                         .cornerRadius(10)
                 }
             }
             .padding(20)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color(.systemBackground))
+                    .fill(Color(UIColor.systemBackground))
             )
             .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 5)
             .padding(30)
@@ -701,4 +694,4 @@ struct ModalPresenter<Content: View>: UIViewControllerRepresentable {
             uiViewController.dismiss(animated: false)
         }
     }
-} 
+}

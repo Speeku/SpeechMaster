@@ -25,11 +25,15 @@ struct SignUpView: View {
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                // Background gradient - lighter, more professional shade - matching LoginView
+                // Background gradient - adapts to dark mode
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(red: 0.95, green: 0.97, blue: 1.0),
-                        Color(red: 0.9, green: 0.93, blue: 0.98)
+                        colorScheme == .dark 
+                            ? Color(red: 0.1, green: 0.11, blue: 0.15)
+                            : Color(red: 0.95, green: 0.97, blue: 1.0),
+                        colorScheme == .dark 
+                            ? Color(red: 0.15, green: 0.16, blue: 0.22)
+                            : Color(red: 0.9, green: 0.93, blue: 0.98)
                     ]),
                     startPoint: .top,
                     endPoint: .bottom
@@ -138,17 +142,18 @@ struct SignUpView: View {
                         VStack(spacing: 10) {
                             socialSignupButton(
                                 icon: "apple.logo",
-                                text: "Sign up with Apple",
+                                text: "Sign in with Apple",
                                 backgroundColor: colorScheme == .dark ? .white : .black,
                                 textColor: colorScheme == .dark ? .black : .white,
                                 action: viewModel.signUpWithApple
                             )
                             
                             socialSignupButton(
-                                icon: "g.circle.fill",
-                                text: "Sign up with Google",
-                                backgroundColor: Color(red: 0.98, green: 0.98, blue: 0.98),
-                                textColor: .black,
+                                text: "Sign in with Google",
+                                backgroundColor: colorScheme == .dark ? Color(.systemGray6) : Color(red: 0.98, green: 0.98, blue: 0.98),
+                                textColor: .primary,
+                                isSystemIcon: false,
+                                assetImage: "google",
                                 action: viewModel.signUpWithGoogle
                             )
                         }
@@ -263,6 +268,7 @@ struct SignUpView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 80, height: 80)
+                .cornerRadius(5)
                 .foregroundColor(Color(red: 0.2, green: 0.5, blue: 0.9))
                 .opacity(isAnimating ? 1 : 0)
                 .offset(y: isAnimating ? 0 : -20)
@@ -339,12 +345,19 @@ struct SignUpView: View {
         .animation(.spring(), value: viewModel.isLoading)
     }
     
-    private func socialSignupButton(icon: String, text: String, backgroundColor: Color, textColor: Color, action: @escaping () -> Void) -> some View {
+    private func socialSignupButton(icon: String = "", text: String, backgroundColor: Color, textColor: Color, isSystemIcon: Bool = true, assetImage: String = "", action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack {
-                Image(systemName: icon)
-                    .font(.system(size: 16))
-                    .frame(width: 22, height: 22)
+                if isSystemIcon {
+                    Image(systemName: icon)
+                        .font(.system(size: 16))
+                        .frame(width: 22, height: 22)
+                } else {
+                    Image(assetImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                }
                 
                 Text(text)
                     .font(.subheadline)

@@ -1,5 +1,7 @@
 import SwiftUI
 import Combine
+import GoogleSignIn
+import GoogleSignInSwift
 
 class LoginViewModel: ObservableObject {
     // MARK: - Published Properties
@@ -96,14 +98,48 @@ class LoginViewModel: ObservableObject {
     
     func signInWithGoogle() {
         isLoading = true
-        
-        // TODO: Implement Google Sign In with Supabase
-        // For now, we'll show an error that this is not implemented
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+
+        guard let clientID = Bundle.main.object(forInfoDictionaryKey: "GIDClientID") as? String else {
+            showError(message: "Google Sign In configuration error")
+            isLoading = false
+            return
+        }
+
+        // Get the root view controller
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            showError(message: "Unable to present Google Sign In")
+            isLoading = false
+            return
+        }
+
+        // Use the new async/await API
+        Task { [weak self] in
             guard let self = self else { return }
-            
-            self.showError(message: "Google Sign In is not implemented yet")
-            self.isLoading = false
+            do {
+                let userResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+                guard let idToken = userResult.user.idToken?.tokenString else {
+                    await MainActor.run {
+                        self.showError(message: "Failed to get Google ID token")
+                        self.isLoading = false
+                    }
+                    return
+                }
+
+                // Sign in with Supabase using the Google ID token
+                let supabaseUser = try await self.supabaseManager.signInWithGoogle(idToken: idToken)
+                await MainActor.run {
+                    self.loginSuccess(with: supabaseUser)
+                    self.isLoading = false
+                    NotificationCenter.default.post(name: NSNotification.Name("UserLoggedIn"), object: nil)
+                    print("Posted UserLoggedIn notification")
+                }
+            } catch {
+                await MainActor.run {
+                    self.showError(message: "Failed to sign in with Google: \(error.localizedDescription)")
+                    self.isLoading = false
+                }
+            }
         }
     }
     
