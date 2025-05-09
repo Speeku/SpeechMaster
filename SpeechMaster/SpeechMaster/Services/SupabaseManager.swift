@@ -1752,4 +1752,203 @@ class SupabaseManager: ObservableObject {
             throw AuthError.unknown("Failed to resend OTP: \(error.localizedDescription)")
         }
     }
+    
+    // MARK: - Social Authentication Methods
+    
+    func signInWithGoogle(idToken: String) async throws -> User {
+        print("Attempting Google sign in")
+        
+        // Sign in with Supabase using Google OAuth
+        let authResponse = try await client.auth.signInWithIdToken(
+            credentials: .init(
+                provider: .google,
+                idToken: idToken
+            )
+        )
+        
+        // Check if user ID exists
+        if authResponse.user.id == nil {
+            print("No user ID in auth response for Google sign in")
+            throw AuthError.invalidCredentials
+        }
+        
+        let userId = authResponse.user.id
+        print("Successfully signed in with Google, auth.users ID: \(userId.uuidString)")
+        
+        // ENHANCED DEBUG: Print all metadata keys and values to see what's actually available
+        print("===== DEBUG: GOOGLE AUTH METADATA =====")
+        let meta = authResponse.user.userMetadata
+        for (key, value) in meta {
+            print("  \(key): \(value)")
+        }
+        
+        // Also check if there's an app_metadata field
+        let appMeta = authResponse.user.appMetadata
+        if !appMeta.isEmpty {
+            print("===== DEBUG: APP METADATA =====")
+            for (key, value) in appMeta {
+                print("  \(key): \(value)")
+            }
+        }
+        
+        // Extract the email and check if we have a display name
+        let email = authResponse.user.email ?? ""
+        print("User email: \(email)")
+        
+        // Try several different ways to get the name
+        let googleName: String
+        
+        // 1. Try to get from the display_name field first (most likely to have proper spacing)
+        if let displayName = meta["display_name"] as? String, !displayName.isEmpty {
+            googleName = displayName
+            print("DEBUG: Found display_name in metadata: \(displayName)")
+        }
+        // 2. Try to get from full_name next
+        else if let fullName = meta["full_name"] as? String, !fullName.isEmpty {
+            googleName = fullName
+            print("DEBUG: Found full_name in metadata: \(fullName)")
+        }
+        // 3. Try to get from raw metadata name field
+        else if let name = meta["name"] as? String, !name.isEmpty {
+            googleName = name
+            print("DEBUG: Found name in metadata: \(name)")
+        }
+        // 4. Try to get from raw provider
+        else if let provider = meta["provider"] as? [String: Any],
+                let providerName = provider["name"] as? String, !providerName.isEmpty {
+            googleName = providerName
+            print("DEBUG: Found name in provider metadata: \(providerName)")
+        }
+        // 5. Check for given_name and family_name and combine them
+        else if let givenName = meta["given_name"] as? String, 
+                let familyName = meta["family_name"] as? String,
+                !givenName.isEmpty {
+            googleName = "\(givenName) \(familyName)".trimmingCharacters(in: .whitespaces)
+            print("DEBUG: Combined given_name and family_name: \(googleName)")
+        }
+        // 6. Try email name as fallback, but with special handling
+        else {
+            let emailParts = email.components(separatedBy: "@")
+            if emailParts.count > 0 && !emailParts[0].isEmpty {
+                // Try to convert email username to a more readable form:
+                // e.g., "john.doe" or "john_doe" to "John Doe"
+                let username = emailParts[0]
+                    .replacingOccurrences(of: ".", with: " ")
+                    .replacingOccurrences(of: "_", with: " ")
+                    .replacingOccurrences(of: "-", with: " ")
+                
+                // Split into words and capitalize each one
+                let nameWords = username.components(separatedBy: " ")
+                let formattedName = nameWords.map { $0.capitalized }.joined(separator: " ")
+                
+                googleName = formattedName
+                print("DEBUG: Using formatted email name: \(googleName)")
+            } else {
+                // Last resort fallback
+                googleName = "Google User"
+                print("DEBUG: No name found, using default: \(googleName)")
+            }
+        }
+        
+        // ALWAYS update the name in User table immediately
+        do {
+            try await updateUserName(userId: userId, name: googleName)
+            print("DEBUG: Name updated in database to: \(googleName)")
+        } catch {
+            print("ERROR: Failed to update user name: \(error)")
+            // Continue anyway - don't throw here
+        }
+        
+        // Check if user exists in our database
+        do {
+            var user = try await fetchUser(userId: userId)
+            print("Successfully fetched existing user data from public.User table")
+            print("DEBUG: User from database has name: \(user.name)")
+            
+            // If user exists but still has default name, update it in memory too
+            if user.name == "Google User" || user.name == "Unknown User" {
+                print("DEBUG: Fixing incorrect name in User object")
+                user.name = googleName
+            }
+            
+            // Update last login date
+            Task {
+                try await updateLastLoginDate(userId: userId)
+            }
+            
+            // Update current user
+            await MainActor.run {
+                self.currentUser = user
+            }
+            
+            return user
+        } catch {
+            // If user doesn't exist in our database, create them
+            print("User not found in database, creating new user record")
+            
+            let newUser = User(
+                id: userId,
+                email: authResponse.user.email ?? "",
+                name: googleName,  // Use the google name we extracted above
+                profileImageURL: meta["avatar_url"] as? String,
+                createdAt: Date(),
+                lastLoginAt: Date(),
+                preferences: User.UserPreferences(
+                    isDarkMode: false,
+                    notificationsEnabled: true,
+                    emailNotificationsEnabled: true
+                )
+            )
+            
+            // Insert the user into our database
+            let createdUser = try await completeUserRegistration(user: newUser)
+            print("DEBUG: Created new user with name: \(createdUser.name)")
+            
+            // Double-check name is correct after creation
+            if createdUser.name != googleName {
+                print("DEBUG: Name mismatch after creation, fixing...")
+                try await updateUserName(userId: userId, name: googleName)
+            }
+            
+            // Update current user
+            await MainActor.run {
+                self.currentUser = createdUser
+            }
+            
+            return createdUser
+        }
+    }
+    
+    func updateUserName(userId: UUID, name: String) async throws {
+        print("Updating user name for user \(userId.uuidString) to \(name)")
+        
+        // Skip empty names
+        guard !name.isEmpty else {
+            print("Warning: Attempted to update user name to empty string, skipping update")
+            return
+        }
+        
+        do {
+            _ = try await client
+                .from("User") // Change to "profiles" if that's your table
+                .update(["name": name])
+                .eq("id", value: userId.uuidString)
+                .execute()
+            
+            print("User name updated successfully to: \(name)")
+            
+            // Also update the in-memory currentUser if it matches this user
+            if let currentUser = self.currentUser, currentUser.id == userId {
+                var updatedUser = currentUser
+                updatedUser.name = name
+                await MainActor.run {
+                    self.currentUser = updatedUser
+                }
+                print("DEBUG: Also updated in-memory currentUser name")
+            }
+        } catch {
+            print("ERROR updating user name: \(error.localizedDescription)")
+            throw error
+        }
+    }
 }
