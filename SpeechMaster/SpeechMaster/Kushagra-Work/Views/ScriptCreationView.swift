@@ -970,7 +970,7 @@ struct ScriptCreationView: View {
             do {
                 let promptText = """
                 You are a professional speech writer. Create a well-structured presentation script that is:
-                1. Clear and engagin
+                1. Clear and engaging
                 2. Includes natural transitions
                 3. Has a strong opening and conclusion
                 4. Uses appropriate pacing for verbal delivery
