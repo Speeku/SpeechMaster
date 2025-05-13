@@ -99,7 +99,7 @@ class HomeViewModel: ObservableObject {
     }
     
     // MARK: - AI Content Generation
-    let model = GenerativeModel(name: "models/gemini-1.5-pro-001", apiKey: APIKey.default)
+    let model = GenerativeModel(name: "models/gemini-2.0-flash", apiKey: APIKey.default)
     func generateScript(prompt: String) async throws -> String {
         do {
             let promptText = """
