@@ -220,16 +220,19 @@ struct ScriptsListView: View {
         ) { result in
             fileUploadViewModel.handleFileSelection(result)
         }
+        .alert("Name Your Script", isPresented: $fileUploadViewModel.showingNamePrompt) {
+            TextField("Script Name", text: $fileUploadViewModel.scriptName)
+            Button("Cancel", role: .cancel) { }
+            Button("Save") {
+                fileUploadViewModel.saveScriptToSupabase()
+            }
+        } message: {
+            Text("Enter a name for your uploaded script.")
+        }
         .alert(fileUploadViewModel.alertMessage, isPresented: $fileUploadViewModel.showingAlert) {
-            Button("OK") {
-                if viewModel.navigateToPiyushScreen {
-                    viewModel.navigateToPiyushScreen = false
-                    viewModel.navigateToPiyushScreen = true
-                    viewModel.uploadedScriptText = fileUploadViewModel.uploadedScriptText
-                }
-            }.navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
-                KeyNoteOptionsStoryboardView()
-                  }
+            Button("OK") { }
+        }.navigationDestination(isPresented: $viewModel.navigateToPiyushScreen) {
+            KeyNoteOptionsStoryboardView()
         }
         NavigationLink(destination: ScriptCreationView(viewModel: viewModel), isActive: $showingScriptCreation) {
         }

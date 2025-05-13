@@ -6,6 +6,11 @@ class FileUploadViewModel: ObservableObject {
     @Published var showingAlert = false
     @Published var alertMessage = ""
     @Published var uploadedScriptText = ""
+    @Published var showingNamePrompt = false
+    @Published var scriptName = ""
+    
+    private let supabaseManager = SupabaseManager.shared
+    
     func handleFileSelection(_ result: Result<[URL], Error>) {
         switch result {
         case .success(let urls):
@@ -32,9 +37,13 @@ class FileUploadViewModel: ObservableObject {
             
             do {
                 uploadedScriptText = try String(contentsOf: url, encoding: .utf8)
-                alertMessage = "File uploaded successfully"
-                showingAlert = true
-                HomeViewModel.shared.navigateToPiyushScreen = true
+                
+                // Get the file name without extension to use as script title
+                let defaultName = url.deletingPathExtension().lastPathComponent
+                scriptName = defaultName
+                
+                // Ask for script name
+                showingNamePrompt = true
             } catch {
                 alertMessage = "Error reading file: \(error.localizedDescription)"
                 showingAlert = true
@@ -44,6 +53,41 @@ class FileUploadViewModel: ObservableObject {
             alertMessage = "Error selecting file: \(error.localizedDescription)"
             showingAlert = true
         }
+    }
+    
+    func saveScriptToSupabase() {
+        guard !uploadedScriptText.isEmpty else {
+            alertMessage = "Cannot save empty script"
+            showingAlert = true
+            return
+        }
+        
+        // Create a trimmed name or use default
+        let finalName = scriptName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let scriptTitle = finalName.isEmpty ? "Uploaded Script" : finalName
+        
+        // Create a new script locally
+        let newScript = Script(
+            id: UUID(),
+            title: scriptTitle,
+            scriptText: uploadedScriptText,
+            createdAt: Date(),
+            isPinned: false
+        )
+        
+        // Save to Supabase
+        HomeViewModel.shared.addScript(newScript)
+        
+        // Set for navigation and practice
+        HomeViewModel.shared.uploadedScriptText = uploadedScriptText
+        HomeViewModel.shared.currentScriptID = newScript.id
+        
+        // Show success message
+        alertMessage = "Script saved successfully"
+        showingAlert = true
+        
+        // Navigate to practice screen
+        HomeViewModel.shared.navigateToPiyushScreen = true
     }
     
     func getSupportedTypes() -> [UTType] {

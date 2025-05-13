@@ -217,16 +217,17 @@ struct LandingPageView: View {
             ) { result in
                 fileUploadViewModel.handleFileSelection(result)
             }
-            .alert(fileUploadViewModel.alertMessage, isPresented: $fileUploadViewModel.showingAlert) {
-                Button("OK") {
-                    if viewModel.navigateToPiyushScreen {
-                        viewModel.navigateToPiyushScreen = false
-                        viewModel.navigateToPiyushScreen = true
-                        viewModel.uploadedScriptText = fileUploadViewModel.uploadedScriptText
-                        let newScript = Script(id: UUID(), title:"Script \(viewModel.scripts.count + 1)", scriptText: fileUploadViewModel.uploadedScriptText, createdAt: Date(), isPinned: false)
-                    }
+            .alert("Name Your Script", isPresented: $fileUploadViewModel.showingNamePrompt) {
+                TextField("Script Name", text: $fileUploadViewModel.scriptName)
+                Button("Cancel", role: .cancel) { }
+                Button("Save") {
+                    fileUploadViewModel.saveScriptToSupabase()
                 }
-                
+            } message: {
+                Text("Enter a name for your uploaded script.")
+            }
+            .alert(fileUploadViewModel.alertMessage, isPresented: $fileUploadViewModel.showingAlert) {
+                Button("OK") { }
             }
             .toolbar(.hidden)
         }
