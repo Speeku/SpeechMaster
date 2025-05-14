@@ -316,7 +316,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KG2H5D767;
+				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Eloquent;
@@ -355,7 +355,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7KG2H5D767;
+				DEVELOPMENT_TEAM = UKQ5428Z5P;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SpeechMaster/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Eloquent;

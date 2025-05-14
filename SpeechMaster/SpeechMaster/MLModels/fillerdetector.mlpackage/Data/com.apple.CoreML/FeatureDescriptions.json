@@ -1,0 +1,18 @@
+{
+  "Inputs" : {
+    "input" : {
+      "MLFeatureShortDescription" : "Mel spectrogram features of shape (1, 100, 64)"
+    }
+  },
+  "Outputs" : {
+    "var_52" : {
+      "MLFeatureShortDescription" : "Probability scores for 6 classes: Uh, Um, Laughter, Breath, Words, Music"
+    }
+  },
+  "TrainingInputs" : {
+
+  },
+  "States" : {
+
+  }
+}

@@ -1,9 +1,14 @@
 import Foundation
 import Speech
 import AVFoundation
+import CoreML
+import SoundAnalysis
+import CoreMedia
 
 class SpeechAnalyzer {
-    private let script = HomeViewModel.shared.uploadedScriptText
+    private var script: String {
+        return HomeViewModel.shared.uploadedScriptText
+    }
     private var audioEngine: AVAudioEngine
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
@@ -17,6 +22,12 @@ class SpeechAnalyzer {
     private var detectedFillerWords: [(word: String, timestamp: TimeInterval)] = []
     private var wordTimestamps: [(word: String, timestamp: TimeInterval)] = []
     
+    // Audio analyzer for filler word detection
+    private var audioAnalyzer: SNAudioStreamAnalyzer?
+    private var fillerDetectorModel: MLModel?
+    private var fillerDetectionRequest: SNClassifySoundRequest?
+    
+    // Traditional filler word list as fallback
     private let fillerWords = Set(["um", "uh", "like", "you know", "sort of", "kind of"])
     
     private var audioMeterTimer: Timer?
@@ -30,9 +41,37 @@ class SpeechAnalyzer {
     private var isCurrentlyDetecting = false
     private var nonRemovableDetections: [(word: String, timestamp: TimeInterval)] = []
     
+    // Dictionary to track filler word counts
+    private var fillerWordCount: [String: Int] = [:]
+    
+    // Results observer for ML model
+    private var fillerDetectionObserver: FillerDetectionObserver?
+    
     init() {
         self.audioEngine = AVAudioEngine()
         self.speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
+        self.loadFillerWordModel()
+    }
+    
+    private func loadFillerWordModel() {
+        // Load ML model for filler word detection
+        do {
+            // Use the existing fillerdetector model
+            if let modelURL = Bundle.main.url(forResource: "fillerdetector", withExtension: "mlmodelc") {
+                fillerDetectorModel = try MLModel(contentsOf: modelURL)
+                // Create a sound classification request using this model
+                fillerDetectionRequest = try SNClassifySoundRequest(mlModel: fillerDetectorModel!)
+            } else {
+                print("Filler word model not found, using fallback detection")
+            }
+        } catch {
+            print("Failed to load filler word model: \(error.localizedDescription)")
+        }
+    }
+    
+    private func isFillerWord(_ word: String) -> Bool {
+        // Traditional method using predefined words
+        return fillerWords.contains(word.lowercased())
     }
     
     func startRecording() async throws {
@@ -63,6 +102,9 @@ class SpeechAnalyzer {
         // Enable audio metering
         audioRecorder?.isMeteringEnabled = true
         
+        // Setup ML-based filler word detection
+        setupFillerWordDetection()
+        
         // Initialize recognition request
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         guard let recognitionRequest = recognitionRequest else { return }
@@ -87,13 +129,18 @@ class SpeechAnalyzer {
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, _ in
+        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] buffer, time in
             guard let self = self else { return }
             
             // Feed buffer to speech recognizer
             self.recognitionRequest?.append(buffer)
             
-            // Process audio levels for filler word detection
+            // Process audio for filler word detection using ML model
+            if let analyzer = self.audioAnalyzer {
+                try? analyzer.analyze(buffer, atAudioFramePosition: time.sampleTime)
+            }
+            
+            // Process audio levels for volume analysis
             let channelData = buffer.floatChannelData?.pointee
             let frameLength = Int(buffer.frameLength)
             
@@ -117,10 +164,45 @@ class SpeechAnalyzer {
         startTime = Date()
     }
     
+    private func setupFillerWordDetection() {
+        guard let request = fillerDetectionRequest else { return }
+        
+        // Create analyzer with audio engine format
+        audioAnalyzer = SNAudioStreamAnalyzer(format: audioEngine.inputNode.outputFormat(forBus: 0))
+        
+        // Create observer for detection results
+        fillerDetectionObserver = FillerDetectionObserver { [weak self] (fillerWordType, timeInterval) in
+            guard let self = self else { return }
+            
+            let timestamp = Date().timeIntervalSince1970 // Use current time for UI display
+            
+            // Use the normalized filler word type (um/uh)
+            self.detectedFillerWords.append((word: fillerWordType, timestamp: timestamp))
+            self.recentFillerWords.append((word: fillerWordType, timestamp: timestamp))
+            
+            // Update filler word count
+            self.fillerWordCount[fillerWordType, default: 0] += 1
+            
+            // Print to console for tracking
+            print("📊 Updated filler word count: \(fillerWordType) - \(self.fillerWordCount[fillerWordType, default: 0])")
+        }
+        
+        // Configure the request with balanced settings
+        request.windowDuration = CMTimeMakeWithSeconds(1.0, preferredTimescale: 48000)
+        request.overlapFactor = 0.7 // Moderate overlap for reliable detection
+        
+        // Add the request and observer to the analyzer
+        try? audioAnalyzer?.add(request, withObserver: fillerDetectionObserver!)
+    }
+    
     func stopRecording() async throws -> SpeechAnalysisResult {
         audioMeterTimer?.invalidate()
         audioMeterTimer = nil
         recentFillerWords.removeAll()
+        
+        // Stop and clean up audio analyzer
+        audioAnalyzer?.removeAllRequests()
+        audioAnalyzer = nil
         
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
@@ -160,9 +242,12 @@ class SpeechAnalyzer {
             
             wordTimestamps.append((word, timestamp))
             
-            if fillerWords.contains(word) {
+            if isFillerWord(word) {
                 detectedFillerWords.append((word, timestamp))
                 recentFillerWords.append((word, Date().timeIntervalSince1970))
+                
+                // Update filler word count
+                fillerWordCount[word, default: 0] += 1
             }
         }
     }
@@ -194,17 +279,46 @@ class SpeechAnalyzer {
         // Group filler words by type and count occurrences
         var fillerWordDict: [String: [TimeInterval]] = [:]
         
-        for (word, timestamp) in nonRemovableDetections {
+        // Add ML detected filler words
+        for (word, timestamp) in detectedFillerWords {
             fillerWordDict[word, default: []].append(timestamp)
         }
         
-        return fillerWordDict.map { word, timestamps in
+        // Add non-removable detections only if confirmed as filler words
+        for (word, timestamp) in nonRemovableDetections {
+            if isFillerWord(word) {
+                fillerWordDict[word, default: []].append(timestamp)
+                fillerWordCount[word, default: 0] += 1
+            }
+        }
+        
+        // Generate result with fair counting
+        var result = fillerWordDict.map { word, timestamps in
             SpeechAnalysisResult.FillerWord(
                 word: word,
-                count: timestamps.count,
+                count: fillerWordCount[word] ?? timestamps.count,
                 timestamps: timestamps
             )
         }
+        
+        // If we have no detections at all, add default entries with zero count
+        if result.isEmpty {
+            result = [
+                SpeechAnalysisResult.FillerWord(word: "um", count: 0, timestamps: []),
+                SpeechAnalysisResult.FillerWord(word: "uh", count: 0, timestamps: [])
+            ]
+        }
+        
+        // Sort by frequency (most frequent first)
+        result.sort { $0.count > $1.count }
+        
+        // Print the final tally for debugging
+        print("📊 Filler word counts:")
+        for item in result {
+            print("  - \(item.word): \(item.count)")
+        }
+        
+        return result
     }
     
     private func findMissingWords() -> [SpeechAnalysisResult.MissingWord] {
@@ -397,5 +511,76 @@ class SpeechAnalyzer {
     
     private func calculateSpokenWordCount() -> Int {
         return transcribedText.split(separator: " ").count
+    }
+    
+    // Method to get current filler word statistics for real-time display
+    func getCurrentFillerWordStats() -> [(word: String, count: Int)] {
+        return fillerWordCount.map { (word: $0.key, count: $0.value) }
+            .sorted { $0.count > $1.count }
+    }
+}
+
+// Observer class for filler word detection
+class FillerDetectionObserver: NSObject, SNResultsObserving {
+    private let resultHandler: (String, TimeInterval) -> Void
+    
+    // Expanded list of filler word labels and their variants
+    private let fillerWordMap: [String: [String]] = [
+        "um": ["um", "umm", "hmm"],
+        "uh": ["uh", "uhh", "ah", "er", "eh", "erm"]
+    ]
+    
+    // Balanced thresholds for both types of filler words
+    private let thresholds: [String: Double] = [
+        "um": 0.5,
+        "uh": 0.4  // Slightly lower threshold for "uh" as they're harder to detect
+    ]
+    
+    init(resultHandler: @escaping (String, TimeInterval) -> Void) {
+        self.resultHandler = resultHandler
+        super.init()
+    }
+    
+    func request(_ request: SNRequest, didProduce result: SNResult) {
+        guard let result = result as? SNClassificationResult else { return }
+        
+        // Check all classifications for filler words
+        for classification in result.classifications.prefix(3) {
+            let identifier = classification.identifier.lowercased()
+            
+            // Determine if this is a filler word and what type
+            var detectedFillerType: String? = nil
+            for (fillerType, variants) in fillerWordMap {
+                if variants.contains(where: { identifier.contains($0) }) {
+                    detectedFillerType = fillerType
+                    break
+                }
+            }
+            
+            guard let fillerType = detectedFillerType else { continue }
+            let threshold = thresholds[fillerType] ?? 0.5
+            
+            if Double(classification.confidence) > threshold {
+                // Log detected filler words to help with debugging
+                print("✅ DETECTED filler word: \(identifier) (\(fillerType)) with confidence: \(classification.confidence)")
+                
+                // Convert CMTime to TimeInterval (seconds)
+                let timestamp = CMTimeGetSeconds(result.timeRange.start)
+                
+                // Use the normalized filler type (um/uh) instead of the specific variant detected
+                resultHandler(fillerType, timestamp)
+                
+                // Only process one detection per result to avoid duplicates
+                break
+            }
+        }
+    }
+    
+    func request(_ request: SNRequest, didFailWithError error: Error) {
+        print("Audio analysis failed with error: \(error.localizedDescription)")
+    }
+    
+    func requestDidComplete(_ request: SNRequest) {
+        print("Audio analysis request completed")
     }
 }
