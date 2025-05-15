@@ -1,0 +1,10 @@
+{
+  "MLModelVersionStringKey" : "--",
+  "MLModelDescriptionKey" : "Filler Word Detection Model",
+  "MLModelCreatorDefinedKey" : {
+    "com.github.apple.coremltools.version" : "6.3.0",
+    "com.github.apple.coremltools.source" : "torch==2.0.0"
+  },
+  "MLModelAuthorKey" : "Custom Model Author",
+  "MLModelLicenseKey" : "MIT"
+}

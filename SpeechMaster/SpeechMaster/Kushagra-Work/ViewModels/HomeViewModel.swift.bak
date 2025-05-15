@@ -30,9 +30,11 @@ class HomeViewModel: ObservableObject {
     @Published var userPerformanceReports : [PerformanceReport] = []
     @Published var qnaQuestions: [QnAQuestion] = []
     @Published var isLoading: Bool = false
+    @Published var isGeneratingScript = false
+    @Published var generationTask: Task<String, Error>?
     
     // MARK: - Services
-    let supabaseManager = SupabaseManager.shared
+    private let supabaseManager = SupabaseManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - API Configuration
@@ -101,6 +103,8 @@ class HomeViewModel: ObservableObject {
     // MARK: - AI Content Generation
     let model = GenerativeModel(name: "models/gemini-2.0-flash", apiKey: APIKey.default)
     func generateScript(prompt: String) async throws -> String {
+        isGeneratingScript = true
+        
         do {
             let promptText = """
             You are a professional speech writer. Create a well-structured presentation script that is:
@@ -118,8 +122,17 @@ class HomeViewModel: ObservableObject {
             // Create a chat session
             let chat = model.startChat()
             
+            // Check for cancellation before sending
+            try Task.checkCancellation()
+            
             // Generate content with safety settings
             let response = try await chat.sendMessage(promptText)
+            
+            // Mark generation as complete
+            await MainActor.run {
+                self.isGeneratingScript = false
+                self.generationTask = nil
+            }
             
             if let responseText = response.text {
                 return responseText
@@ -128,8 +141,33 @@ class HomeViewModel: ObservableObject {
                               userInfo: [NSLocalizedDescriptionKey: "Failed to generate response"])
             }
         } catch {
+            // Ensure we reset the generating state on error too
+            await MainActor.run {
+                self.isGeneratingScript = false
+                self.generationTask = nil
+            }
+            
             print("Gemini API Error: \(error.localizedDescription)")
             throw error
+        }
+    }
+    
+    func startScriptGeneration(prompt: String) {
+        // Cancel any existing task
+        cancelScriptGeneration()
+        
+        // Create and store new task
+        generationTask = Task {
+            return try await generateScript(prompt: prompt)
+        }
+    }
+    
+    func cancelScriptGeneration() {
+        generationTask?.cancel()
+        generationTask = nil
+        
+        Task { @MainActor in
+            isGeneratingScript = false
         }
     }
     
@@ -1094,7 +1132,5 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
-
-
-
+}
 
