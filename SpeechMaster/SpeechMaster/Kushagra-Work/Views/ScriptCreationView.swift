@@ -350,61 +350,6 @@ struct GenerationStageView: View {
     }
 }
 
-struct AIGenerationLoadingView: View {
-    @Binding var currentStage: Int
-    let stages = [
-        "Analyzing prompt...",
-        "Structuring content...",
-        "Generating script...",
-        "Refining output..."
-    ]
-    
-    var body: some View {
-        VStack(spacing: 24) {
-            // Progress Ring Container
-            ZStack {
-                Circle()
-                    .stroke(Color.blue.opacity(0.2), lineWidth: 8)
-                    .frame(width: 80, height: 80)
-                
-                Circle()
-                    .trim(from: 0, to: CGFloat(currentStage) / CGFloat(stages.count))
-                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 8, lineCap: .round))
-                    .frame(width: 80, height: 80)
-                    .rotationEffect(.degrees(-90))
-                    .animation(.easeInOut(duration: 0.6), value: currentStage)
-                
-                Image(systemName: "wand.and.stars")
-                    .font(.system(size: 24))
-                    .foregroundColor(.blue)
-            }
-            .frame(width: 80, height: 80)
-            
-            // Typing Animation Container
-            TypingAnimationView(text: "Creating your script...")
-                .frame(height: 20)
-                .padding(.vertical, 8)
-            
-            // Generation Stages Container
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(0..<stages.count, id: \.self) { index in
-                    GenerationStageView(
-                        stage: stages[index],
-                        isActive: index == currentStage
-                    )
-                    .frame(height: 24)
-                }
-            }
-            .frame(width: 250)
-        }
-        .frame(width: 300, height: 300)
-        .padding(24)
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(radius: 20)
-    }
-}
-
 struct FormattingToolbar: View {
     @Binding var fontSize: CGFloat
     @Binding var isBold: Bool
@@ -826,6 +771,9 @@ struct ScriptCreationView: View {
     @FocusState private var isEditorFocused: Bool
     @State private var textStorage = NSTextStorage()
     
+    // Add a property to store the generation task
+    @State private var generationTask: Task<Void, Never>?
+    
     private var wordCount: Int {
         scriptText.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count
     }
@@ -880,7 +828,65 @@ struct ScriptCreationView: View {
             if isGenerating {
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
-                AIGenerationLoadingView(currentStage: $currentStage)
+                
+                VStack(spacing: 24) {
+                    // Progress Ring Container
+                    ZStack {
+                        Circle()
+                            .stroke(Color.blue.opacity(0.2), lineWidth: 8)
+                            .frame(width: 80, height: 80)
+                        
+                        Circle()
+                            .trim(from: 0, to: CGFloat(currentStage) / CGFloat(stages.count))
+                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 8, lineCap: .round))
+                            .frame(width: 80, height: 80)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.easeInOut(duration: 0.6), value: currentStage)
+                        
+                        Image(systemName: "wand.and.stars")
+                            .font(.system(size: 24))
+                            .foregroundColor(.blue)
+                    }
+                    .frame(width: 80, height: 80)
+                    
+                    // Typing Animation Container
+                    TypingAnimationView(text: "Creating your script...")
+                        .frame(height: 20)
+                        .padding(.vertical, 8)
+                    
+                    // Generation Stages Container
+                    VStack(alignment: .leading, spacing: 12) {
+                        ForEach(0..<stages.count, id: \.self) { index in
+                            GenerationStageView(
+                                stage: stages[index],
+                                isActive: index == currentStage
+                            )
+                            .frame(height: 24)
+                        }
+                    }
+                    .frame(width: 250)
+                    
+                    // Cancel Button
+                    Button(action: {
+                        cancelGeneration()
+                    }) {
+                        Text("Cancel")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.red)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.red, lineWidth: 1.5)
+                            )
+                    }
+                    .padding(.top, 12)
+                }
+                .frame(width: 300, height: 340)
+                .padding(24)
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .shadow(radius: 20)
             }
             
             // Glowing Text Field
@@ -948,6 +954,22 @@ struct ScriptCreationView: View {
         }
     }
     
+    private let stages = [
+        "Analyzing prompt...",
+        "Structuring content...",
+        "Generating script...",
+        "Refining output..."
+    ]
+    
+    private func cancelGeneration() {
+        // Cancel the task
+        generationTask?.cancel()
+        generationTask = nil
+        
+        // Update UI
+        isGenerating = false
+    }
+    
     private func saveScript() {
         let newScript = Script(
             id: UUID(),
@@ -966,7 +988,8 @@ struct ScriptCreationView: View {
         isGenerating = true
         currentStage = 0
         
-        Task {
+        // Create a task that can be cancelled
+        generationTask = Task {
             do {
                 let promptText = """
                 You are a professional speech writer. Create a well-structured presentation script that is:
@@ -980,39 +1003,61 @@ struct ScriptCreationView: View {
                 
                 """
                 
-
-                
                 // Create a chat session
                 let chat = model.startChat()
                 
                 // Update stages
                 await MainActor.run {
+                    if Task.isCancelled { return }
                     currentStage = 1
                 }
+                
+                // Check if task was cancelled
+                if Task.isCancelled { return }
                 
                 // Generate content
                 let response = try await chat.sendMessage(promptText)
                 
+                // Check if task was cancelled
+                if Task.isCancelled { return }
+                
                 await MainActor.run {
+                    if Task.isCancelled { return }
                     currentStage = 2
                 }
+                
+                // Check if task was cancelled
+                if Task.isCancelled { return }
                 
                 if let responseText = response.text {
                     // Final stage and update UI
                     await MainActor.run {
+                        if Task.isCancelled { return }
                         currentStage = 3
-                        scriptText = responseText
-                        isGenerating = false
-                        self.promptText = ""
+                        
+                        // Small delay to show the final stage
+                        Task {
+                            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+                            
+                            if !Task.isCancelled {
+                                scriptText = responseText
+                                isGenerating = false
+                                self.promptText = ""
+                                self.generationTask = nil
+                            }
+                        }
                     }
                 } else {
                     throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to generate response"])
                 }
             } catch {
-                await MainActor.run {
-                    isGenerating = false
-                    generationError = "Failed to generate script: \(error.localizedDescription)"
-                    showingGenerationError = true
+                if !Task.isCancelled {
+                    await MainActor.run {
+                        isGenerating = false
+                        generationError = "Failed to generate script: \(error.localizedDescription)"
+                        showingGenerationError = true
+                        self.generationTask = nil
+                    }
                 }
             }
         }
