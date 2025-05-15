@@ -32,7 +32,7 @@ class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     // MARK: - Services
-    private let supabaseManager = SupabaseManager.shared
+    let supabaseManager = SupabaseManager.shared
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - API Configuration

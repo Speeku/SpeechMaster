@@ -431,8 +431,40 @@ class PerformanceViewController: UIViewController, QLPreviewControllerDataSource
         
         recordButton.tintColor = .systemRed
         
-        // Set the script content
-        scriptPreviewTextView.text = ds.getScriptText(for: ds.currentScriptID)
+        // Set the script content using all available sources with fallbacks
+        Task {
+            // First attempt: Load scripts from Supabase if needed
+            if ds.scripts.isEmpty && ds.isLoggedIn && ds.supabaseManager.currentUser != nil {
+                await ds.loadScriptsFromSupabase()
+            }
+            
+            // Now attempt to set the script text using multiple fallback options
+            await MainActor.run {
+                // Option 1: Try to get script from Supabase-loaded scripts
+                var scriptText = ds.getScriptText(for: ds.currentScriptID)
+                
+                // Option 2: If empty, check if there's an uploaded script text
+                if scriptText.isEmpty && !ds.uploadedScriptText.isEmpty {
+                    print("Using uploaded script text instead of Supabase script")
+                    scriptText = ds.uploadedScriptText
+                }
+                
+                // Option 3: If still empty and scripts exist, use the first available script
+                if scriptText.isEmpty && !ds.scripts.isEmpty {
+                    print("Using first available script instead of requested script")
+                    scriptText = ds.scripts[0].scriptText
+                }
+                
+                // Always set some content to the script preview
+                if !scriptText.isEmpty {
+                    self.scriptPreviewTextView.text = scriptText
+                } else {
+                    // Last resort - provide a minimal placeholder that doesn't look like an error
+                    print("No script content found, using placeholder")
+                    self.scriptPreviewTextView.text = "Your speech transcript will appear here.\n\nStart practicing by pressing the record button below."
+                }
+            }
+        }
         
         // Add gesture recognizer for preview size adjustment
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePreviewResize(_:)))
